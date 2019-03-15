@@ -16,9 +16,11 @@ import torch
 
 os.makedirs('pacgan-images', exist_ok=True)
 
+
 parser = argparse.ArgumentParser()
+parser.add_argument('--pac_size', type=int, default=4, help='pac size')
 parser.add_argument('--n_epochs', type=int, default=200, help='number of epochs of training')
-parser.add_argument('--batch_size', type=int, default=64*4, help='size of the batches')
+parser.add_argument('--batch_size', type=int, default=64, help='size of the batches')
 parser.add_argument('--lr', type=float, default=0.0002, help='adam: learning rate')
 parser.add_argument('--b1', type=float, default=0.5, help='adam: decay of first order momentum of gradient')
 parser.add_argument('--b2', type=float, default=0.999, help='adam: decay of first order momentum of gradient')
@@ -99,7 +101,7 @@ dataloader = torch.utils.data.DataLoader(
                        transforms.ToTensor(),
                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                    ])),
-    batch_size=opt.batch_size, shuffle=True)
+    batch_size=opt.batch_size * opt.pac_size, shuffle=True)
 
 # Optimizers
 optimizer_G = torch.optim.Adam(generator.parameters(), lr=opt.lr, betas=(opt.b1, opt.b2))
@@ -114,11 +116,11 @@ Tensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 for epoch in range(opt.n_epochs):
     for i, (imgs, _) in enumerate(dataloader):
         # print(imgs.shape)
-        imgs = imgs.reshape(int(imgs.size(0)/4),4,28,28)
+        imgs = imgs.reshape(int(imgs.size(0)/opt.pac_size),opt.pac_size,opt.img_size,opt.img_size)
 
         # Adversarial ground truths
-        valid = Variable(Tensor(imgs.size(0), 1*4).fill_(1.0), requires_grad=False)
-        fake = Variable(Tensor(imgs.size(0), 1*4).fill_(0.0), requires_grad=False)
+        valid = Variable(Tensor(imgs.size(0), opt.pac_size).fill_(1.0), requires_grad=False)
+        fake = Variable(Tensor(imgs.size(0), opt.pac_size).fill_(0.0), requires_grad=False)
 
         # Configure input
         real_imgs = Variable(imgs.type(Tensor))
@@ -131,12 +133,12 @@ for epoch in range(opt.n_epochs):
         optimizer_G.zero_grad()
 
         # Sample noise as generator input
-        z = Variable(Tensor(np.random.normal(0, 1, (imgs.shape[0]*4, opt.latent_dim))))
+        z = Variable(Tensor(np.random.normal(0, 1, (imgs.shape[0]*opt.pac_size, opt.latent_dim))))
         # print("z shape:{}".format(z.shape))
 
         # Generate a batch of images
         gen_imgs = generator(z)
-        gen_imgs = gen_imgs.reshape(imgs.size(0),4,28,28)
+        gen_imgs = gen_imgs.reshape(imgs.size(0),opt.pac_size, opt.img_size, opt.img_size)
         # Loss measures generator's ability to fool the discriminator
         g_loss = adversarial_loss(discriminator(gen_imgs), valid)
 
@@ -163,7 +165,7 @@ for epoch in range(opt.n_epochs):
 
         batches_done = epoch * len(dataloader) + i
 
-        gen_imgs = gen_imgs.reshape(imgs.size(0)*4,1,28,28)
+        gen_imgs = gen_imgs.reshape(imgs.size(0)*opt.pac_size,1, opt.img_size, opt.img_size)
         if batches_done % opt.sample_interval == 0:
             save_image(gen_imgs.data[:25], 'pacgan-images/%d.png' % batches_done, nrow=5, normalize=True)
             
