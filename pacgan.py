@@ -75,7 +75,7 @@ class Discriminator(nn.Module):
         )
 
     def forward(self, img):
-        img_flat = img.view(img.size(0)*4, -1)
+        img_flat = img.view(img.size(0)*opt.pac_size, -1)
         # print(img_flat.shape)
         validity = self.model(img_flat)
 
