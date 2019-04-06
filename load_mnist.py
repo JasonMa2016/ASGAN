@@ -35,7 +35,7 @@ def load_labels():
         labels = labels.reshape(n)
     return labels
 
-def load_mnist():
+def load_mnist(num_training_sample):
     img = load_images().reshape(-1, 28, 28) # 60k, 28, 28
     lab = load_labels() # 60k
     ids = np.random.randint(0, img.shape[0], size=(num_training_sample, 3)) # 25600, 3
@@ -47,11 +47,9 @@ def load_mnist():
             lab_1[i, j] = lab[ids[i, j]]
     return img_1, lab_1
 
-
-num_training_sample = 128000
-
 # sample image
-img_1, lab_1 = load_mnist()
-plt.imshow(img_1[42])
-plt.show()
-print('label of image', lab_1[42])
+if __name__ == "__main__":
+    img_1, lab_1 = load_mnist(128000)
+    plt.imshow(img_1[42])
+    plt.show()
+    print('label of image', lab_1[42])

@@ -65,7 +65,7 @@ def stack(x):
 
 # network
 G = generator(32)
-G.load_state_dict(torch.load("MNIST_DCGAN_results/generator_param.pkl"))
+G.load_state_dict(torch.load("MNIST_ASGAN_results/generator_param.pkl"))
 
 batch_size = 129 # 64 in pacgan
 num_test_sample = 25929
