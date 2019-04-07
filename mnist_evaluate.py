@@ -1,18 +1,58 @@
+# copied from PacGan repo evaluate.py
+# import theano
+# from scipy import misc
+import numpy as np
+import keras
+model = keras.models.load_model("mnist_cnn.hdf5")
+
+def evaluate(x):
+    output = model.predict(x)
+    return list(np.argmax(output, axis=1))
+
+# if __name__ == "__main__":
+#     p2 = numpy.reshape(misc.imread("2.png"), (1, 28, 28, 1))
+#     p9 = numpy.reshape(misc.imread("9.png"), (1, 28, 28, 1))
+#     print(evaluate(np.concatenate((p2, p9), axis=0)))
+
+
 # adapted (copy pasted) from https://github.com/znxlwm/pytorch-MNIST-CelebA-GAN-DCGAN
-import os, time
-import matplotlib.pyplot as plt
-import itertools
-import pickle
+import argparse
+# import os, time
+# import matplotlib.pyplot as plt
+# import itertools
+# import pickle
 # import imageio
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
+# import torch.nn as nn
+# import torch.nn.functional as F
+# import torch.optim as optim
 # from torchvision import datasets, transforms
 # from torch.autograd import Variable
 from math import ceil, log
-from evaluate import evaluate
-import numpy as np
+from mnist_models import Generator
+
+parser = argparse.ArgumentParser(description='training runner')
+parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
+parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimension')
+parser.add_argument('--batch_size','-bs',type=int,default=63,help='Batch size')
+parser.add_argument('--gen_file','-gf',type=str,default='generator_param.pkl',help='Save gen filename')
+parser.add_argument('--disc_file','-df',type=str,default='discriminator_param.pkl',help='Save disc filename')
+args = parser.parse_args()
+SAVEDIR = args.save_dir
+GENFILE = args.gen_file
+DISCFILE = args.disc_file
+# training parameters
+latent_dim = args.latent_dim
+batch_size = args.batch_size
+
+if torch.cuda.is_available():
+    print('using cuda!')
+    torch.cuda.set_device(0)
+    dtype = torch.cuda.FloatTensor
+    is_cuda = True
+else:
+    dtype = torch.FloatTensor
+    is_cuda = False
 
 # from https://www.zealseeker.com/archives/jensen-shannon-divergence-jsd-python/
 class JSD:
@@ -24,60 +64,27 @@ class JSD:
         M = [0.5*(_p+_q) for _p,_q in zip(p,q)]
         return 0.5*self.KLD(p,M)+0.5*self.KLD(q,M)
 
-# G(z)
-class generator(nn.Module):
-    # initializers
-    def __init__(self, d=128):
-        super(generator, self).__init__()
-        self.deconv1 = nn.ConvTranspose2d(100, d*4, 4, 1, 0) # changed things
-        self.deconv1_bn = nn.BatchNorm2d(d*4)
-        self.deconv2 = nn.ConvTranspose2d(d*4, d*2, 3, 2, 1)
-        self.deconv2_bn = nn.BatchNorm2d(d*2)
-        self.deconv3 = nn.ConvTranspose2d(d*2, d, 4, 2, 1)
-        self.deconv3_bn = nn.BatchNorm2d(d)
-        self.deconv4 = nn.ConvTranspose2d(d, 3, 4, 2, 1) # 1 to 3, 4 to 3
-        # self.deconv4 = nn.ConvTranspose2d(d*2, d, 4, 2, 1)
-        # self.deconv4_bn = nn.BatchNorm2d(d)
-        # self.deconv5 = nn.ConvTranspose2d(d, 3, 4, 2, 1) # 1 to 3
-    # weight_init
-    def weight_init(self, mean, std):
-        for m in self._modules:
-            normal_init(self._modules[m], mean, std)
-    # forward method
-    def forward(self, input):
-        # x = F.relu(self.deconv1(input))
-        x = F.relu(self.deconv1_bn(self.deconv1(input)))
-        x = F.relu(self.deconv2_bn(self.deconv2(x)))
-        x = F.relu(self.deconv3_bn(self.deconv3(x)))
-        x = torch.tanh(self.deconv4(x))
-        # x = F.relu(self.deconv4_bn(self.deconv4(x)))
-        # x = torch.tanh(self.deconv5(x)) # deprecated
-        return x
-
-def normal_init(m, mean, std):
-    if isinstance(m, nn.ConvTranspose2d) or isinstance(m, nn.Conv2d):
-        m.weight.data.normal_(mean, std)
-        m.bias.data.zero_()
-
 def stack(x):
     assert(x.shape[0] % 3 == 0)
     return torch.cat([x[::3], x[1::3], x[2::3]], dim=1)
 
 # network
-G = generator(32)
-G.load_state_dict(torch.load("MNIST_ASGAN_results/generator_param.pkl"))
+G = Generator()
+G.load_state_dict(torch.load(SAVEDIR+GENFILE))
+if is_cuda:
+    G.cuda()
 
-batch_size = 129 # 64 in pacgan
-num_test_sample = 25929
+batch_size = 63 # 129 previously
+num_test_sample = ceil(26000/batch_size) * batch_size # yes, this is lazy
 
 # def log_metrics(self, epoch):
 results = []
 for i in range(int(ceil(float(num_test_sample) / float(batch_size)))):
     # input_z_samples = self.test_samples[i * batch_size : (i + 1) * batch_size]
     # samples = self.sess.run(self.sampler, feed_dict={self.z[0]: input_z_samples})
-    input_z_samples = torch.randn((batch_size, 100)).view(-1, 100, 1, 1)
-    samples = G(input_z_samples).data.numpy().transpose(0, 2, 3, 1)
-    # todo: reshape into numpy for consumption by keras!??
+    input_z_samples = torch.randn((batch_size, latent_dim)).view(-1, latent_dim)
+    if is_cuda: input_z_samples = input_z_samples.cuda()
+    samples = G(input_z_samples).cpu().data.numpy().transpose(0, 2, 3, 1)
 
     dect0 = evaluate(np.reshape(samples[:, :, :, 0], (batch_size, 28, 28, 1)))
     dect1 = evaluate(np.reshape(samples[:, :, :, 1], (batch_size, 28, 28, 1)))
@@ -107,7 +114,7 @@ q = [1.0 / 1000.0] * 1000
 kl = JSD().KLD(p, q) 
 
 print('num mode', num_mode, 'kl', kl)
-print(map)
+# print(map)
 
 # with open(self.metric_path, "ab") as csv_file:
 #     writer = csv.DictWriter(csv_file, fieldnames=self.field_names)
