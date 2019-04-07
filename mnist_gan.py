@@ -231,8 +231,8 @@ for epoch in range(train_epoch):
     train_hist['per_epoch_ptimes'].append(per_epoch_ptime)
 
     if epoch % 2 == 0:
-        torch.save(G.state_dict(), SAVEDIR+GENFILE)
-        torch.save(D.state_dict(), SAVEDIR+DISCFILE) # for safety!
+        torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
+        torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE) # for safety!
 
 end_time = time.time()
 total_ptime = end_time - start_time
@@ -240,12 +240,12 @@ train_hist['total_ptime'].append(total_ptime)
 
 print("Avg per epoch ptime: %.2f, total %d epochs ptime: %.2f" % (torch.mean(torch.FloatTensor(train_hist['per_epoch_ptimes'])), train_epoch, total_ptime))
 print("Training finish!... save training results")
-torch.save(G.state_dict(), SAVEDIR+GENFILE)
-torch.save(D.state_dict(), SAVEDIR+DISCFILE)
+torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
+torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE)
 with open(SAVEDIR+'/train_hist.pkl', 'wb') as f:
     pickle.dump(train_hist, f)
 
-show_train_hist(train_hist, save=True, path=SAVEDIR+'/MNIST_DCGAN_train_hist.png')
+show_train_hist(train_hist, save=True, path=SAVEDIR+'/train_hist.png')
 
 # images = []
 # for e in range(train_epoch):
