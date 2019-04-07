@@ -2568,3 +2568,11 @@ Avg per epoch ptime: 1274.78, total 50 epochs ptime: 63835.61
 Training finish!... save training results
 (pytorch_p36) [01;32mubuntu@ip-172-31-8-26[00m:[01;34m~/pacgan[00m$ python mnist_dcgan.py [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kexit
 exit
+[01;32mubuntu@ip-172-31-8-26[00m:[01;34m~/pacgan[00m$ source activate pytorch_p36
+(pytorch_p36) [01;32mubuntu@ip-172-31-8-26[00m:[01;34m~/pacgan[00m$ python [K[K[K[K[K[K[Ktrai[K[K[K[Kmnist_[K[K[K[K[K[Kbash mnist_train.h[Ksh
+usage: mnist_gan.py [-h] [--model_type MODEL_TYPE] [--save_dir SAVE_DIR]
+                    [--tau TAU] [--latent_dim LATENT_DIM]
+                    [--batch_size BATCH_SIZE] [--num_epochs NUM_EPOCHS]
+                    [--learning_rate LEARNING_RATE] [--gen_file GEN_FILE]
+                    [--disc_file DISC_FILE]
+mnist_gan.py: error: argument --model_type/-m: invalid int value: 't'
