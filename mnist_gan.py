@@ -16,7 +16,7 @@ from torchvision import datasets, transforms
 from mnist_models import Generator, Discriminator
 
 parser = argparse.ArgumentParser(description='training runner')
-parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 for dcgan, 1 for asgan
+parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 dcgan, 1 asgan, 2 ergan
 parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
 parser.add_argument('--tau','-t',type=float,default=0.3,help='Alpha smoothing parameter')
 parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimension')
