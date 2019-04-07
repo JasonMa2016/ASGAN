@@ -1,6 +1,9 @@
 # adapted (copy pasted) from https://github.com/znxlwm/pytorch-MNIST-CelebA-GAN-DCGAN
-import os, time
+import numpy as np
 import matplotlib.pyplot as plt
+import argparse
+import copy
+import os, time
 import itertools
 import pickle
 # import imageio
@@ -9,7 +12,31 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
-# from torch.autograd import Variable
+# from torch.autograd import Variable # torch <=0.3
+from mnist_models import Generator, Discriminator
+
+parser = argparse.ArgumentParser(description='training runner')
+parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 for dcgan, 1 for asgan
+parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
+parser.add_argument('--tau','-t',type=float,default=0.3,help='Alpha smoothing parameter')
+parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimension')
+parser.add_argument('--batch_size','-bs',type=int,default=63,help='Batch size')
+parser.add_argument('--num_epochs','-ne',type=int,default=50,help='Number of epochs')
+parser.add_argument('--learning_rate','-lr',type=float,default=0.0002,help='Learning rate')
+parser.add_argument('--gen_file','-gf',type=str,default='generator_param.pkl',help='Save gen filename')
+parser.add_argument('--disc_file','-df',type=str,default='discriminator_param.pkl',help='Save disc filename')
+# parser.add_argument('--track_space','-ts',action='store_true',help='Save 2D latent space viz, if ld=2')
+args = parser.parse_args()
+MODELTYPE = args.model_type
+SAVEDIR = args.save_dir
+GENFILE = args.gen_file
+DISCFILE = args.disc_file
+# training parameters
+tau = args.tau
+latent_dim = args.latent_dim
+batch_size = args.batch_size
+train_epoch = args.num_epochs
+lr = args.learning_rate
 
 if torch.cuda.is_available():
     print('using cuda!')
@@ -17,96 +44,25 @@ if torch.cuda.is_available():
     dtype = torch.cuda.FloatTensor
     is_cuda = True
 else:
+    dtype = torch.FloatTensor
     is_cuda = False
 
-# G(z)
-class generator(nn.Module):
-    def __init__(self, d=64):
-        super(generator, self).__init__()
-        self.d = d
-        self.linear = nn.Linear(100, 2*2*d*8)
-        self.linear_bn = nn.BatchNorm1d(2*2*d*8)
-        self.deconv1 = nn.ConvTranspose2d(d*8, d*4, 5, 2, 1) # changed things
-        self.deconv1_bn = nn.BatchNorm2d(d*4)
-        self.deconv2 = nn.ConvTranspose2d(d*4, d*2, 5, 2, 2)
-        self.deconv2_bn = nn.BatchNorm2d(d*2)
-        self.deconv3 = nn.ConvTranspose2d(d*2, d, 5, 2, 1)
-        self.deconv3_bn = nn.BatchNorm2d(d)
-        self.deconv4 = nn.ConvTranspose2d(d, 3, 5, 2, 1)
-    def weight_init(self, mean, std):
-        for m in self._modules:
-            normal_init(self._modules[m], mean, std)
-    def forward(self, input):
-        x = F.relu(self.linear_bn(self.linear(input)))
-        x = x.view(-1, self.d*8, 2, 2)
-        x = F.relu(self.deconv1_bn(self.deconv1(x)))
-        x = x[:,:,:-1,:-1] # hacky way to get shapes right (like "SAME" in tf)
-        x = F.relu(self.deconv2_bn(self.deconv2(x)))
-        x = F.relu(self.deconv3_bn(self.deconv3(x)))
-        x = x[:,:,:-1,:-1]
-        x = torch.tanh(self.deconv4(x))
-        x = x[:,:,:-1,:-1]
-        return x
-
-# test dimensions
-# import time
-# G = generator()
-# start = time.time()
-# x = torch.zeros(43, 100)
-# y = G(x)
-# print(time.time()-start)
-
-class discriminator(nn.Module):
-    def __init__(self, d=64):
-        super(discriminator, self).__init__()
-        self.d = d
-        self.conv1 = nn.Conv2d(3, d, 5, 2, 2)
-        self.conv2 = nn.Conv2d(d, d*2, 5, 2, 2)
-        self.conv2_bn = nn.BatchNorm2d(d*2)
-        self.conv3 = nn.Conv2d(d*2, d*4, 5, 2, 2)
-        self.conv3_bn = nn.BatchNorm2d(d*4)
-        self.conv4 = nn.Conv2d(d*4, d*8, 5, 2, 2)
-        self.conv4_bn = nn.BatchNorm2d(d*8)
-        self.linear = nn.Linear(2*2*d*8, 1)
-    def weight_init(self, mean, std):
-        for m in self._modules:
-            normal_init(self._modules[m], mean, std)
-    def forward(self, input):
-        x = F.leaky_relu(self.conv1(input), 0.2)
-        x = F.leaky_relu(self.conv2_bn(self.conv2(x)), 0.2)
-        x = F.leaky_relu(self.conv3_bn(self.conv3(x)), 0.2)
-        x = F.leaky_relu(self.conv4_bn(self.conv4(x)), 0.2)
-        x = x.view(-1, 2*2*self.d*8)
-        x = torch.sigmoid(self.linear(x))
-        return x
-
-# test dimensions
-# start = time.time()
-# D = discriminator()
-# x = torch.zeros(43, 3, 28, 28)
-# y = D(x)
-# print(time.time()-start)
-
-def normal_init(m, mean, std):
-    if isinstance(m, nn.ConvTranspose2d) or isinstance(m, nn.Conv2d):
-        m.weight.data.normal_(mean, std)
-        m.bias.data.zero_()
-
 def gen_noise():
-    return torch.randn((5 * 5), 100).view(-1, 100).type(dtype)
-    # fixed_z_ = Variable(fixed_z_.cuda(), volatile=True)
+    z_ = torch.randn((5 * 5), latent_dim).view(-1, latent_dim).type(dtype)
+    return z_.cuda() if is_cuda else z_
 
 fixed_z_ = gen_noise() # fixed noise
 
 def show_result(num_epoch, show = False, save = False, path = 'result.png', isFix=False):
     z_ = gen_noise()
-    # z_ = Variable(z_.cuda(), volatile=True)
     G.eval()
     if isFix:
         test_images = G(fixed_z_)
     else:
         test_images = G(z_)
     G.train()
+    test_images = test_images.cpu().data.numpy().transpose(0,2,3,1) # different manip, all 3 channels!
+    test_images = (test_images + 1) / 2
     size_figure_grid = 5
     fig, ax = plt.subplots(size_figure_grid, size_figure_grid, figsize=(5, 5))
     for i, j in itertools.product(range(size_figure_grid), range(size_figure_grid)):
@@ -116,9 +72,10 @@ def show_result(num_epoch, show = False, save = False, path = 'result.png', isFi
         i = k // 5
         j = k % 5
         ax[i, j].cla()
-        ti = test_images[k].cpu().data.numpy().transpose(1,2,0) # all 3 channels!
-        ax[i, j].imshow(ti, cmap='gray')
-    label = 'Epoch {0}'.format(num_epoch)
+        ti = test_images[k]
+        # transform?? vmin # (ti - np.min(ti)) / (np.max(ti) - np.min(ti))
+        ax[i, j].imshow(ti) # , cmap='gray')
+    label = 'Epoch {0} (min {1} max {2})'.format(num_epoch, np.min(test_images), np.max(test_images))
     fig.text(0.5, 0.04, label, ha='center')
     plt.savefig(path)
     if show:
@@ -126,6 +83,7 @@ def show_result(num_epoch, show = False, save = False, path = 'result.png', isFi
     else:
         plt.close()
         
+
 def show_train_hist(hist, show = False, save = False, path = 'Train_hist.png'):
     x = range(len(hist['D_losses']))
     y1 = hist['D_losses']
@@ -144,20 +102,15 @@ def show_train_hist(hist, show = False, save = False, path = 'Train_hist.png'):
     else:
         plt.close()
 
-# training parameters
-batch_size = 63
-lr = 0.0002
-train_epoch = 50
-
 # data_loader
 img_size = 28
 transform = transforms.Compose([
-        transforms.Scale(img_size),
+        transforms.Scale(img_size) if torch.__version__[0] < '1' else transforms.Resize(img_size),
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
 ])
 train_loader = torch.utils.data.DataLoader(
-    datasets.MNIST('data', train=True, download=True, transform=transform),
+    datasets.MNIST('./data', train=True, download=True, transform=transform),
     batch_size=batch_size, shuffle=True, pin_memory = is_cuda)
 
 # 60000 dataset stacked is 20000
@@ -166,8 +119,9 @@ train_loader = torch.utils.data.DataLoader(
 # from load_mnist import *
 # img, lab = load_mnist(128000)
 
-G = generator()
-D = discriminator()
+G = Generator()
+G_old = copy.deepcopy(G) # TODO: will this work with cuda?
+D = Discriminator()
 G.weight_init(mean=0.0, std=0.02)
 D.weight_init(mean=0.0, std=0.02)
 if is_cuda:
@@ -187,12 +141,12 @@ def stack(x):
 
 
 # results save folder
-if not os.path.isdir('DCGAN_MNIST'):
-    os.mkdir('DCGAN_MNIST')
-if not os.path.isdir('DCGAN_MNIST/Random_results'):
-    os.mkdir('DCGAN_MNIST/Random_results')
-if not os.path.isdir('DCGAN_MNIST/Fixed_results'):
-    os.mkdir('DCGAN_MNIST/Fixed_results')
+if not os.path.isdir(SAVEDIR):
+    os.mkdir(SAVEDIR)
+if not os.path.isdir(SAVEDIR+'/Random_results'):
+    os.mkdir(SAVEDIR+'/Random_results')
+if not os.path.isdir(SAVEDIR+'/Fixed_results'):
+    os.mkdir(SAVEDIR+'/Fixed_results')
 
 train_hist = {}
 train_hist['D_losses'] = []
@@ -201,7 +155,6 @@ train_hist['per_epoch_ptimes'] = []
 train_hist['total_ptime'] = []
 num_iter = 0
 
-stupid_var = False
 print('training start!')
 start_time = time.time()
 for epoch in range(train_epoch):
@@ -219,12 +172,12 @@ for epoch in range(train_epoch):
             y_real_ = torch.ones(mini_batch)
             y_fake_ = torch.zeros(mini_batch)
 
-            x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
+            if is_cuda: x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
             D_result = D(x_).squeeze()
             D_real_loss = BCE_loss(D_result, y_real_)
 
-            z_ = torch.randn((mini_batch, 100)).view(-1, 100)
-            z_ = z_.cuda()
+            z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
+            if is_cuda: z_ = z_.cuda()
             G_result = G(z_)
 
             D_result = D(G_result).squeeze()
@@ -243,8 +196,8 @@ for epoch in range(train_epoch):
             for j in range(2):
                 G.zero_grad()
 
-                z_ = torch.randn((mini_batch, 100)).view(-1, 100)
-                z_ = z_.cuda()
+                z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
+                if is_cuda: z_ = z_.cuda()
 
                 G_result = G(z_)
                 D_result = D(G_result).squeeze()
@@ -253,10 +206,13 @@ for epoch in range(train_epoch):
                 G_optimizer.step()
                 G_losses.append(G_train_loss.item())
 
+            # alpha smoothing
+            if MODELTYPE == 1:
+                for model_param, old_param in zip(G.parameters(), G_old.parameters()):
+                    model_param.data.copy_(model_param.data*(1-tau) + old_param.data*tau)
+                    old_param.data.copy_(model_param.data)
+
             num_iter += 1
-        if stupid_var == False:
-            stupid_var = True
-            print(D_losses, G_losses, time.time()-start)
 
     epoch_end_time = time.time()
     per_epoch_ptime = epoch_end_time - epoch_start_time
@@ -264,8 +220,8 @@ for epoch in range(train_epoch):
 
     print('[%d/%d] - ptime: %.2f, loss_d: %.3f, loss_g: %.3f' % ((epoch + 1), train_epoch, per_epoch_ptime, torch.mean(torch.FloatTensor(D_losses)),
                                                               torch.mean(torch.FloatTensor(G_losses))))
-    p = 'DCGAN_MNIST/Random_results/MNIST_DCGAN_' + str(epoch + 1) + '.png'
-    fixed_p = 'DCGAN_MNIST/Fixed_results/MNIST_DCGAN_' + str(epoch + 1) + '.png'
+    p = SAVEDIR+'/Random_results/MNIST_DCGAN_' + str(epoch + 1) + '.png'
+    fixed_p = SAVEDIR+'/Fixed_results/MNIST_DCGAN_' + str(epoch + 1) + '.png'
     show_result((epoch+1), save=True, path=p, isFix=False)
     show_result((epoch+1), save=True, path=fixed_p, isFix=True)
     train_hist['D_losses'].append(torch.mean(torch.FloatTensor(D_losses)))
@@ -273,8 +229,8 @@ for epoch in range(train_epoch):
     train_hist['per_epoch_ptimes'].append(per_epoch_ptime)
 
     if epoch % 2 == 0:
-        torch.save(G.state_dict(), "DCGAN_MNIST/generator_param.pkl")
-        torch.save(D.state_dict(), "DCGAN_MNIST/discriminator_param.pkl") # for safety!
+        torch.save(G.state_dict(), SAVEDIR+GENFILE)
+        torch.save(D.state_dict(), SAVEDIR+DISCFILE) # for safety!
 
 end_time = time.time()
 total_ptime = end_time - start_time
@@ -282,15 +238,15 @@ train_hist['total_ptime'].append(total_ptime)
 
 print("Avg per epoch ptime: %.2f, total %d epochs ptime: %.2f" % (torch.mean(torch.FloatTensor(train_hist['per_epoch_ptimes'])), train_epoch, total_ptime))
 print("Training finish!... save training results")
-torch.save(G.state_dict(), "DCGAN_MNIST/generator_param.pkl")
-torch.save(D.state_dict(), "DCGAN_MNIST/discriminator_param.pkl")
-with open('DCGAN_MNIST/train_hist.pkl', 'wb') as f:
+torch.save(G.state_dict(), SAVEDIR+GENFILE)
+torch.save(D.state_dict(), SAVEDIR+DISCFILE)
+with open(SAVEDIR+'/train_hist.pkl', 'wb') as f:
     pickle.dump(train_hist, f)
 
-show_train_hist(train_hist, save=True, path='DCGAN_MNIST/MNIST_DCGAN_train_hist.png')
+show_train_hist(train_hist, save=True, path=SAVEDIR+'/MNIST_DCGAN_train_hist.png')
 
 # images = []
 # for e in range(train_epoch):
-#     img_name = 'DCGAN_MNIST/Fixed_results/MNIST_DCGAN_' + str(e + 1) + '.png'
+#     img_name = SAVEDIR+'/Fixed_results/MNIST_DCGAN_' + str(e + 1) + '.png'
 #     images.append(imageio.imread(img_name))
-# imageio.mimsave('DCGAN_MNIST/generation_animation.gif', images, fps=5)
+# imageio.mimsave(SAVEDIR+'/generation_animation.gif', images, fps=5)

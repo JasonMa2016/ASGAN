@@ -1,3 +1,16 @@
+'''
+Differences: 
+tau = 0.3
+G_old = copy.deepcopy(G)
+# alpha smoothing
+for model_param, old_param in zip(G.parameters(), G_old.parameters()):
+    model_param.data.copy_(model_param.data*(1-tau) + old_param.data*tau)
+    old_param.data.copy_(model_param.data)
+Folder name
+
+this file is out-of-date in many ways. just copy the mnist_dcgan and recreate the changes above
+'''
+
 # adapted (copy pasted) from https://github.com/znxlwm/pytorch-MNIST-CelebA-GAN-DCGAN
 import os, time
 import matplotlib.pyplot as plt
