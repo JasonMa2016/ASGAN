@@ -256,7 +256,7 @@ for epoch in range(train_epoch):
             num_iter += 1
         if stupid_var == False:
             stupid_var = True
-            print(D_losses, G_losses, time.time()-start)
+            print(D_losses, G_losses, time.time()-start_time)
 
     epoch_end_time = time.time()
     per_epoch_ptime = epoch_end_time - epoch_start_time
