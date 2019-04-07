@@ -112,10 +112,10 @@ transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
 ])
-subset_indices = torch.LongTensor(np.random.choice(np.arange(50000), batch_size * 10))
+sampler = torch.utils.data.SubsetRandomSampler(torch.LongTensor(np.random.choice(np.arange(50000), batch_size * 10)))
 train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('./data', train=True, download=True, transform=transform),
-    batch_size=batch_size, shuffle=True, pin_memory = is_cuda, sampler=SubsetRandomSampler(subset_indices)) # TODO: why doesn't this return cuda.FloatTensors?
+    batch_size=batch_size, shuffle=False, pin_memory = is_cuda, sampler=sampler) # TODO: why doesn't this return cuda.FloatTensors?
 
 print('batch size', batch_size, 'whole thing is that times 10')
 # 60000 dataset stacked is 20000
@@ -155,11 +155,11 @@ def stack(x):
 # if not os.path.isdir(SAVEDIR+'/Fixed_results'):
 #     os.mkdir(SAVEDIR+'/Fixed_results')
 
-# train_hist = {}
-# train_hist['D_losses'] = []
-# train_hist['G_losses'] = []
-# train_hist['per_epoch_ptimes'] = []
-# train_hist['total_ptime'] = []
+train_hist = {}
+train_hist['D_losses'] = []
+train_hist['G_losses'] = []
+train_hist['per_epoch_ptimes'] = []
+train_hist['total_ptime'] = []
 num_iter = 0
 
 print('training start!')
@@ -170,7 +170,7 @@ for epoch in range(train_epoch):
     epoch_start_time = time.time()
     for i in range(1):
         for x_, _ in train_loader:
-        	print('batch')
+            print('batch')
             # train discriminator D
             D.zero_grad()
 

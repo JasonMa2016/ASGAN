@@ -70,7 +70,7 @@ def stack(x):
 
 # network
 G = Generator()
-G.load_state_dict(torch.load(SAVEDIR+GENFILE))
+G.load_state_dict(torch.load(SAVEDIR+'/'+GENFILE))
 if is_cuda:
     G.cuda()
 
