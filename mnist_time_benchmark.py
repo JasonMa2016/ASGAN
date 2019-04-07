@@ -1,3 +1,5 @@
+# mini-training loop for timing purposes!
+
 # adapted (copy pasted) from https://github.com/znxlwm/pytorch-MNIST-CelebA-GAN-DCGAN
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,13 +17,14 @@ from torchvision import datasets, transforms
 # from torch.autograd import Variable # torch <=0.3
 from mnist_models import Generator, Discriminator
 
+
 parser = argparse.ArgumentParser(description='training runner')
 parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 dcgan, 1 asgan, 2 ergan
 parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
 parser.add_argument('--tau','-t',type=float,default=0.3,help='Alpha smoothing parameter')
 parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimension')
 parser.add_argument('--batch_size','-bs',type=int,default=63,help='Batch size')
-parser.add_argument('--num_epochs','-ne',type=int,default=50,help='Number of epochs')
+# parser.add_argument('--num_epochs','-ne',type=int,default=50,help='Number of epochs')
 parser.add_argument('--learning_rate','-lr',type=float,default=0.0002,help='Learning rate')
 parser.add_argument('--gen_file','-gf',type=str,default='generator_param.pkl',help='Save gen filename')
 parser.add_argument('--disc_file','-df',type=str,default='discriminator_param.pkl',help='Save disc filename')
@@ -35,7 +38,7 @@ DISCFILE = args.disc_file
 tau = args.tau
 latent_dim = args.latent_dim
 batch_size = args.batch_size
-train_epoch = args.num_epochs
+train_epoch = 1
 lr = args.learning_rate
 
 if torch.cuda.is_available():
@@ -109,10 +112,12 @@ transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
 ])
+subset_indices = torch.LongTensor(np.random.choice(np.arange(50000), batch_size * 10))
 train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('./data', train=True, download=True, transform=transform),
-    batch_size=batch_size, shuffle=True, pin_memory = is_cuda) # TODO: why doesn't this return cuda.FloatTensors?
+    batch_size=batch_size, shuffle=True, pin_memory = is_cuda, sampler=SubsetRandomSampler(subset_indices)) # TODO: why doesn't this return cuda.FloatTensors?
 
+print('batch size', batch_size, 'whole thing is that times 10')
 # 60000 dataset stacked is 20000
 # repeat 6 times per epoch to get 120000 (pacgan does 128000)
 # alternatively, can use load_mnist() function, but it is much slower
@@ -143,18 +148,18 @@ def stack(x):
 
 
 # results save folder
-if not os.path.isdir(SAVEDIR):
-    os.mkdir(SAVEDIR)
-if not os.path.isdir(SAVEDIR+'/Random_results'):
-    os.mkdir(SAVEDIR+'/Random_results')
-if not os.path.isdir(SAVEDIR+'/Fixed_results'):
-    os.mkdir(SAVEDIR+'/Fixed_results')
+# if not os.path.isdir(SAVEDIR):
+#     os.mkdir(SAVEDIR)
+# if not os.path.isdir(SAVEDIR+'/Random_results'):
+#     os.mkdir(SAVEDIR+'/Random_results')
+# if not os.path.isdir(SAVEDIR+'/Fixed_results'):
+#     os.mkdir(SAVEDIR+'/Fixed_results')
 
-train_hist = {}
-train_hist['D_losses'] = []
-train_hist['G_losses'] = []
-train_hist['per_epoch_ptimes'] = []
-train_hist['total_ptime'] = []
+# train_hist = {}
+# train_hist['D_losses'] = []
+# train_hist['G_losses'] = []
+# train_hist['per_epoch_ptimes'] = []
+# train_hist['total_ptime'] = []
 num_iter = 0
 
 print('training start!')
@@ -163,8 +168,9 @@ for epoch in range(train_epoch):
     D_losses = []
     G_losses = []
     epoch_start_time = time.time()
-    for i in range(6):
+    for i in range(1):
         for x_, _ in train_loader:
+        	print('batch')
             # train discriminator D
             D.zero_grad()
 
@@ -222,17 +228,17 @@ for epoch in range(train_epoch):
 
     print('[%d/%d] - ptime: %.2f, loss_d: %.3f, loss_g: %.3f' % ((epoch + 1), train_epoch, per_epoch_ptime, torch.mean(torch.FloatTensor(D_losses)),
                                                               torch.mean(torch.FloatTensor(G_losses))))
-    p = SAVEDIR+'/Random_results/' + str(epoch + 1) + '.png'
-    fixed_p = SAVEDIR+'/Fixed_results/' + str(epoch + 1) + '.png'
-    show_result((epoch+1), save=True, path=p, isFix=False)
-    show_result((epoch+1), save=True, path=fixed_p, isFix=True)
-    train_hist['D_losses'].append(torch.mean(torch.FloatTensor(D_losses)))
-    train_hist['G_losses'].append(torch.mean(torch.FloatTensor(G_losses)))
-    train_hist['per_epoch_ptimes'].append(per_epoch_ptime)
+    # p = SAVEDIR+'/Random_results/' + str(epoch + 1) + '.png'
+    # fixed_p = SAVEDIR+'/Fixed_results/' + str(epoch + 1) + '.png'
+    # show_result((epoch+1), save=True, path=p, isFix=False)
+    # show_result((epoch+1), save=True, path=fixed_p, isFix=True)
+    # train_hist['D_losses'].append(torch.mean(torch.FloatTensor(D_losses)))
+    # train_hist['G_losses'].append(torch.mean(torch.FloatTensor(G_losses)))
+    # train_hist['per_epoch_ptimes'].append(per_epoch_ptime)
 
-    if epoch % 2 == 0:
-        torch.save(G.state_dict(), SAVEDIR+GENFILE)
-        torch.save(D.state_dict(), SAVEDIR+DISCFILE) # for safety!
+    # if epoch % 2 == 0:
+    #     torch.save(G.state_dict(), SAVEDIR+GENFILE)
+    #     torch.save(D.state_dict(), SAVEDIR+DISCFILE) # for safety!
 
 end_time = time.time()
 total_ptime = end_time - start_time
@@ -240,12 +246,12 @@ train_hist['total_ptime'].append(total_ptime)
 
 print("Avg per epoch ptime: %.2f, total %d epochs ptime: %.2f" % (torch.mean(torch.FloatTensor(train_hist['per_epoch_ptimes'])), train_epoch, total_ptime))
 print("Training finish!... save training results")
-torch.save(G.state_dict(), SAVEDIR+GENFILE)
-torch.save(D.state_dict(), SAVEDIR+DISCFILE)
-with open(SAVEDIR+'/train_hist.pkl', 'wb') as f:
-    pickle.dump(train_hist, f)
+# torch.save(G.state_dict(), SAVEDIR+GENFILE)
+# torch.save(D.state_dict(), SAVEDIR+DISCFILE)
+# with open(SAVEDIR+'/train_hist.pkl', 'wb') as f:
+#     pickle.dump(train_hist, f)
 
-show_train_hist(train_hist, save=True, path=SAVEDIR+'/MNIST_DCGAN_train_hist.png')
+# show_train_hist(train_hist, save=True, path=SAVEDIR+'/MNIST_DCGAN_train_hist.png')
 
 # images = []
 # for e in range(train_epoch):

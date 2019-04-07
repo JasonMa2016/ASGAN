@@ -10,7 +10,7 @@ def normal_init(m, mean, std):
 # 4517891 params
 class Generator(nn.Module):
     def __init__(self, d=64, ld=100):
-        super(generator, self).__init__()
+        super(Generator, self).__init__()
         self.d = d
         self.linear = nn.Linear(ld, 2*2*d*8)
         self.linear_bn = nn.BatchNorm1d(2*2*d*8)
@@ -47,7 +47,7 @@ class Generator(nn.Module):
 # 4310401 params
 class Discriminator(nn.Module):
     def __init__(self, d=64):
-        super(discriminator, self).__init__()
+        super(Discriminator, self).__init__()
         self.d = d
         self.conv1 = nn.Conv2d(3, d, 5, 2, 2)
         self.conv2 = nn.Conv2d(d, d*2, 5, 2, 2)
