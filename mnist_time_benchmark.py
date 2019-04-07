@@ -172,6 +172,10 @@ for epoch in range(train_epoch):
     epoch_start_time = time.time()
     for i in range(1):
         for x_, _ in train_loader:
+<<<<<<< HEAD
+=======
+            print('batch')
+>>>>>>> c389ab72961add774b80cdf15dcdb23b7c96396f
             # train discriminator D
             D.zero_grad()
 
