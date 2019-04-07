@@ -185,6 +185,7 @@ def stack(x):
     # assert(x.shape[0] % 3 == 0)
     return torch.cat([x[::3], x[1::3], x[2::3]], dim=1)
 
+
 # results save folder
 if not os.path.isdir('DCGAN_MNIST'):
     os.mkdir('DCGAN_MNIST')
@@ -200,6 +201,7 @@ train_hist['per_epoch_ptimes'] = []
 train_hist['total_ptime'] = []
 num_iter = 0
 
+stupid_var = False
 print('training start!')
 start_time = time.time()
 for epoch in range(train_epoch):
@@ -217,7 +219,7 @@ for epoch in range(train_epoch):
             y_real_ = torch.ones(mini_batch)
             y_fake_ = torch.zeros(mini_batch)
 
-            x_, y_real, y_fake = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
+            x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
             D_result = D(x_).squeeze()
             D_real_loss = BCE_loss(D_result, y_real_)
 
@@ -252,6 +254,9 @@ for epoch in range(train_epoch):
                 G_losses.append(G_train_loss.item())
 
             num_iter += 1
+        if stupid_var == False:
+            stupid_var = True
+            print(D_losses, G_losses, time.time()-start)
 
     epoch_end_time = time.time()
     per_epoch_ptime = epoch_end_time - epoch_start_time
