@@ -1,0 +1,2 @@
+using cuda!
+num mode 93 kl 4.371614523673349
