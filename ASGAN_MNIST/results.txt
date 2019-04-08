@@ -1,2 +1,2 @@
 using cuda!
-num mode 93 kl 4.371614523673349
+num mode 86 kl 4.374850014375301

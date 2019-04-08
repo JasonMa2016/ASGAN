@@ -57,3 +57,167 @@ Training finish!... save training results
 Using TensorFlow backend.
 2019-04-08 16:15:56.506677: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
 2019-04-08 16:15:56.507645: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+upload failed: ASGAN_MNIST/ to s3://am221/ Parameter validation failed:
+Invalid length for parameter Key, value: 0, valid range: 1-inf
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	[31mmodified:   screenlog.0[m
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	[31mASGAN_MNIST/[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[master a844c93] asgan mnist train
+ Committer: Ubuntu <ubuntu@ip-172-31-8-26.ec2.internal>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 106 files changed, 61 insertions(+), 2578 deletions(-)
+ create mode 100644 ASGAN_MNIST/Fixed_results/1.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/10.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/11.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/12.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/13.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/14.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/15.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/16.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/17.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/18.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/19.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/2.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/20.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/21.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/22.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/23.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/24.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/25.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/26.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/27.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/28.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/29.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/3.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/30.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/31.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/32.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/33.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/34.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/35.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/36.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/37.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/38.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/39.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/4.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/40.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/41.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/42.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/43.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/44.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/45.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/46.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/47.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/48.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/49.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/5.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/50.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/6.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/7.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/8.png
+ create mode 100644 ASGAN_MNIST/Fixed_results/9.png
+ create mode 100644 ASGAN_MNIST/Random_results/1.png
+ create mode 100644 ASGAN_MNIST/Random_results/10.png
+ create mode 100644 ASGAN_MNIST/Random_results/11.png
+ create mode 100644 ASGAN_MNIST/Random_results/12.png
+ create mode 100644 ASGAN_MNIST/Random_results/13.png
+ create mode 100644 ASGAN_MNIST/Random_results/14.png
+ create mode 100644 ASGAN_MNIST/Random_results/15.png
+ create mode 100644 ASGAN_MNIST/Random_results/16.png
+ create mode 100644 ASGAN_MNIST/Random_results/17.png
+ create mode 100644 ASGAN_MNIST/Random_results/18.png
+ create mode 100644 ASGAN_MNIST/Random_results/19.png
+ create mode 100644 ASGAN_MNIST/Random_results/2.png
+ create mode 100644 ASGAN_MNIST/Random_results/20.png
+ create mode 100644 ASGAN_MNIST/Random_results/21.png
+ create mode 100644 ASGAN_MNIST/Random_results/22.png
+ create mode 100644 ASGAN_MNIST/Random_results/23.png
+ create mode 100644 ASGAN_MNIST/Random_results/24.png
+ create mode 100644 ASGAN_MNIST/Random_results/25.png
+ create mode 100644 ASGAN_MNIST/Random_results/26.png
+ create mode 100644 ASGAN_MNIST/Random_results/27.png
+ create mode 100644 ASGAN_MNIST/Random_results/28.png
+ create mode 100644 ASGAN_MNIST/Random_results/29.png
+ create mode 100644 ASGAN_MNIST/Random_results/3.png
+ create mode 100644 ASGAN_MNIST/Random_results/30.png
+ create mode 100644 ASGAN_MNIST/Random_results/31.png
+ create mode 100644 ASGAN_MNIST/Random_results/32.png
+ create mode 100644 ASGAN_MNIST/Random_results/33.png
+ create mode 100644 ASGAN_MNIST/Random_results/34.png
+ create mode 100644 ASGAN_MNIST/Random_results/35.png
+ create mode 100644 ASGAN_MNIST/Random_results/36.png
+ create mode 100644 ASGAN_MNIST/Random_results/37.png
+ create mode 100644 ASGAN_MNIST/Random_results/38.png
+ create mode 100644 ASGAN_MNIST/Random_results/39.png
+ create mode 100644 ASGAN_MNIST/Random_results/4.png
+ create mode 100644 ASGAN_MNIST/Random_results/40.png
+ create mode 100644 ASGAN_MNIST/Random_results/41.png
+ create mode 100644 ASGAN_MNIST/Random_results/42.png
+ create mode 100644 ASGAN_MNIST/Random_results/43.png
+ create mode 100644 ASGAN_MNIST/Random_results/44.png
+ create mode 100644 ASGAN_MNIST/Random_results/45.png
+ create mode 100644 ASGAN_MNIST/Random_results/46.png
+ create mode 100644 ASGAN_MNIST/Random_results/47.png
+ create mode 100644 ASGAN_MNIST/Random_results/48.png
+ create mode 100644 ASGAN_MNIST/Random_results/49.png
+ create mode 100644 ASGAN_MNIST/Random_results/5.png
+ create mode 100644 ASGAN_MNIST/Random_results/50.png
+ create mode 100644 ASGAN_MNIST/Random_results/6.png
+ create mode 100644 ASGAN_MNIST/Random_results/7.png
+ create mode 100644 ASGAN_MNIST/Random_results/8.png
+ create mode 100644 ASGAN_MNIST/Random_results/9.png
+ create mode 100644 ASGAN_MNIST/discriminator_param.pkl
+ create mode 100644 ASGAN_MNIST/generator_param.pkl
+ create mode 100644 ASGAN_MNIST/results.txt
+ create mode 100644 ASGAN_MNIST/train_hist.pkl
+ create mode 100644 ASGAN_MNIST/train_hist.png
+ rewrite screenlog.0 (99%)
+warning: push.default is unset; its implicit value has changed in
+Git 2.0 from 'matching' to 'simple'. To squelch this message
+and maintain the traditional behavior, use:
+
+  git config --global push.default matching
+
+To squelch this message and adopt the new behavior now, use:
+
+  git config --global push.default simple
+
+When push.default is set to 'matching', git will push local branches
+to the remote branches that already exist with the same name.
+
+Since Git 2.0, Git defaults to the more conservative 'simple'
+behavior, which only pushes the current branch to the corresponding
+remote branch that 'git pull' uses to update the current branch.
+
+See 'git help config' and search for 'push.default' for further information.
+(the 'simple' mode was introduced in Git 1.7.11. Use the similar mode
+'current' instead of 'simple' if you sometimes use older versions of Git)
+
+Username for 'https://github.com': elbertgong
+Password for 'https://delbertgong@github.com': 
+remote: Invalid username or password.
+fatal: Authentication failed for 'https://github.com/JasonMa2016/pacgan.git/'
+(pytorch_p36) [01;32mubuntu@ip-172-31-8-26[00m:[01;34m~/pacgan[00m$ exit[K[K[K[Kexit
+exit
