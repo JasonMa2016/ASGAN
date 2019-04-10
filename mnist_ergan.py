@@ -166,7 +166,7 @@ old_G_result = G(z_) # ERGAN
 print('training start!')
 start_time = time.time()
 
-memory = deque()
+memory = deque(maxlen=len(train_loader))
 
 for epoch in range(train_epoch):
     D_losses = []
