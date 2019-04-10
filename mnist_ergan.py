@@ -163,9 +163,6 @@ z_ = torch.randn((int(batch_size/3), latent_dim)).view(-1, latent_dim)
 if is_cuda: z_ = z_.cuda()
 old_G_result = G(z_) # ERGAN
 
-# new stuff
-Q = ImageQueue(len(train_loader * batch_size))
-
 print('training start!')
 start_time = time.time()
 
@@ -186,24 +183,35 @@ for epoch in range(train_epoch):
             y_real_ = torch.ones(mini_batch)
             y_fake_ = torch.zeros(mini_batch)
 
-            if is_cuda: x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
+            if is_cuda: 
+                x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
+
             D_result = D(x_).squeeze()
             D_real_loss = BCE_loss(D_result, y_real_)
 
-            z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
-            if is_cuda: z_ = z_.cuda()
+            z_ = torch.randn((int(mini_batch/2), latent_dim)).view(-1, latent_dim)
+
+            if is_cuda: 
+                z_ = z_.cuda()
+
             G_result = G(z_)
+
+            # sample from experience
+            if len(memory) > mini_batch:
+                samples = random.sample(memory, int(mini_batch/2)+1)
+                samples = torch.stack(samples)
+                print(G_result.shape, samples.shape)
+                G_result = torch.cat((G_result, samples))
+
             D_result = D(G_result).squeeze()
-            D_result_er = D(Q.sample(mini_batch))
-            D_fake_loss = 0.5 * BCE_loss(D_result, y_fake_) + 0.5 * BCE_loss(D_result_er, y_fake_)
-            D_fake_score = D_result.data.mean()
+
+            D_fake_loss = BCE_loss(D_result, y_fake_[:D_result.shape[0]])
+            # D_fake_score = D_result.data.mean()
 
             D_train_loss = D_real_loss + D_fake_loss
 
             D_train_loss.backward()
             D_optimizer.step()
-
-            Q.enqueue(G_result)
 
             D_losses.append(D_train_loss.item())
 
@@ -235,10 +243,6 @@ for epoch in range(train_epoch):
                     old_param.data.copy_(model_param.data)
 
             num_iter += 1
-
-            if num_iter == 100:
-                print('100 iter', time.time()-epoch_start_time)
-                exit()
 
     epoch_end_time = time.time()
     per_epoch_ptime = epoch_end_time - epoch_start_time
