@@ -181,10 +181,11 @@ for epoch in range(train_epoch):
             mini_batch = x_.size()[0]
 
             y_real_ = torch.ones(mini_batch)
-            y_fake_ = torch.zeros(mini_batch)
+            # y_fake_ = torch.zeros(mini_batch)
 
-            if is_cuda: 
-                x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
+            if is_cuda: x_, y_real_ = x_.cuda(), y_real_.cuda()
+            # keep on the same line!
+                # x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
 
             D_result = D(x_).squeeze()
             D_real_loss = BCE_loss(D_result, y_real_)
@@ -204,8 +205,10 @@ for epoch in range(train_epoch):
                 G_result = torch.cat((G_result, samples))
 
             D_result = D(G_result).squeeze()
+            y_fake_ = torch.zeros(D_result.shape[0])
+            if is_cuda: y_fake_ = y_fake_.cuda()
 
-            D_fake_loss = BCE_loss(D_result, y_fake_[:D_result.shape[0]])
+            D_fake_loss = BCE_loss(D_result, y_fake_) # that old way is now deprecated
             # D_fake_score = D_result.data.mean()
 
             D_train_loss = D_real_loss + D_fake_loss
