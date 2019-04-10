@@ -1,2 +1,0 @@
-using cuda!
-num mode 86 kl 4.374850014375301
