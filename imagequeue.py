@@ -1,10 +1,10 @@
 import torch
 
 class ImageQueue():
-    def __init__(self, maxsize, imgsize = 3*28*28):
+    def __init__(self, maxsize):
         self.ttype = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
         self.tttype = torch.cuda.LongTensor if torch.cuda.is_available() else torch.LongTensor
-        self.arr = torch.zeros((maxsize, imgsize)).type(self.ttype)
+        self.arr = torch.zeros((maxsize, 3, 28, 28)).type(self.ttype)
         self.i = 0
         self.maxsize = maxsize
         self.uplimit = self.i

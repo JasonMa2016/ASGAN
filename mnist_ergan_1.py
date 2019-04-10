@@ -16,6 +16,7 @@ from torchvision import datasets, transforms
 from mnist_models import Generator, Discriminator
 from collections import deque
 import random
+from imagequeue import ImageQueue
 
 parser = argparse.ArgumentParser(description='training runner')
 parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 dcgan, 1 asgan, 2 ergan
@@ -164,12 +165,10 @@ if is_cuda: z_ = z_.cuda()
 old_G_result = G(z_) # ERGAN
 
 # new stuff
-Q = ImageQueue(len(train_loader * batch_size))
+Q = ImageQueue(len(train_loader) * batch_size)
 
 print('training start!')
 start_time = time.time()
-
-memory = deque()
 
 for epoch in range(train_epoch):
     D_losses = []
@@ -193,6 +192,7 @@ for epoch in range(train_epoch):
             z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
             if is_cuda: z_ = z_.cuda()
             G_result = G(z_)
+            Q.enqueue(G_result.detach())
             D_result = D(G_result).squeeze()
             D_result_er = D(Q.sample(mini_batch))
             D_fake_loss = 0.5 * BCE_loss(D_result, y_fake_) + 0.5 * BCE_loss(D_result_er, y_fake_)
@@ -202,8 +202,6 @@ for epoch in range(train_epoch):
 
             D_train_loss.backward()
             D_optimizer.step()
-
-            Q.enqueue(G_result)
 
             D_losses.append(D_train_loss.item())
 
@@ -216,10 +214,6 @@ for epoch in range(train_epoch):
                 if is_cuda: z_ = z_.cuda()
 
                 G_result = G(z_)
-
-                # add to memory
-                for i in range(G_result.shape[0]):
-                    memory.append(G_result[i].detach())
 
                 D_result = D(G_result).squeeze()
                 G_train_loss = BCE_loss(D_result, y_real_)

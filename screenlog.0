@@ -1,0 +1,16 @@
+[01;32mubuntu@ip-172-31-4-9[00m:[01;34m~/pacgan[00m$ source activate pytorch_p36
+(pytorch_p36) [01;32mubuntu@ip-172-31-4-9[00m:[01;34m~/pacgan[00m$ bash install.s[K[K[K[K[K[K[K[K[Kmnist_train.sh 
+using cuda!
+training start!
+[1/50] - ptime: 1198.08, loss_d: 0.010, loss_g: 0.010
+[2/50] - ptime: 1199.30, loss_d: 0.000, loss_g: 0.000
+[3/50] - ptime: 1199.45, loss_d: 0.002, loss_g: 0.005
+Traceback (most recent call last):
+  File "mnist_ergan.py", line 215, in <module>
+    D_train_loss.backward()
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/torch/tensor.py", line 102, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph)
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/torch/autograd/__init__.py", line 90, in backward
+    allow_unreachable=True)  # allow_unreachable flag
+RuntimeError: CUDA out of memory. Tried to allocate 1024.00 KiB (GPU 0; 11.17 GiB total capacity; 8.82 GiB already allocated; 448.00 KiB free; 2.07 GiB cached)
+(pytorch_p36) [01;32mubuntu@ip-172-31-4-9[00m:[01;34m~/pacgan[00m$ 
