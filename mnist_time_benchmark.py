@@ -112,10 +112,10 @@ transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
 ])
-# sampler = torch.utils.data.SubsetRandomSampler(torch.LongTensor(np.random.choice(np.arange(60000), batch_size * 10)))
+sampler = torch.utils.data.SubsetRandomSampler(torch.LongTensor(np.random.choice(np.arange(60000), batch_size * 10)))
 train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('./data', train=True, download=True, transform=transform),
-    batch_size=batch_size, shuffle=False, pin_memory = is_cuda) # , sampler=sampler) # TODO: why doesn't this return cuda.FloatTensors?
+    batch_size=batch_size, shuffle=False, pin_memory = is_cuda, sampler=sampler) # TODO: why doesn't this return cuda.FloatTensors?
 
 print('batch size:', batch_size, 'and whole thing is that times 10')
 # usually there are 953 batches per epoch, each batch is 63
@@ -164,6 +164,10 @@ train_hist['per_epoch_ptimes'] = []
 train_hist['total_ptime'] = []
 num_iter = 0
 
+z_ = torch.randn((int(batch_size/3), latent_dim)).view(-1, latent_dim)
+if is_cuda: z_ = z_.cuda()
+old_G_result = G(z_) # ERGAN
+
 print('training start!')
 start_time = time.time()
 for epoch in range(train_epoch):
@@ -208,9 +212,18 @@ for epoch in range(train_epoch):
                 z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
                 if is_cuda: z_ = z_.cuda()
 
+                # G_result = G(z_)
+                # D_result = D(G_result).squeeze()
+                # G_train_loss = BCE_loss(D_result, y_real_)
+                # G_train_loss.backward()
+                # G_optimizer.step()
+                # G_losses.append(G_train_loss.item())
+
                 G_result = G(z_)
                 D_result = D(G_result).squeeze()
-                G_train_loss = BCE_loss(D_result, y_real_)
+                old_D_result = D(old_G_result).squeeze()
+                old_G_result = G_result # TODO: will this work?
+                G_train_loss = tau * BCE_loss(D_result, y_real_) + (1-tau) * BCE_loss(old_D_result, y_real_)
                 G_train_loss.backward()
                 G_optimizer.step()
                 G_losses.append(G_train_loss.item())

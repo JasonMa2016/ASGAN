@@ -157,9 +157,9 @@ train_hist['per_epoch_ptimes'] = []
 train_hist['total_ptime'] = []
 num_iter = 0
 
-z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
+z_ = torch.randn((int(batch_size/3), latent_dim)).view(-1, latent_dim)
 if is_cuda: z_ = z_.cuda()
-old_G_result = G(z_)
+old_G_result = G(z_) # ERGAN
 
 print('training start!')
 start_time = time.time()
@@ -205,10 +205,23 @@ for epoch in range(train_epoch):
                 z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
                 if is_cuda: z_ = z_.cuda()
 
+                # G_result = G(z_)
+                # D_result = D(G_result).squeeze()
+                # if MODELTYPE == 2:
+                #     old_D_result = D(G_result_old).squeeze()
+                #     old_G_result = G_result # TODO: will this work?
+                #     G_train_loss = tau * BCE_loss(D_result, y_real_) + (1-tau) * BCE_loss(old_D_result, y_real_)
+                # else:
+                #     G_train_loss = BCE_loss(D_result, y_real_)
+
+                # G_train_loss.backward()
+                # G_optimizer.step()
+                # G_losses.append(G_train_loss.item())
+
                 G_result = G(z_)
                 D_result = D(G_result).squeeze()
-                old_D_result = D(G_result_old).squeeze()
-                old_G_result = G_result # TODO: will this work?
+                old_D_result = D(old_G_result).squeeze()
+                old_G_result = G_result # TODO: will this work? nope
                 G_train_loss = tau * BCE_loss(D_result, y_real_) + (1-tau) * BCE_loss(old_D_result, y_real_)
                 G_train_loss.backward()
                 G_optimizer.step()
