@@ -161,6 +161,9 @@ z_ = torch.randn((int(batch_size/3), latent_dim)).view(-1, latent_dim)
 if is_cuda: z_ = z_.cuda()
 old_G_result = G(z_) # ERGAN
 
+# new stuff
+Q = ImageQueue(len(train_loader * batch_size))
+
 print('training start!')
 start_time = time.time()
 for epoch in range(train_epoch):
@@ -187,13 +190,16 @@ for epoch in range(train_epoch):
             G_result = G(z_)
 
             D_result = D(G_result).squeeze()
-            D_fake_loss = BCE_loss(D_result, y_fake_)
+            D_result_er = D(Q.sample(mini_batch))
+            D_fake_loss = 0.5 * BCE_loss(D_result, y_fake_) + 0.5 * BCE_loss(D_result_er, y_fake_)
             D_fake_score = D_result.data.mean()
 
             D_train_loss = D_real_loss + D_fake_loss
 
             D_train_loss.backward()
             D_optimizer.step()
+
+            Q.enqueue(G_result)
 
             D_losses.append(D_train_loss.item())
 
@@ -234,6 +240,10 @@ for epoch in range(train_epoch):
                     old_param.data.copy_(model_param.data)
 
             num_iter += 1
+
+            if num_iter == 100:
+                print('100 iter', time.time()-epoch_start_time)
+                exit()
 
     epoch_end_time = time.time()
     per_epoch_ptime = epoch_end_time - epoch_start_time
