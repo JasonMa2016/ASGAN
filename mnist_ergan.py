@@ -200,7 +200,6 @@ for epoch in range(train_epoch):
             if len(memory) > mini_batch:
                 samples = random.sample(memory, int(mini_batch/2)+1)
                 samples = torch.stack(samples)
-                print(G_result.shape, samples.shape)
                 G_result = torch.cat((G_result, samples))
 
             D_result = D(G_result).squeeze()
