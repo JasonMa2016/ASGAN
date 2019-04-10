@@ -110,7 +110,7 @@ transform = transforms.Compose([
         transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
 ])
 train_loader = torch.utils.data.DataLoader(
-    datasets.MNIST('./data', train=True, download=True, transform=transform),
+    datasets.MNIST('../data', train=True, download=True, transform=transform),
     batch_size=batch_size, shuffle=True, pin_memory = is_cuda) # TODO: why doesn't this return cuda.FloatTensors?
 
 # 60000 dataset stacked is 20000
