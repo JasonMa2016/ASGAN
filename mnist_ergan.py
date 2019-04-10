@@ -14,6 +14,8 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 # from torch.autograd import Variable # torch <=0.3
 from mnist_models import Generator, Discriminator
+from collections import deque
+import random
 
 parser = argparse.ArgumentParser(description='training runner')
 parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 dcgan, 1 asgan, 2 ergan
@@ -163,6 +165,9 @@ old_G_result = G(z_) # ERGAN
 
 print('training start!')
 start_time = time.time()
+
+memory = deque()
+
 for epoch in range(train_epoch):
     D_losses = []
     G_losses = []
@@ -178,17 +183,30 @@ for epoch in range(train_epoch):
             y_real_ = torch.ones(mini_batch)
             y_fake_ = torch.zeros(mini_batch)
 
-            if is_cuda: x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
+            if is_cuda: 
+                x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
+
             D_result = D(x_).squeeze()
             D_real_loss = BCE_loss(D_result, y_real_)
 
-            z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
-            if is_cuda: z_ = z_.cuda()
+            z_ = torch.randn((int(mini_batch/2), latent_dim)).view(-1, latent_dim)
+
+            if is_cuda: 
+                z_ = z_.cuda()
+
             G_result = G(z_)
 
+            # sample from experience
+            if len(memory) > mini_batch:
+                samples = random.sample(memory, int(mini_batch/2)+1)
+                samples = torch.stack(samples)
+                print(G_result.shape, samples.shape)
+                G_result = torch.cat((G_result, samples))
+
             D_result = D(G_result).squeeze()
-            D_fake_loss = BCE_loss(D_result, y_fake_)
-            D_fake_score = D_result.data.mean()
+
+            D_fake_loss = BCE_loss(D_result, y_fake_[:D_result.shape[0]])
+            # D_fake_score = D_result.data.mean()
 
             D_train_loss = D_real_loss + D_fake_loss
 
@@ -205,24 +223,15 @@ for epoch in range(train_epoch):
                 z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
                 if is_cuda: z_ = z_.cuda()
 
-                # G_result = G(z_)
-                # D_result = D(G_result).squeeze()
-                # if MODELTYPE == 2:
-                #     old_D_result = D(G_result_old).squeeze()
-                #     old_G_result = G_result # TODO: will this work?
-                #     G_train_loss = tau * BCE_loss(D_result, y_real_) + (1-tau) * BCE_loss(old_D_result, y_real_)
-                # else:
-                #     G_train_loss = BCE_loss(D_result, y_real_)
-
-                # G_train_loss.backward()
-                # G_optimizer.step()
-                # G_losses.append(G_train_loss.item())
-
                 G_result = G(z_)
+
+                # add to memory
+                for i in range(G_result.shape[0]):
+                    memory.append(G_result[i].detach())
+
                 D_result = D(G_result).squeeze()
-                old_D_result = D(old_G_result).squeeze()
-                old_G_result = G_result # TODO: will this work? nope
-                G_train_loss = tau * BCE_loss(D_result, y_real_) + (1-tau) * BCE_loss(old_D_result, y_real_)
+                G_train_loss = BCE_loss(D_result, y_real_)
+
                 G_train_loss.backward()
                 G_optimizer.step()
                 G_losses.append(G_train_loss.item())
