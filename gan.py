@@ -6,6 +6,7 @@ import torch
 import copy
 from collections import deque 
 import numpy as np
+import random 
 
 class GAN(object):
     def __init__(self, latent_dim, hidden_size):
