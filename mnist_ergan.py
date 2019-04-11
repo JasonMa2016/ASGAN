@@ -198,7 +198,7 @@ for epoch in range(train_epoch):
             G_result = G(z_)
 
             # sample from experience
-            if len(memory) > mini_batch:
+            if len(memory) > mini_batch && epoch > 1:
                 samples = random.sample(memory, int(mini_batch/2)+1)
                 samples = torch.stack(samples)
                 G_result = torch.cat((G_result, samples))

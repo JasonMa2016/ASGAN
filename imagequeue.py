@@ -1,5 +1,6 @@
 import torch
 
+# hand-implemented queue storing image data of shape 3*28*28
 class ImageQueue():
     def __init__(self, maxsize):
         self.ttype = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
