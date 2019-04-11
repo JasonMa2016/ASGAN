@@ -1,6 +1,4 @@
 # adapted (copy pasted) from https://github.com/znxlwm/pytorch-MNIST-CelebA-GAN-DCGAN
-print('todo!! this file has a one-time modification to account for an AWS crash on 4/11/19! careful!!!')
-
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
@@ -131,10 +129,6 @@ if is_cuda:
     G.cuda()
     D.cuda()
 
-G.load_state_dict(torch.load(SAVEDIR+'/'+GENFILE))
-D.load_state_dict(torch.load(SAVEDIR+'/'+DISCFILE))
-print('loaded params, one-time change!')
-
 if MODELTYPE == 1:
     G_old = copy.deepcopy(G)
 
@@ -174,7 +168,7 @@ start_time = time.time()
 
 memory = deque(maxlen=len(train_loader))
 
-for epoch in range(28, train_epoch):
+for epoch in range(train_epoch):
     D_losses = []
     G_losses = []
     epoch_start_time = time.time()
