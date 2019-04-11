@@ -195,7 +195,7 @@ for epoch in range(train_epoch):
             G_result = G(z_)
             Q.enqueue(G_result.detach())
             D_result = D(G_result).squeeze()
-            D_result_er = D(Q.sample(mini_batch))
+            D_result_er = D(Q.sample(mini_batch)).squeeze()
             D_fake_loss = 0.5 * BCE_loss(D_result, y_fake_) + 0.5 * BCE_loss(D_result_er, y_fake_)
             D_fake_score = D_result.data.mean()
 
