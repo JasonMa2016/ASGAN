@@ -1,4 +1,6 @@
 # adapted (copy pasted) from https://github.com/znxlwm/pytorch-MNIST-CelebA-GAN-DCGAN
+print('todo!! this file has a one-time modification to account for an AWS crash on 4/11/19! careful!!!')
+
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
@@ -129,6 +131,10 @@ if is_cuda:
     G.cuda()
     D.cuda()
 
+G.load_state_dict(torch.load(SAVEDIR+'/'+GENFILE))
+D.load_state_dict(torch.load(SAVEDIR+'/'+DISCFILE))
+print('loaded params, one-time change!')
+
 if MODELTYPE == 1:
     G_old = copy.deepcopy(G)
 
@@ -168,7 +174,7 @@ start_time = time.time()
 
 memory = deque(maxlen=len(train_loader))
 
-for epoch in range(train_epoch):
+for epoch in range(28, train_epoch):
     D_losses = []
     G_losses = []
     epoch_start_time = time.time()
@@ -263,6 +269,8 @@ for epoch in range(train_epoch):
     if epoch % 2 == 0:
         torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
         torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE) # for safety!
+        if MODELTYPE == 2:
+            torch.save(memory, SAVEDIR+'/'+'memory.pkl')
 
 end_time = time.time()
 total_ptime = end_time - start_time
@@ -272,6 +280,9 @@ print("Avg per epoch ptime: %.2f, total %d epochs ptime: %.2f" % (torch.mean(tor
 print("Training finish!... save training results")
 torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
 torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE)
+if MODELTYPE == 2:
+    torch.save(memory, SAVEDIR+'/'+'memory.pkl')
+
 with open(SAVEDIR+'/train_hist.pkl', 'wb') as f:
     pickle.dump(train_hist, f)
 
