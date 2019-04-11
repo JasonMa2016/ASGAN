@@ -4,7 +4,7 @@ from collections import deque
 import random
 import torch
 
-memory = deque()
+memory = deque(maxlen=12)
 
 # add to memory
 G_result = torch.randn(21,3*28*28).cuda()
