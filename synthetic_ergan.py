@@ -35,6 +35,7 @@ for i in range(20):
         mode_count = count_mode_grid
         os.makedirs(DIR_NAME, exist_ok=True)
         print("Now, 2d-grid")
+    gan = ERGAN(latent_dim, HIDDEN_SIZE)
     for epoch in range(EPOCH_SIZE):
         real_data = create(BATCH_SIZE)
         # z = Variable(torch.FloatTensor(np.random.normal(0,1, (BATCH_SIZE,latent_dim))))
