@@ -33,6 +33,7 @@ for i in range(20):
         DIR_NAME = 'ERGAN_2dgrid'
         create = create_grid
         mode_count = count_mode_grid
+        os.makedirs(DIR_NAME, exist_ok=True)
         print("Now, 2d-grid")
     for epoch in range(EPOCH_SIZE):
         real_data = create(BATCH_SIZE)
