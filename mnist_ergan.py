@@ -115,7 +115,7 @@ transform = transforms.Compose([
 ])
 train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('../data', train=True, download=True, transform=transform),
-    batch_size=batch_size, shuffle=True, pin_memory = is_cuda) # TODO: why doesn't this return cuda.FloatTensors?
+    batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last=True) # TODO: why doesn't this return cuda.FloatTensors?
 
 # 60000 dataset stacked is 20000
 # repeat 6 times per epoch to get 120000 (pacgan does 128000)
