@@ -17,7 +17,7 @@ from mnist_models import Generator, Discriminator
 from collections import deque
 import random
 
-import tqdm 
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser(description='training runner')
 parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 dcgan, 1 asgan, 2 ergan
