@@ -114,7 +114,7 @@ transform = transforms.Compose([
 ])
 sampler = torch.utils.data.SubsetRandomSampler(torch.LongTensor(np.random.choice(np.arange(60000), batch_size * 10)))
 train_loader = torch.utils.data.DataLoader(
-    datasets.MNIST('./data', train=True, download=True, transform=transform),
+    datasets.MNIST('../data', train=True, download=True, transform=transform),
     batch_size=batch_size, shuffle=False, pin_memory = is_cuda, sampler=sampler) # TODO: why doesn't this return cuda.FloatTensors?
 
 print('batch size:', batch_size, 'and whole thing is that times 10')

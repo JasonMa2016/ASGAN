@@ -1,4 +1,5 @@
 source activate pytorch_p36
+sudo mkdir -p ../data
 
 # python mnist_gan.py -m 0 -sd DCGAN_MNIST &&
 # python mnist_evaluate.py -sd DCGAN_MNIST > DCGAN_MNIST/results.txt &&
