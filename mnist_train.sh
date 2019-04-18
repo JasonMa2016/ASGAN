@@ -12,5 +12,8 @@ sudo mkdir -p ../data
 # oops! on 4/11 i accidentally ran mnist_ergan with alpha smoothing too!
 # aws s3 sync can 
 
-python mnist_ergan.py -m 2 -sd ERGAN_MNIST_0 &&
-python mnist_evaluate.py -sd ERGAN_MNIST_0 > ERGAN_MNIST_0/results.txt
+for i in {1..5}
+do
+	python mnist_ergan.py -m 2 -sd ERGAN_MNIST_0 &&
+	python mnist_evaluate.py -sd ERGAN_MNIST_0 >> ERGAN_MNIST_0/results.txt
+done

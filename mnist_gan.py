@@ -119,8 +119,8 @@ train_loader = torch.utils.data.DataLoader(
 # from load_mnist import *
 # img, lab = load_mnist(128000)
 
-G = Generator()
-D = Discriminator()
+G = nn.DataParallel(Generator())
+D = nn.DataParallel(Discriminator())
 G.weight_init(mean=0.0, std=0.02)
 D.weight_init(mean=0.0, std=0.02)
 if is_cuda:

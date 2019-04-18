@@ -17,6 +17,8 @@ from mnist_models import Generator, Discriminator
 from collections import deque
 import random
 
+from tqdm import tqdm
+
 parser = argparse.ArgumentParser(description='training runner')
 parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 dcgan, 1 asgan, 2 ergan
 parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
@@ -113,7 +115,7 @@ transform = transforms.Compose([
 ])
 train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('../data', train=True, download=True, transform=transform),
-    batch_size=batch_size, shuffle=True, pin_memory = is_cuda) # TODO: why doesn't this return cuda.FloatTensors?
+    batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last=True) # TODO: why doesn't this return cuda.FloatTensors?
 
 # 60000 dataset stacked is 20000
 # repeat 6 times per epoch to get 120000 (pacgan does 128000)
@@ -125,6 +127,8 @@ G = Generator()
 D = Discriminator()
 G.weight_init(mean=0.0, std=0.02)
 D.weight_init(mean=0.0, std=0.02)
+G = nn.DataParallel(G)
+D = nn.DataParallel(D)
 if is_cuda:
     G.cuda()
     D.cuda()
@@ -168,7 +172,7 @@ start_time = time.time()
 
 memory = deque(maxlen=len(train_loader))
 
-for epoch in range(train_epoch):
+for epoch in tqdm(range(train_epoch)):
     D_losses = []
     G_losses = []
     epoch_start_time = time.time()
@@ -198,7 +202,7 @@ for epoch in range(train_epoch):
             G_result = G(z_)
 
             # sample from experience
-            if len(memory) > mini_batch && epoch > 1:
+            if len(memory) > mini_batch and epoch > 1:
                 samples = random.sample(memory, int(mini_batch/2)+1)
                 samples = torch.stack(samples)
                 G_result = torch.cat((G_result, samples))
