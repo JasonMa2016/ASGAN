@@ -1,4 +1,5 @@
 source activate pytorch_p36
+conda install keras
 sudo mkdir -p ../data
 
 # python mnist_gan.py -m 0 -sd DCGAN_MNIST &&
@@ -10,7 +11,6 @@ sudo mkdir -p ../data
 # python mnist_gan.py -m 2 -sd ERGAN_MNIST &&
 # python mnist_evaluate.py -sd ERGAN_MNIST > ERGAN_MNIST/results.txt # -halt
 # oops! on 4/11 i accidentally ran mnist_ergan with alpha smoothing too!
-# aws s3 sync can 
 
 for i in {1..5}
 do

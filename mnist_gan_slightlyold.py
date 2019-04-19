@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import argparse
 import copy
 import os, time
-import itertools
 import pickle
 # import imageio
 import torch
@@ -16,8 +15,8 @@ from torchvision import datasets, transforms
 from mnist_models import Generator, Discriminator
 from collections import deque
 import random
-
 from tqdm import tqdm
+from math import floor, ceil
 
 parser = argparse.ArgumentParser(description='training runner')
 parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 dcgan, 1 asgan, 2 ergan
@@ -44,7 +43,7 @@ lr = args.learning_rate
 
 if torch.cuda.is_available():
     print('using cuda!')
-    torch.cuda.set_device(0)
+    torch.cuda.set_device(0) # sets default gpu
     dtype = torch.cuda.FloatTensor
     is_cuda = True
 else:
@@ -115,7 +114,7 @@ transform = transforms.Compose([
 ])
 train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('../data', train=True, download=True, transform=transform),
-    batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last=True) # TODO: why doesn't this return cuda.FloatTensors?
+    batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
 
 # 60000 dataset stacked is 20000
 # repeat 6 times per epoch to get 120000 (pacgan does 128000)
@@ -123,12 +122,10 @@ train_loader = torch.utils.data.DataLoader(
 # from load_mnist import *
 # img, lab = load_mnist(128000)
 
-G = Generator()
-D = Discriminator()
+G = nn.DataParallel(Generator())
+D = nn.DataParallel(Discriminator())
 G.weight_init(mean=0.0, std=0.02)
 D.weight_init(mean=0.0, std=0.02)
-G = nn.DataParallel(G)
-D = nn.DataParallel(D)
 if is_cuda:
     G.cuda()
     D.cuda()
@@ -163,15 +160,8 @@ train_hist['per_epoch_ptimes'] = []
 train_hist['total_ptime'] = []
 num_iter = 0
 
-z_ = torch.randn((int(batch_size/3), latent_dim)).view(-1, latent_dim)
-if is_cuda: z_ = z_.cuda()
-old_G_result = G(z_) # ERGAN
-
 print('training start!')
 start_time = time.time()
-
-memory = deque(maxlen=len(train_loader))
-
 for epoch in tqdm(range(train_epoch)):
     D_losses = []
     G_losses = []
@@ -181,37 +171,22 @@ for epoch in tqdm(range(train_epoch)):
             # train discriminator D
             D.zero_grad()
 
-            x_ = stack(x_) # new!
+            x_ = stack(x_) # stacking changes the size
             mini_batch = x_.size()[0]
 
             y_real_ = torch.ones(mini_batch)
-            # y_fake_ = torch.zeros(mini_batch)
+            y_fake_ = torch.zeros(mini_batch)
 
-            if is_cuda: x_, y_real_ = x_.cuda(), y_real_.cuda()
-            # keep on the same line!
-                # x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
-
+            if is_cuda: x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
             D_result = D(x_).squeeze()
             D_real_loss = BCE_loss(D_result, y_real_)
 
-            z_ = torch.randn((int(mini_batch/2), latent_dim)).view(-1, latent_dim)
-
-            if is_cuda: 
-                z_ = z_.cuda()
-
+            z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
+            if is_cuda: z_ = z_.cuda()
             G_result = G(z_)
 
-            # sample from experience
-            if len(memory) > mini_batch and epoch > 1:
-                samples = random.sample(memory, int(mini_batch/2)+1)
-                samples = torch.stack(samples)
-                G_result = torch.cat((G_result, samples))
-
             D_result = D(G_result).squeeze()
-            y_fake_ = torch.zeros(D_result.shape[0])
-            if is_cuda: y_fake_ = y_fake_.cuda()
-
-            D_fake_loss = BCE_loss(D_result, y_fake_) # that old way is now deprecated
+            D_fake_loss = BCE_loss(D_result, y_fake_)
             # D_fake_score = D_result.data.mean()
 
             D_train_loss = D_real_loss + D_fake_loss
@@ -230,14 +205,8 @@ for epoch in tqdm(range(train_epoch)):
                 if is_cuda: z_ = z_.cuda()
 
                 G_result = G(z_)
-
-                # add to memory
-                for i in range(G_result.shape[0]):
-                    memory.append(G_result[i].detach())
-
                 D_result = D(G_result).squeeze()
                 G_train_loss = BCE_loss(D_result, y_real_)
-
                 G_train_loss.backward()
                 G_optimizer.step()
                 G_losses.append(G_train_loss.item())
@@ -267,8 +236,6 @@ for epoch in tqdm(range(train_epoch)):
     if epoch % 2 == 0:
         torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
         torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE) # for safety!
-        if MODELTYPE == 2:
-            torch.save(memory, SAVEDIR+'/'+'memory.pkl')
 
 end_time = time.time()
 total_ptime = end_time - start_time
@@ -278,9 +245,6 @@ print("Avg per epoch ptime: %.2f, total %d epochs ptime: %.2f" % (torch.mean(tor
 print("Training finish!... save training results")
 torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
 torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE)
-if MODELTYPE == 2:
-    torch.save(memory, SAVEDIR+'/'+'memory.pkl')
-
 with open(SAVEDIR+'/train_hist.pkl', 'wb') as f:
     pickle.dump(train_hist, f)
 
