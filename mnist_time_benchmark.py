@@ -123,12 +123,12 @@ num_iter = 0
 print('training start!')
 start_time = time.time()
 
-# just 1 epoch
+# fewer epochs for sanity
 for epoch in tqdm(range(1)):
     D_losses = []
     G_losses = []
     epoch_start_time = time.time()
-    for i in range(1):
+    for i in range(2):
         for x_, _ in train_loader:
             # train discriminator D
             D.zero_grad()
@@ -143,7 +143,7 @@ for epoch in tqdm(range(1)):
             D_result = D(x_).squeeze()
             D_real_loss = BCE_loss(D_result, y_real_)
 
-            if MODELTYPE == 2 and len(memory) > mini_batch and epoch > 1:
+            if MODELTYPE == 2 and len(memory) > mini_batch//2 and epoch >= 1:
                 G_result = patch_with_replay(mini_batch, G, memory)
             else:
                 z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
