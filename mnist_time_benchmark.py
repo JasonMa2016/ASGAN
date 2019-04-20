@@ -124,11 +124,11 @@ print('training start!')
 start_time = time.time()
 
 # fewer epochs for sanity
-for epoch in tqdm(range(1)):
+for epoch in tqdm(range(2)):
     D_losses = []
     G_losses = []
     epoch_start_time = time.time()
-    for i in range(2):
+    for i in range(1):
         for x_, _ in train_loader:
             # train discriminator D
             D.zero_grad()
