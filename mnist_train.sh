@@ -14,12 +14,12 @@ sudo mkdir -p ../data
 # python mnist_evaluate.py -sd ERGAN_MNIST > ERGAN_MNIST/results.txt # -halt
 # oops! on 4/11 i accidentally ran mnist_ergan with alpha smoothing too!
 
-datadir = ../data/ERGAN_MNIST_1
+# TODO: figure out the way to avoid repeating data dir
 for i in {1..5}
 do
-	python mnist_gan.py -m 2 -sd $datadir &&
-	python mnist_evaluate.py -sd $datadir >> "$datadir results.txt"
-	aws s3 cp $datadir s3://am221
+	python mnist_gan.py -m 2 -sd ../data/ERGAN_MNIST_1 &&
+	python mnist_evaluate.py -sd ../data/ERGAN_MNIST_1 >> ../data/ERGAN_MNIST_1/results.txt
+	aws s3 cp ../data/ERGAN_MNIST_1 s3://am221
 done
 
 # might need :set ff=unix (if \r causing problems)
