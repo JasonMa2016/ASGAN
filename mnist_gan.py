@@ -86,7 +86,7 @@ z_ = torch.randn((int(batch_size/3), latent_dim)).view(-1, latent_dim)
 if is_cuda: z_ = z_.cuda()
 
 old_G_result = G(z_)
-memory = deque(maxlen = len(train_loader) * batch_size / 3) # TODO: check that size is right!
+memory = deque(maxlen = len(train_loader) * batch_size // 3) # TODO: check that size is right!
 
 # Binary Cross Entropy loss
 BCE_loss = nn.BCELoss()
