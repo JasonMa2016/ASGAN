@@ -73,7 +73,7 @@ def stack(x):
     # assert(x.shape[0] % 3 == 0)
     return torch.cat([x[::3], x[1::3], x[2::3]], dim=1)
 
-def patch_with_replay(mini_batch, G, memory):
+def patch_with_replay(mini_batch, G, memory, latent_dim = 100):
     z_ = torch.randn((floor(mini_batch/2), latent_dim)).view(-1, latent_dim)
     if is_cuda: z_ = z_.cuda()
     G_result = G(z_)

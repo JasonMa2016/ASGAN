@@ -82,7 +82,7 @@ if MODELTYPE == 1:
     G_old = copy.deepcopy(G)
 
 # ERGAN
-z_ = torch.randn((int(batch_size/3), latent_dim)).view(-1, latent_dim)
+z_ = torch.randn((batch_size//3, latent_dim)).view(-1, latent_dim)
 if is_cuda: z_ = z_.cuda()
 
 old_G_result = G(z_)
@@ -133,7 +133,7 @@ for epoch in tqdm(range(train_epoch)):
             D_real_loss = BCE_loss(D_result, y_real_)
 
             if MODELTYPE == 2 and len(memory) > mini_batch and epoch > 1:
-                G_result = patch_with_replay(mini_batch, G, memory)
+                G_result = patch_with_replay(mini_batch, G, memory, latent_dim)
             else:
                 z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
                 if is_cuda: z_ = z_.cuda()
@@ -197,7 +197,7 @@ for epoch in tqdm(range(train_epoch)):
         torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
         torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE) # for safety!
         if MODELTYPE == 2:
-            torch.save(memory, SAVEDIR+'/'+'memory.pkl')
+            torch.save(memory, SAVEDIR+'/'+'memory.pkl') # big tho!
 
 end_time = time.time()
 total_ptime = end_time - start_time

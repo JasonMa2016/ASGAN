@@ -1,7 +1,7 @@
 #! /bin/bash
+echo "remember to aws configure and conda install keras inside pytorch_p36 first"
 
 source activate pytorch_p36
-conda install keras
 sudo mkdir -p ../data
 
 # python mnist_gan.py -m 0 -sd DCGAN_MNIST &&
@@ -14,10 +14,12 @@ sudo mkdir -p ../data
 # python mnist_evaluate.py -sd ERGAN_MNIST > ERGAN_MNIST/results.txt # -halt
 # oops! on 4/11 i accidentally ran mnist_ergan with alpha smoothing too!
 
+datadir = ../data/ERGAN_MNIST_1
 for i in {1..5}
 do
-	python mnist_gan.py -m 2 -sd ../data/ERGAN_MNIST_1 &&
-	python mnist_evaluate.py -sd ../data/ERGAN_MNIST_1 >> ../data/ERGAN_MNIST_1/results.txt
+	python mnist_gan.py -m 2 -sd $datadir &&
+	python mnist_evaluate.py -sd $datadir >> "$datadir results.txt"
+	aws s3 cp $datadir s3://am221
 done
 
 # might need :set ff=unix (if \r causing problems)
