@@ -1,3 +1,5 @@
+#! /bin/bash
+
 source activate pytorch_p36
 conda install keras
 sudo mkdir -p ../data
@@ -14,6 +16,9 @@ sudo mkdir -p ../data
 
 for i in {1..5}
 do
-	python mnist_ergan.py -m 2 -sd ERGAN_MNIST_0 &&
-	python mnist_evaluate.py -sd ERGAN_MNIST_0 >> ERGAN_MNIST_0/results.txt
+	python mnist_gan.py -m 2 -sd ../data/ERGAN_MNIST_1 &&
+	python mnist_evaluate.py -sd ../data/ERGAN_MNIST_1 >> ../data/ERGAN_MNIST_1/results.txt
 done
+
+# might need :set ff=unix (if \r causing problems)
+# j=stringystring; echo message > $j.txt

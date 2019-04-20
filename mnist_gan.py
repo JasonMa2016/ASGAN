@@ -148,7 +148,6 @@ for epoch in tqdm(range(train_epoch)):
 
             D_train_loss.backward()
             D_optimizer.step()
-
             D_losses.append(D_train_loss.item())
 
             # train generator G
@@ -160,18 +159,17 @@ for epoch in tqdm(range(train_epoch)):
                 if is_cuda: z_ = z_.cuda()
 
                 G_result = G(z_)
-
-                # add to memory
-                if MODELTYPE == 2:
-                    for i in range(G_result.shape[0]):
-                        memory.append(G_result[i].detach())
-
                 D_result = D(G_result).squeeze()
                 G_train_loss = BCE_loss(D_result, y_real_)
 
                 G_train_loss.backward()
                 G_optimizer.step()
                 G_losses.append(G_train_loss.item())
+
+            # add to memory
+            if MODELTYPE == 2:
+                for i in range(G_result.shape[0]):
+                    memory.append(G_result[i].detach())
 
             # alpha smoothing
             if MODELTYPE == 1:
