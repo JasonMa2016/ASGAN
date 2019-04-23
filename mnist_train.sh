@@ -1,5 +1,5 @@
 #! /bin/bash
-echo "remember to aws configure and conda install keras inside pytorch_p36 first"
+#echo "remember to aws configure and conda install keras inside pytorch_p36 first"
 
 source activate pytorch_p36
 sudo mkdir -p ../data
@@ -19,7 +19,7 @@ for i in {1..5}
 do
 	python mnist_gan.py -m 2 -sd ../data/ERGAN_MNIST_1 &&
 	python mnist_evaluate.py -sd ../data/ERGAN_MNIST_1 >> ../data/ERGAN_MNIST_1/results.txt
-	aws s3 cp ../data/ERGAN_MNIST_1 s3://am221
+#	aws s3 cp ../data/ERGAN_MNIST_1 s3://am221
 done
 
 # might need :set ff=unix (if \r causing problems)
