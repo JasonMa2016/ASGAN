@@ -15,7 +15,7 @@ BATCH_SIZE = 1000
 taus = [0.4,0.5,0.6,0.7,0.8]
 
 for tau in taus:
-    print("current tau: ".format(tau))
+    print("current tau: {}".format(tau))
     gan = ASGAN(latent_dim, HIDDEN_SIZE, tau)
     grid = False
 
