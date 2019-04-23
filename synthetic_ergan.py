@@ -28,6 +28,7 @@ else:
     
 os.makedirs(DIR_NAME, exist_ok=True)
 
+
 for i in range(20):
     if i == 10:
         DIR_NAME = 'ERGAN_2dgrid'
