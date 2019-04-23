@@ -12,8 +12,6 @@ HIDDEN_SIZE = 128
 EPOCH_SIZE = 20000
 BATCH_SIZE = 1000
 
-tau = 0.3
-
 gan = ERGAN(latent_dim, HIDDEN_SIZE)
 grid = False
 
@@ -51,7 +49,7 @@ for i in range(20):
             ax1.scatter(x=real_data[:,0], y=real_data[:,1], c='g', s=100)
             ax1.scatter(x=fake_data[:,0], y=fake_data[:,1], c='b',alpha=0.1, s=100)
             # plt.show()
-            
+
             fig.savefig('{}/{}.png'.format(DIR_NAME, epoch))
 
     batch_size = 2500
@@ -64,7 +62,7 @@ for i in range(20):
     ax1 = fig.add_subplot(111)
     ax1.scatter(x=real_normals[:,0], y=real_normals[:,1], c='g', s=100)
     ax1.scatter(x=fake_normals[:,0], y=fake_normals[:,1], c='b',alpha=0.02, s=100)
-    plt.show()
+    # plt.show()
 
     fig.savefig('{}/final.png'.format(DIR_NAME))
 
