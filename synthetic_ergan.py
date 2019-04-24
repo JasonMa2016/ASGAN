@@ -13,7 +13,7 @@ EPOCH_SIZE = 20000
 BATCH_SIZE = 1000
 
 print('Hidden Size is {}'.format(HIDDEN_SIZE))
-gan = ERGAN(latent_dim, HIDDEN_SIZE)
+gan = GAN(latent_dim, HIDDEN_SIZE)
 grid = True
 
 if grid:

@@ -17,8 +17,9 @@ class GAN(object):
         self.optimizer_G = torch.optim.Adam(self.G.parameters(), lr=LR, betas=(B1, B2))
         self.optimizer_D = torch.optim.Adam(self.D.parameters(), lr=LR, betas=(B1, B2))
 
-    def optimize(self, batch_size, real_data, noise):
-        fake_data = self.G(noise)
+    def optimize(self, batch_size, real_data, epoch):
+        z = Variable(torch.FloatTensor(np.random.normal(0, 1, (int(batch_size / 2), self.latent_dim))))
+        fake_data = self.G(z)
 
         valid = Variable(torch.FloatTensor(batch_size, 1).fill_(1.0), requires_grad=False)
         fake = Variable(torch.FloatTensor(batch_size, 1).fill_(0.0), requires_grad=False)
@@ -48,8 +49,9 @@ class ASGAN(object):
         self.optimizer_G = torch.optim.Adam(self.G.parameters(), lr=LR, betas=(B1, B2))
         self.optimizer_D = torch.optim.Adam(self.D.parameters(), lr=LR, betas=(B1, B2))
 
-    def optimize(self, batch_size, real_data, noise):
-        fake_data = self.G(noise)
+    def optimize(self, batch_size, real_data, epoch):
+        z = Variable(torch.FloatTensor(np.random.normal(0, 1, (int(batch_size / 2), self.latent_dim))))
+        fake_data = self.G(z)
 
         valid = Variable(torch.FloatTensor(batch_size, 1).fill_(1.0), requires_grad=False)
         fake = Variable(torch.FloatTensor(batch_size, 1).fill_(0.0), requires_grad=False)
