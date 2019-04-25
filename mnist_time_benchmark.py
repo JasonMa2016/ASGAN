@@ -22,14 +22,16 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 # from torch.autograd import Variable # torch <=0.3
-from mnist_models import Generator, Discriminator
+from mnist_models import *
 from helpers import *
 from collections import deque
 from tqdm import tqdm
 from math import floor, ceil
 
 parser = argparse.ArgumentParser(description='training runner')
-parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 dcgan, 1 asgan, 2 ergan
+parser.add_argument('--model_type','-m',type=int,default=0,help='Model type')
+# 0 dcgan, 1 asgan, 2 ergan, 3 ergan weighted smoothing
+parser.add_argument('--arch_type','-a',type=int,default=0,help='Architecture type')
 parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
 parser.add_argument('--tau','-t',type=float,default=0.3,help='Alpha smoothing parameter')
 parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimension')
@@ -41,6 +43,7 @@ parser.add_argument('--disc_file','-df',type=str,default='discriminator_param.pk
 # parser.add_argument('--track_space','-ts',action='store_true',help='Save 2D latent space viz, if ld=2')
 args = parser.parse_args()
 MODELTYPE = args.model_type
+ARCHTYPE = args.arch_type
 SAVEDIR = args.save_dir
 GENFILE = args.gen_file
 DISCFILE = args.disc_file
@@ -79,8 +82,13 @@ print('batch size:', batch_size, 'len train_loader', len(train_loader))
 # from load_mnist import *
 # img, lab = load_mnist(128000)
 
-G = Generator()
-D = Discriminator()
+if ARCHTYPE == 0:
+    G = Generator()
+    D = Discriminator()
+elif ARCHTYPE == 1:
+    G = Generator1()
+    D = Discriminator1()
+
 G.weight_init(mean=0.0, std=0.02)
 D.weight_init(mean=0.0, std=0.02)
 G = nn.DataParallel(G)

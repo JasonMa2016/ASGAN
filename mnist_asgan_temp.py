@@ -12,7 +12,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 # from torch.autograd import Variable # torch <=0.3
-from mnist_models import Generator, Discriminator
+from mnist_models import *
 from helpers import *
 from collections import deque
 from tqdm import tqdm
