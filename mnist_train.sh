@@ -1,8 +1,8 @@
 #! /bin/bash
-#echo "remember to aws configure and conda install keras inside pytorch_p36 first"
+echo "remember to aws configure and conda install keras inside pytorch_p36 first"
 
 source activate pytorch_p36
-sudo mkdir -p ../data
+mkdir -p ../data
 
 # might need :set ff=unix (if \r causing problems)
 # j=stringystring; echo message > $j.txt
