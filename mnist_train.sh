@@ -24,6 +24,7 @@ mkdir -p ../data
 # run dcgan and ergan 5 times each
 for i in {1..5}
 do
+	mkdir -p DCGAN_MNIST
 	python mnist_gan.py -sd ../data/DCGAN_MNIST
 	python mnist_evaluate.py -sd ../data/DCGAN_MNIST >> ../data/DCGAN_MNIST/results.txt
 	aws s3 cp ../data/DCGAN_MNIST/Fixed_results/45.png "s3://am221/DCGAN_MNIST/${i}.png"
@@ -31,12 +32,14 @@ done
 
 for i in {1..5}
 do
+	mkdir -p ERGAN_MNIST
 	python mnist_gan.py -m 2 -sd ../data/ERGAN_MNIST
 	python mnist_evaluate.py -sd ../data/ERGAN_MNIST >> ../data/ERGAN_MNIST/results.txt
 	aws s3 cp ../data/ERGAN_MNIST/Fixed_results/45.png "s3://am221/ERGAN_MNIST/${i}.png"
 done
 
 # test alphagan for different alpha (.1,.2,.4,.6,.8)
+mkdir -p ASGAN_MNIST_1
 python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.1
 echo "alpha=0.1" >> ../data/ASGAN_MNIST_1/results.txt
 python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
@@ -59,11 +62,15 @@ python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/resu
 aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/45.png s3://am221/ASGAN_MNIST_1/point8.png
 
 # test asgan_temp
+mkdir -p ASGAN_MNIST_2
 python mnist_asgan_temp.py -m 1 -sd ../data/ASGAN_MNIST_2
 python mnist_evaluate.py -sd ../data/ASGAN_MNIST_2 >> ../data/ASGAN_MNIST_2/results.txt
 aws s3 cp ../data/ASGAN_MNIST_2/Fixed_results/45.png s3://am221/ASGAN_MNIST_2/3epochs.png
 
 # test weighted sampling
+mkdir -p ERGAN_MNIST_8
 python mnist_gan.py -m 3 -sd ../data/ERGAN_MNIST_8
 python mnist_evaluate.py -sd ../data/ERGAN_MNIST_8 >> ../data/ERGAN_MNIST_8/results.txt
 aws s3 cp ../data/ERGAN_MNIST_8/Fixed_results/45.png s3://am221/ERGAN_MNIST_8/weightedsampling.png
+
+aws s3 cp ../data/*/results.txt s3://am221
