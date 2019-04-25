@@ -43,26 +43,26 @@ mkdir -p ../data/ERGAN_MNIST_8
 # done
 
 # test alphagan for different alpha (.1,.2,.4,.6,.8)
-python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.1
-echo "alpha=0.1" >> ../data/ASGAN_MNIST_1/results.txt
-python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
-aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/25.png s3://am221/ASGAN_MNIST_1/point1.png
-python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.2
-echo "alpha=0.2" >> ../data/ASGAN_MNIST_1/results.txt
-python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
-aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/25.png s3://am221/ASGAN_MNIST_1/point2.png
-python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.4
-echo "alpha=0.4" >> ../data/ASGAN_MNIST_1/results.txt
-python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
-aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/25.png s3://am221/ASGAN_MNIST_1/point4.png
-python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.6
-echo "alpha=0.6" >> ../data/ASGAN_MNIST_1/results.txt
-python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
-aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/25.png s3://am221/ASGAN_MNIST_1/point6.png
-python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.8
-echo "alpha=0.8" >> ../data/ASGAN_MNIST_1/results.txt
-python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
-aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/25.png s3://am221/ASGAN_MNIST_1/point8.png
+# python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.1
+# echo "alpha=0.1" >> ../data/ASGAN_MNIST_1/results.txt
+# python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
+# aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/25.png s3://am221/ASGAN_MNIST_1/point1.png
+# python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.2
+# echo "alpha=0.2" >> ../data/ASGAN_MNIST_1/results.txt
+# python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
+# aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/25.png s3://am221/ASGAN_MNIST_1/point2.png
+# python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.4
+# echo "alpha=0.4" >> ../data/ASGAN_MNIST_1/results.txt
+# python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
+# aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/25.png s3://am221/ASGAN_MNIST_1/point4.png
+# python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.6
+# echo "alpha=0.6" >> ../data/ASGAN_MNIST_1/results.txt
+# python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
+# aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/25.png s3://am221/ASGAN_MNIST_1/point6.png
+# python mnist_gan.py -m 1 -sd ../data/ASGAN_MNIST_1 -t 0.8
+# echo "alpha=0.8" >> ../data/ASGAN_MNIST_1/results.txt
+# python mnist_evaluate.py -sd ../data/ASGAN_MNIST_1 >> ../data/ASGAN_MNIST_1/results.txt
+# aws s3 cp ../data/ASGAN_MNIST_1/Fixed_results/25.png s3://am221/ASGAN_MNIST_1/point8.png
 
 # test asgan_temp
 python mnist_asgan_temp.py -m 1 -sd ../data/ASGAN_MNIST_2
