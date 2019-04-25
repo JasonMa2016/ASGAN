@@ -21,11 +21,6 @@ sudo mkdir -p ../data
 # 	aws s3 cp ../data/ERGAN_MNIST_1 s3://am221
 # done
 
-# prelim
-aws s3 cp stupid.py s3://am221/nonexistent_folder/stupid1.py
-aws s3 cp stupid.py s3://am221/nonexistent_folder/stupid2.py
-exit
-
 # test for timing
 python mnist_time_benchmark.py -bs 63
 python mnist_time_benchmark.py -bs 504 # diff batch size ()
