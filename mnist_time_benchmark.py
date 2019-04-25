@@ -1,6 +1,13 @@
 # mini-training loop for timing purposes!
 # only difference: smaller batch size, no for-loop in each epoch, and no saving!
 
+# sampler = torch.utils.data.SubsetRandomSampler(torch.LongTensor(np.random.choice(np.arange(60000), batch_size * 10)))
+# train_loader = torch.utils.data.DataLoader(
+#     datasets.MNIST('../data', train=True, download=True, transform=transform),
+#     batch_size=batch_size, shuffle=False, pin_memory = is_cuda, sampler=sampler) # TODO: why doesn't this return cuda.FloatTensors?
+
+
+
 # adapted (copy pasted) from https://github.com/znxlwm/pytorch-MNIST-CelebA-GAN-DCGAN
 import numpy as np
 import matplotlib.pyplot as plt
@@ -63,11 +70,6 @@ transform = transforms.Compose([
 train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('../data', train=True, download=True, transform=transform),
     batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
-
-# sampler = torch.utils.data.SubsetRandomSampler(torch.LongTensor(np.random.choice(np.arange(60000), batch_size * 10)))
-# train_loader = torch.utils.data.DataLoader(
-#     datasets.MNIST('../data', train=True, download=True, transform=transform),
-#     batch_size=batch_size, shuffle=False, pin_memory = is_cuda, sampler=sampler) # TODO: why doesn't this return cuda.FloatTensors?
 
 print('batch size:', batch_size, 'len train_loader', len(train_loader))
 

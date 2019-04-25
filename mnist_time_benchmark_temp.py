@@ -1,3 +1,13 @@
+# mini-training loop for timing purposes!
+# only difference: smaller batch size, no for-loop in each epoch, and no saving!
+
+# sampler = torch.utils.data.SubsetRandomSampler(torch.LongTensor(np.random.choice(np.arange(60000), batch_size * 10)))
+# train_loader = torch.utils.data.DataLoader(
+#     datasets.MNIST('../data', train=True, download=True, transform=transform),
+#     batch_size=batch_size, shuffle=False, pin_memory = is_cuda, sampler=sampler) # TODO: why doesn't this return cuda.FloatTensors?
+
+
+
 # adapted (copy pasted) from https://github.com/znxlwm/pytorch-MNIST-CelebA-GAN-DCGAN
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,9 +29,7 @@ from tqdm import tqdm
 from math import floor, ceil
 
 parser = argparse.ArgumentParser(description='training runner')
-parser.add_argument('--model_type','-m',type=int,default=0,help='Model type')
-# 0 dcgan, 1 asgan, 2 ergan, 3 ergan weighted smoothing
-parser.add_argument('--arch_type','-a',type=int,default=0,help='Architecture type')
+parser.add_argument('--model_type','-m',type=int,default=0,help='Model type') # 0 dcgan, 1 asgan, 2 ergan
 parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
 parser.add_argument('--tau','-t',type=float,default=0.3,help='Alpha smoothing parameter')
 parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimension')
@@ -33,7 +41,6 @@ parser.add_argument('--disc_file','-df',type=str,default='discriminator_param.pk
 # parser.add_argument('--track_space','-ts',action='store_true',help='Save 2D latent space viz, if ld=2')
 args = parser.parse_args()
 MODELTYPE = args.model_type
-ARCHTYPE = args.arch_type
 SAVEDIR = args.save_dir
 GENFILE = args.gen_file
 DISCFILE = args.disc_file
@@ -64,19 +71,16 @@ train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('../data', train=True, download=True, transform=transform),
     batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
 
+print('batch size:', batch_size, 'len train_loader', len(train_loader))
+
 # 60000 dataset stacked is 20000
 # repeat 6 times per epoch to get 120000 (pacgan does 128000)
 # alternatively, can use load_mnist() function, but it is much slower
 # from load_mnist import *
 # img, lab = load_mnist(128000)
 
-if ARCHTYPE == 0:
-    G = Generator()
-    D = Discriminator()
-elif ARCHTYPE == 1:
-    G = Generator1()
-    D = Discriminator1()
-
+G = Generator()
+D = Discriminator()
 G.weight_init(mean=0.0, std=0.02)
 D.weight_init(mean=0.0, std=0.02)
 G = nn.DataParallel(G)
@@ -90,11 +94,11 @@ if MODELTYPE == 1:
     G_old = copy.deepcopy(G)
 
 # ERGAN
-z_ = torch.randn((batch_size//3, latent_dim)).view(-1, latent_dim)
+z_ = torch.randn((int(batch_size/3), latent_dim)).view(-1, latent_dim)
 if is_cuda: z_ = z_.cuda()
 
 old_G_result = G(z_)
-memory = deque(maxlen = len(train_loader) * batch_size // 3)
+memory = deque(maxlen = len(train_loader) * batch_size // 3) # TODO: check that size is right!
 
 # Binary Cross Entropy loss
 BCE_loss = nn.BCELoss()
@@ -121,29 +125,30 @@ num_iter = 0
 print('training start!')
 start_time = time.time()
 
-for epoch in tqdm(range(train_epoch)):
+y_real_ = torch.ones(mini_batch)
+y_fake_ = torch.zeros(mini_batch)
+if is_cuda: y_real_, y_fake_ = y_real_.cuda(), y_fake_.cuda()
+
+# fewer epochs for sanity
+for epoch in tqdm(range(2)):
     D_losses = []
     G_losses = []
     epoch_start_time = time.time()
-    for i in range(6):
+    for i in range(1):
         for x_, _ in train_loader:
+            if is_cuda: x_ = x_.cuda()
+
             # train discriminator D
             D.zero_grad()
 
             x_ = stack(x_) # stacking changes the size
             mini_batch = x_.size()[0]
 
-            y_real_ = torch.ones(mini_batch)
-            y_fake_ = torch.zeros(mini_batch)
-            if is_cuda: x_, y_real_, y_fake_ = x_.cuda(), y_real_.cuda(), y_fake_.cuda()
-
             D_result = D(x_).squeeze()
             D_real_loss = BCE_loss(D_result, y_real_)
 
-            if MODELTYPE >= 2 and len(memory) > mini_batch and epoch > 1:
-                G_result = patch_with_replay(mini_batch, G, memory, latent_dim, MODELTYPE-2)
-                # it's a little messy, outsourcing patching to a helper function
-                # last arg determines whether to use weighted sampling (yes for model type 3)
+            if MODELTYPE == 2 and len(memory) > mini_batch//2 and epoch >= 1:
+                G_result = patch_with_replay(mini_batch, G, memory)
             else:
                 z_ = torch.randn((mini_batch, latent_dim)).view(-1, latent_dim)
                 if is_cuda: z_ = z_.cuda()
@@ -158,6 +163,7 @@ for epoch in tqdm(range(train_epoch)):
 
             D_train_loss.backward()
             D_optimizer.step()
+
             D_losses.append(D_train_loss.item())
 
             # train generator G
@@ -169,17 +175,18 @@ for epoch in tqdm(range(train_epoch)):
                 if is_cuda: z_ = z_.cuda()
 
                 G_result = G(z_)
+
+                # add to memory
+                if MODELTYPE == 2:
+                    for i in range(G_result.shape[0]):
+                        memory.append(G_result[i].detach())
+
                 D_result = D(G_result).squeeze()
                 G_train_loss = BCE_loss(D_result, y_real_)
 
                 G_train_loss.backward()
                 G_optimizer.step()
                 G_losses.append(G_train_loss.item())
-
-            # add to memory
-            if MODELTYPE == 2:
-                for i in range(G_result.shape[0]):
-                    memory.append(G_result[i].detach())
 
             # alpha smoothing
             if MODELTYPE == 1:
@@ -197,17 +204,17 @@ for epoch in tqdm(range(train_epoch)):
                                                               torch.mean(torch.FloatTensor(G_losses))))
     p = SAVEDIR+'/Random_results/' + str(epoch + 1) + '.png'
     fixed_p = SAVEDIR+'/Fixed_results/' + str(epoch + 1) + '.png'
-    show_result((epoch+1), G, save=True, path=p, isFix=False)
-    show_result((epoch+1), G, save=True, path=fixed_p, isFix=True)
+    # show_result((epoch+1), G, save=True, path=p, isFix=False)
+    # show_result((epoch+1), G, save=True, path=fixed_p, isFix=True)
     train_hist['D_losses'].append(torch.mean(torch.FloatTensor(D_losses)))
     train_hist['G_losses'].append(torch.mean(torch.FloatTensor(G_losses)))
     train_hist['per_epoch_ptimes'].append(per_epoch_ptime)
 
-    if epoch % 2 == 0:
-        torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
-        torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE) # for safety!
-        if MODELTYPE >= 2:
-            torch.save(memory, SAVEDIR+'/'+'memory.pkl') # big tho!
+    # if epoch % 2 == 0:
+    #     torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
+    #     torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE) # for safety!
+    #     if MODELTYPE == 2:
+    #         torch.save(memory, SAVEDIR+'/'+'memory.pkl')
 
 end_time = time.time()
 total_ptime = end_time - start_time
@@ -215,15 +222,15 @@ train_hist['total_ptime'].append(total_ptime)
 
 print("Avg per epoch ptime: %.2f, total %d epochs ptime: %.2f" % (torch.mean(torch.FloatTensor(train_hist['per_epoch_ptimes'])), train_epoch, total_ptime))
 print("Training finish!... save training results")
-torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
-torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE)
-if MODELTYPE >= 2:
-    torch.save(memory, SAVEDIR+'/'+'memory.pkl')
+# torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
+# torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE)
+# if MODELTYPE == 2:
+#     torch.save(memory, SAVEDIR+'/'+'memory.pkl')
 
-with open(SAVEDIR+'/train_hist.pkl', 'wb') as f:
-    pickle.dump(train_hist, f)
+# with open(SAVEDIR+'/train_hist.pkl', 'wb') as f:
+#     pickle.dump(train_hist, f)
 
-show_train_hist(train_hist, save=True, path=SAVEDIR+'/train_hist.png')
+# show_train_hist(train_hist, save=True, path=SAVEDIR+'/train_hist.png')
 
 # images = []
 # for e in range(train_epoch):

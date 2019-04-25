@@ -112,7 +112,7 @@ p = np.zeros(1000)
 p[0:num_mode] = list(map.values())
 p = p / np.sum(p)
 q = [1.0 / 1000.0] * 1000
-kl = JSD().KLD(p, q) 
+kl = JSD().KLD(p, q)
 
 print('num mode', num_mode, 'kl', kl)
 # print(map)

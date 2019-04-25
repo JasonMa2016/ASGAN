@@ -75,3 +75,60 @@ class Discriminator(nn.Module):
 # x = torch.zeros(43, 3, 28, 28)
 # y = D(x)
 # print(time.time()-start)
+
+def deconv(c_in, c_out, k_size, stride=2, pad=1, bn=True):
+    layers = []
+    layers.append(nn.ConvTranspose2d(c_in, c_out, k_size, stride, pad))
+    if bn:
+        layers.append(nn.BatchNorm2d(c_out))
+    return nn.Sequential(*layers)    
+
+def conv(c_in, c_out, k_size, stride=2, pad=1, bn=True):
+    layers = []
+    layers.append(nn.Conv2d(c_in, c_out, k_size, stride, pad))
+    if bn:
+        layers.append(nn.BatchNorm2d(c_out))
+    return nn.Sequential(*layers)
+
+# 664933 params
+class Generator1(nn.Module):
+    def __init__(self, latent_dim=100, image_size=28, conv_dim=32):
+        super(Generator1, self).__init__()
+        self.fc = deconv(latent_dim, conv_dim*8, 2, stride=1, pad=0, bn=False)
+        self.deconv1 = deconv(conv_dim*8, conv_dim*4, 4)
+        self.deconv2 = deconv(conv_dim*4, conv_dim*2, 3) # hacky to change kernel size
+        self.deconv3 = deconv(conv_dim*2, conv_dim, 4)
+        self.deconv4 = deconv(conv_dim, 1, 4, bn=False)
+    def weight_init(self, mean, std):
+        for m in self._modules:
+            normal_init(self._modules[m], mean, std)
+    def forward(self, z):
+        z = z.view(z.size(0), z.size(1), 1, 1)
+        out = self.fc(z) # (?, 256, 2, 2)
+        out = F.leaky_relu(self.deconv1(out), 0.05) # (?, 128, 4, 4)
+        out = F.leaky_relu(self.deconv2(out), 0.05) # (?, 64, 7, 7)
+        out = F.leaky_relu(self.deconv3(out), 0.05) # (?, 32, 14, 14)
+        out = torch.sigmoid(self.deconv4(out)) # (?, 1, 28, 28)
+        return out
+
+#2394849 params
+class Discriminator2(nn.Module):
+    def __init__(self, image_size=28, conv_dim=32):
+        super(Discriminator2, self).__init__()
+        self.conv_dim = conv_dim
+        self.conv1 = conv(1, conv_dim, 4, stride=1, pad=1, bn=False)
+        self.conv2 = conv(conv_dim, conv_dim*2, 4, stride=1, pad=0)
+        self.maxpool= nn.MaxPool2d(2,padding=1)
+        self.linear = nn.Linear(conv_dim*2*6*6, 1024)
+        self.output = nn.Linear(1024, 1)
+    def weight_init(self, mean, std):
+        for m in self._modules:
+            normal_init(self._modules[m], mean, std)
+    def forward(self, x):
+        out = F.leaky_relu(self.conv1(x), 0.05) # (?, 32, 27, 27)
+        out = self.maxpool(out) # (?, 32, 13, 13)
+        out = F.leaky_relu(self.conv2(out), 0.05) # (?, 64, 10, 10)
+        out = self.maxpool(out) # (?, 64, 6, 6)
+        out = out.view(-1, self.conv_dim*2*6*6) # (?, 64*8*8)
+        out = F.leaky_relu(self.linear(out), 0.05) # (?, 1024)
+        return torch.sigmoid(self.output(out).squeeze())

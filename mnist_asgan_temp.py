@@ -43,6 +43,7 @@ latent_dim = args.latent_dim
 batch_size = args.batch_size
 train_epoch = args.num_epochs
 lr = args.learning_rate
+assert(MODELTYPE == 1)
 
 if torch.cuda.is_available():
     print('using cuda!')
@@ -87,7 +88,8 @@ if is_cuda:
 
 # ASGAN
 if MODELTYPE == 1:
-    G_old = copy.deepcopy(G)
+    G_old1 = copy.deepcopy(G)
+    G_old2 = copy.deepcopy(G)
 
 # ERGAN
 z_ = torch.randn((batch_size//3, latent_dim)).view(-1, latent_dim)
@@ -183,9 +185,10 @@ for epoch in tqdm(range(train_epoch)):
 
             # alpha smoothing
             if MODELTYPE == 1:
-                for model_param, old_param in zip(G.parameters(), G_old.parameters()):
-                    model_param.data.copy_(model_param.data*(1-tau) + old_param.data*tau)
-                    old_param.data.copy_(model_param.data)
+                for model_param, old1_param, old2_param in zip(G.parameters(), G_old1.parameters(), G_old2.parameters()):
+                    model_param.data.copy_(model_param.data*0.5 + old1_param.data*0.3 + old2_param.data*0.2)
+                    old2_param.data.copy_(old1_param.data)
+                    old1_param.data.copy_(model_param.data)
 
             num_iter += 1
 

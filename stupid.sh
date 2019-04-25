@@ -1,7 +1,13 @@
-#! /bin/bash
+#!/bin/bash
 
-datadir = "../data/adsf"
+datadir="../data/asdf"
+mkdir -p $datadir
+echo $datadir
+echo bye > "${datadir}/results.txt"
+python stupid.py -m $datadir
 
-echo hi > "$datadir results.txt"
-echo whatever
-python stupid.py -m jfoij
+# doesn't work
+for i in {1..5}
+do
+	answer=$(bc <<< "scale=2;$i/5")
+done
