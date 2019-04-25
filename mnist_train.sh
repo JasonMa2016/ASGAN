@@ -67,7 +67,7 @@ mkdir -p ../data/ERGAN_MNIST_8
 # test asgan_temp
 python mnist_asgan_temp.py -m 1 -sd ../data/ASGAN_MNIST_2
 python mnist_evaluate.py -sd ../data/ASGAN_MNIST_2 >> ../data/ASGAN_MNIST_2/results.txt
-aws s3 cp ../data/ASGAN_MNIST_2/Fixed_results/25.png s3://am221/ASGAN_MNIST_2/3epochs.png
+aws s3 cp ../data/ASGAN_MNIST_2/Fixed_results/25.png s3://am221/ASGAN_MNIST_2/3epochseven.png
 
 # test weighted sampling
 # python mnist_gan.py -m 3 -sd ../data/ERGAN_MNIST_8
