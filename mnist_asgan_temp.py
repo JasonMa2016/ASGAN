@@ -209,8 +209,6 @@ for epoch in tqdm(range(train_epoch)):
     if epoch % 2 == 0:
         torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
         torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE) # for safety!
-        if MODELTYPE >= 2:
-            torch.save(memory, SAVEDIR+'/'+'memory.pkl') # big tho!
 
 end_time = time.time()
 total_ptime = end_time - start_time
@@ -220,8 +218,6 @@ print("Avg per epoch ptime: %.2f, total %d epochs ptime: %.2f" % (torch.mean(tor
 print("Training finish!... save training results")
 torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
 torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE)
-if MODELTYPE >= 2:
-    torch.save(memory, SAVEDIR+'/'+'memory.pkl')
 
 with open(SAVEDIR+'/train_hist.pkl', 'wb') as f:
     pickle.dump(train_hist, f)

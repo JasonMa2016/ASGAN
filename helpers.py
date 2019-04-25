@@ -73,17 +73,17 @@ def stack(x):
     # assert(x.shape[0] % 3 == 0)
     return torch.cat([x[::3], x[1::3], x[2::3]], dim=1)
 
-def patch_with_replay(mini_batch, G, memory, latent_dim = 100, sample_type=0):
-    z_ = torch.randn((floor(7*mini_batch/8), latent_dim)).view(-1, latent_dim)
+def patch_with_replay(mini_batch, G, memory, latent_dim = 100, sample_type=0, prop):
+    z_ = torch.randn((floor((1-prop)*mini_batch), latent_dim)).view(-1, latent_dim)
     if is_cuda: z_ = z_.cuda()
     G_result = G(z_)
     # sample from experience
     if sample_type == 0:
-        samples = random.sample(memory, ceil(mini_batch/8))
+        samples = random.sample(memory, ceil(prop*mini_batch))
     elif sample_type == 1:
         lm = len(memory)
         weight_dist = np.linspace(.8/lm, 1.2/lm, lm)
-        samples = np.random.choice(memory, ceil(mini_batch/8), p=weight_dist)
+        samples = np.random.choice(memory, ceil(prop*mini_batch), p=weight_dist)
     samples = torch.stack(samples)
     G_result = torch.cat((G_result, samples))
     return G_result

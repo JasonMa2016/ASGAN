@@ -28,6 +28,8 @@ parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimen
 parser.add_argument('--batch_size','-bs',type=int,default=540,help='Batch size') # not 63
 parser.add_argument('--num_epochs','-ne',type=int,default=30,help='Number of epochs')
 parser.add_argument('--learning_rate','-lr',type=float,default=0.0002,help='Learning rate')
+parser.add_argument('--buffer_prop','-bufp',type=float,default=0.5,help='Proportion of batch sampled from buffer')
+parser.add_argument('--buffer_size','-bufs',type=float,default=20000,help='Length of replay buffer')
 parser.add_argument('--gen_file','-gf',type=str,default='generator_param.pkl',help='Save gen filename')
 parser.add_argument('--disc_file','-df',type=str,default='discriminator_param.pkl',help='Save disc filename')
 # parser.add_argument('--track_space','-ts',action='store_true',help='Save 2D latent space viz, if ld=2')
@@ -94,7 +96,7 @@ z_ = torch.randn((batch_size//3, latent_dim)).view(-1, latent_dim)
 if is_cuda: z_ = z_.cuda()
 
 old_G_result = G(z_)
-memory = deque(maxlen = len(train_loader) * batch_size // 3)
+memory = deque(maxlen = args.buffer_size)
 
 # Binary Cross Entropy loss
 BCE_loss = nn.BCELoss()
@@ -141,7 +143,7 @@ for epoch in tqdm(range(train_epoch)):
             D_real_loss = BCE_loss(D_result, y_real_)
 
             if MODELTYPE >= 2 and len(memory) > mini_batch and epoch > 1:
-                G_result = patch_with_replay(mini_batch, G, memory, latent_dim, MODELTYPE-2)
+                G_result = patch_with_replay(mini_batch, G, memory, latent_dim, MODELTYPE-2, args.buffer_prop)
                 # it's a little messy, outsourcing patching to a helper function
                 # last arg determines whether to use weighted sampling (yes for model type 3)
             else:
@@ -206,8 +208,6 @@ for epoch in tqdm(range(train_epoch)):
     if epoch % 2 == 0:
         torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
         torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE) # for safety!
-        # if MODELTYPE >= 2:
-        #     torch.save(memory, SAVEDIR+'/'+'memory.pkl') # too big!
 
 end_time = time.time()
 total_ptime = end_time - start_time
@@ -217,8 +217,6 @@ print("Avg per epoch ptime: %.2f, total %d epochs ptime: %.2f" % (torch.mean(tor
 print("Training finish!... save training results")
 torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
 torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE)
-if MODELTYPE >= 2:
-    torch.save(memory, SAVEDIR+'/'+'memory.pkl')
 
 with open(SAVEDIR+'/train_hist.pkl', 'wb') as f:
     pickle.dump(train_hist, f)
