@@ -98,7 +98,7 @@ class Generator1(nn.Module):
         self.deconv1 = deconv(conv_dim*8, conv_dim*4, 4)
         self.deconv2 = deconv(conv_dim*4, conv_dim*2, 3) # hacky to change kernel size
         self.deconv3 = deconv(conv_dim*2, conv_dim, 4)
-        self.deconv4 = deconv(conv_dim, 1, 4, bn=False)
+        self.deconv4 = deconv(conv_dim, 3, 4, bn=False)
     def weight_init(self, mean, std):
         for m in self._modules:
             normal_init(self._modules[m], mean, std)
@@ -112,11 +112,11 @@ class Generator1(nn.Module):
         return out
 
 #2394849 params
-class Discriminator2(nn.Module):
+class Discriminator1(nn.Module):
     def __init__(self, image_size=28, conv_dim=32):
-        super(Discriminator2, self).__init__()
+        super(Discriminator1, self).__init__()
         self.conv_dim = conv_dim
-        self.conv1 = conv(1, conv_dim, 4, stride=1, pad=1, bn=False)
+        self.conv1 = conv(3, conv_dim, 4, stride=1, pad=1, bn=False)
         self.conv2 = conv(conv_dim, conv_dim*2, 4, stride=1, pad=0)
         self.maxpool= nn.MaxPool2d(2,padding=1)
         self.linear = nn.Linear(conv_dim*2*6*6, 1024)

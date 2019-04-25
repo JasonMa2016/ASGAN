@@ -21,11 +21,6 @@ mkdir -p ../data
 # 	aws s3 cp ../data/ERGAN_MNIST_1 s3://am221
 # done
 
-# test for timing
-python mnist_time_benchmark.py -bs 63
-python mnist_time_benchmark.py -bs 504 # diff batch size ()
-python mnist_time_benchmark.py -a 1 # smaller architecture
-
 # run dcgan and ergan 5 times each
 for i in {1..5}
 do
