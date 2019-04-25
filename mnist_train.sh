@@ -74,4 +74,4 @@ aws s3 cp ../data/ASGAN_MNIST_2/Fixed_results/25.png s3://am221/ASGAN_MNIST_2/3e
 # python mnist_evaluate.py -sd ../data/ERGAN_MNIST_8 >> ../data/ERGAN_MNIST_8/results.txt
 # aws s3 cp ../data/ERGAN_MNIST_8/Fixed_results/25.png s3://am221/ERGAN_MNIST_8/weightedsampling.png
 
-aws s3 cp ../data/*/results.txt s3://am221
+# aws s3 cp ../data/*/results.txt s3://am221

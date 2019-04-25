@@ -206,8 +206,8 @@ for epoch in tqdm(range(train_epoch)):
     if epoch % 2 == 0:
         torch.save(G.state_dict(), SAVEDIR+'/'+GENFILE)
         torch.save(D.state_dict(), SAVEDIR+'/'+DISCFILE) # for safety!
-        if MODELTYPE >= 2:
-            torch.save(memory, SAVEDIR+'/'+'memory.pkl') # big tho!
+        # if MODELTYPE >= 2:
+        #     torch.save(memory, SAVEDIR+'/'+'memory.pkl') # too big!
 
 end_time = time.time()
 total_ptime = end_time - start_time
