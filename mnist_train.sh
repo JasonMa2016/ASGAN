@@ -1,8 +1,8 @@
 #! /bin/bash
-#echo "remember to aws configure and conda install keras inside pytorch_p36 first"
+echo "remember to aws configure and conda install keras inside pytorch_p36 first"
 
 source activate pytorch_p36
-sudo mkdir -p ../data
+mkdir -p ../data
 
 # might need :set ff=unix (if \r causing problems)
 # j=stringystring; echo message > $j.txt
@@ -20,11 +20,6 @@ sudo mkdir -p ../data
 # 	python mnist_evaluate.py -sd ../data/ERGAN_MNIST_1 >> ../data/ERGAN_MNIST_1/results.txt
 # 	aws s3 cp ../data/ERGAN_MNIST_1 s3://am221
 # done
-
-# prelim
-aws s3 cp stupid.py s3://am221/nonexistent_folder/stupid1.py
-aws s3 cp stupid.py s3://am221/nonexistent_folder/stupid2.py
-exit
 
 # test for timing
 python mnist_time_benchmark.py -bs 63
