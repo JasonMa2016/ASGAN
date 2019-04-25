@@ -26,7 +26,7 @@ parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save
 parser.add_argument('--tau','-t',type=float,default=0.3,help='Alpha smoothing parameter')
 parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimension')
 parser.add_argument('--batch_size','-bs',type=int,default=540,help='Batch size') # not 63
-parser.add_argument('--num_epochs','-ne',type=int,default=50,help='Number of epochs')
+parser.add_argument('--num_epochs','-ne',type=int,default=30,help='Number of epochs')
 parser.add_argument('--learning_rate','-lr',type=float,default=0.0002,help='Learning rate')
 parser.add_argument('--gen_file','-gf',type=str,default='generator_param.pkl',help='Save gen filename')
 parser.add_argument('--disc_file','-df',type=str,default='discriminator_param.pkl',help='Save disc filename')
