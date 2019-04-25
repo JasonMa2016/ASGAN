@@ -7,16 +7,16 @@ mkdir -p ../data
 datadir="../data/ERGAN_MNIST"
 mkdir -p $datadir
 python mnist_gan.py -m 2 -sd $datadir -bs 63
-python mnist_evaulate.py -sd $datadir >> ${datadir}/results.txt
+python mnist_evaluate.py -sd $datadir >> ${datadir}/results.txt
 aws s3 cp ${datadir}/Fixed_results/25.png s3://am221/ERGAN_MNIST/ergan0.png
 python mnist_gan.py -m 2 -sd $datadir -bufp 0.1
-python mnist_evaulate.py -sd $datadir >> ${datadir}/results.txt
+python mnist_evaluate.py -sd $datadir >> ${datadir}/results.txt
 aws s3 cp ${datadir}/Fixed_results/25.png s3://am221/ERGAN_MNIST/ergan1.png
 python mnist_gan.py -m 2 -sd $datadir -bufsz 1000
-python mnist_evaulate.py -sd $datadir >> ${datadir}/results.txt
+python mnist_evaluate.py -sd $datadir >> ${datadir}/results.txt
 aws s3 cp ${datadir}/Fixed_results/25.png s3://am221/ERGAN_MNIST/ergan0.png
 python mnist_gan.py -m 2 -sd $datadir -bs 63 -bufsz 1000 -bufp 0.1
-python mnist_evaulate.py -sd $datadir >> ${datadir}/results.txt
+python mnist_evaluate.py -sd $datadir >> ${datadir}/results.txt
 aws s3 cp ${datadir}/Fixed_results/25.png s3://am221/ERGAN_MNIST/ergan0.png
 
 # for i in {1..5}
