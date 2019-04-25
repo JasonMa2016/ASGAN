@@ -1,5 +1,5 @@
 #! /bin/bash
-echo "remember to aws configure and conda install keras inside pytorch_p36 first"
+#echo "remember to aws configure and conda install keras inside pytorch_p36 first"
 
 source activate pytorch_p36
 sudo mkdir -p ../data

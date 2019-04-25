@@ -8,14 +8,13 @@ import torch.distributions as ds
 import matplotlib.pyplot as plt
 
 latent_dim = 2 # 2d Gaussian
-HIDDEN_SIZE = 128
+HIDDEN_SIZE = 256
 EPOCH_SIZE = 20000
 BATCH_SIZE = 1000
 
-tau = 0.3
-
-gan = ERGAN(latent_dim, HIDDEN_SIZE)
-grid = False
+print('Hidden Size is {}'.format(HIDDEN_SIZE))
+gan = GAN(latent_dim, HIDDEN_SIZE)
+grid = True
 
 if grid:
     DIR_NAME = 'ERGAN_2dgrid'
@@ -25,16 +24,19 @@ else:
     DIR_NAME = 'ERGAN_2dring'
     create = create_ring
     mode_count = count_mode_ring
-    
+
+print(DIR_NAME)
+
 os.makedirs(DIR_NAME, exist_ok=True)
 
-for i in range(20):
-    if i == 10:
-        DIR_NAME = 'ERGAN_2dgrid'
-        create = create_grid
-        mode_count = count_mode_grid
-        os.makedirs(DIR_NAME, exist_ok=True)
-        print("Now, 2d-grid")
+
+for i in range(10):
+    # if i == 10:
+    #     DIR_NAME = 'ERGAN_2dgrid'
+    #     create = create_grid
+    #     mode_count = count_mode_grid
+    #     os.makedirs(DIR_NAME, exist_ok=True)
+    #     print("Now, 2d-grid")
     gan = ERGAN(latent_dim, HIDDEN_SIZE)
     for epoch in range(EPOCH_SIZE):
         real_data = create(BATCH_SIZE)
@@ -50,7 +52,7 @@ for i in range(20):
             ax1.scatter(x=real_data[:,0], y=real_data[:,1], c='g', s=100)
             ax1.scatter(x=fake_data[:,0], y=fake_data[:,1], c='b',alpha=0.1, s=100)
             # plt.show()
-            
+
             fig.savefig('{}/{}.png'.format(DIR_NAME, epoch))
 
     batch_size = 2500
@@ -63,7 +65,7 @@ for i in range(20):
     ax1 = fig.add_subplot(111)
     ax1.scatter(x=real_normals[:,0], y=real_normals[:,1], c='g', s=100)
     ax1.scatter(x=fake_normals[:,0], y=fake_normals[:,1], c='b',alpha=0.02, s=100)
-    plt.show()
+    # plt.show()
 
     fig.savefig('{}/final.png'.format(DIR_NAME))
 
