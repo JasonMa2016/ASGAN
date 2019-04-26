@@ -33,6 +33,6 @@ aws s3 cp ${datadir}/Fixed_results/25.png s3://am221/ERGAN_MNIST/erganvanilla.pn
 # # test weighted sampling
 # datadir="../data/ERGAN_MNIST_8"
 # mkdir -p $datadir
-# python mnist_gan.py -m 3 -sd $datadir
-# python mnist_evaluate.py -sd $datadir >> $datadir/results.txt
-# aws s3 cp $datadir/Fixed_results/25.png s3://am221/ERGAN_MNIST_8/weightedsampling.png
+python mnist_gan.py -m 3 -sd $datadir
+python mnist_evaluate.py -sd $datadir >> $datadir/results.txt
+aws s3 cp $datadir/Fixed_results/25.png s3://am221/ERGAN_MNIST_8/weightedsampling.png
