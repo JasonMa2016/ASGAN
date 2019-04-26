@@ -364,4 +364,592 @@ Using TensorFlow backend.
 Completed 11.5 KiB/11.5 KiB (105.7 KiB/s) with 1 file(s) remainingupload: ../data/ASGAN_MNIST_2/Fixed_results/25.png to s3://am221/ASGAN_MNIST_2/3epochseven.png
 
 Unknown options: ../data/DCGAN_MNIST/results.txt,../data/ERGAN_MNIST_8/results.txt,s3://am221
-[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ 
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ [01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ bash help[K[K[K[Ktmem[K[Kem[K[K[Kemptemptemp.sh 
+using cuda!
+using cuda!
+training start!
+  0%|                                                                                            | 0/30 [00:00<?, ?it/s][1/30] - ptime: 206.70, loss_d: 0.547, loss_g: 3.963
+  3%|██▋                                                                              | 1/30 [03:28<1:40:50, 208.63s/it][2/30] - ptime: 202.68, loss_d: 0.289, loss_g: 5.253
+  7%|█████▍                                                                           | 2/30 [06:53<1:36:47, 207.40s/it][3/30] - ptime: 202.48, loss_d: 0.152, loss_g: 0.942
+ 10%|████████                                                                         | 3/30 [10:17<1:32:55, 206.49s/it][4/30] - ptime: 206.86, loss_d: 0.013, loss_g: 0.066
+ 13%|██████████▊                                                                      | 4/30 [13:46<1:29:46, 207.16s/it][5/30] - ptime: 205.41, loss_d: 0.015, loss_g: 0.056
+ 17%|█████████████▌                                                                   | 5/30 [17:13<1:26:20, 207.21s/it][6/30] - ptime: 203.16, loss_d: 0.008, loss_g: 0.042
+ 20%|████████████████▏                                                                | 6/30 [20:38<1:22:37, 206.54s/it][7/30] - ptime: 202.87, loss_d: 0.011, loss_g: 0.049
+ 23%|██████████████████▉                                                              | 7/30 [24:03<1:18:58, 206.01s/it][8/30] - ptime: 203.20, loss_d: 0.004, loss_g: 0.026
+ 27%|█████████████████████▌                                                           | 8/30 [27:28<1:15:26, 205.74s/it][9/30] - ptime: 200.74, loss_d: 0.007, loss_g: 0.051
+ 30%|████████████████████████▎                                                        | 9/30 [30:51<1:11:41, 204.81s/it][10/30] - ptime: 202.15, loss_d: 0.006, loss_g: 0.047
+ 33%|██████████████████████████▋                                                     | 10/30 [34:15<1:08:11, 204.57s/it][11/30] - ptime: 199.58, loss_d: 0.007, loss_g: 0.058
+ 37%|█████████████████████████████▎                                                  | 11/30 [37:36<1:04:29, 203.65s/it][12/30] - ptime: 198.41, loss_d: 0.004, loss_g: 0.048
+ 40%|████████████████████████████████                                                | 12/30 [40:56<1:00:47, 202.63s/it][13/30] - ptime: 199.07, loss_d: 0.008, loss_g: 0.063
+ 43%|███████████████████████████████████▌                                              | 13/30 [44:17<57:16, 202.14s/it][14/30] - ptime: 198.35, loss_d: 0.004, loss_g: 0.053
+ 47%|██████████████████████████████████████▎                                           | 14/30 [47:37<53:44, 201.55s/it][15/30] - ptime: 198.30, loss_d: 0.006, loss_g: 0.066
+ 50%|█████████████████████████████████████████                                         | 15/30 [50:58<50:17, 201.14s/it][16/30] - ptime: 197.63, loss_d: 0.004, loss_g: 0.068
+ 53%|███████████████████████████████████████████▋                                      | 16/30 [54:17<46:49, 200.65s/it][17/30] - ptime: 198.15, loss_d: 0.005, loss_g: 0.069
+ 57%|██████████████████████████████████████████████▍                                   | 17/30 [57:37<43:25, 200.46s/it][18/30] - ptime: 199.41, loss_d: 0.004, loss_g: 0.059
+ 60%|████████████████████████████████████████████████                                | 18/30 [1:00:58<40:08, 200.70s/it][19/30] - ptime: 198.16, loss_d: 0.003, loss_g: 0.068
+ 63%|██████████████████████████████████████████████████▋                             | 19/30 [1:04:18<36:45, 200.50s/it][20/30] - ptime: 198.91, loss_d: 0.006, loss_g: 0.061
+ 67%|█████████████████████████████████████████████████████▎                          | 20/30 [1:07:39<33:25, 200.57s/it][21/30] - ptime: 199.89, loss_d: 0.004, loss_g: 0.054
+ 70%|████████████████████████████████████████████████████████                        | 21/30 [1:11:01<30:08, 200.94s/it][22/30] - ptime: 200.53, loss_d: 0.005, loss_g: 0.105
+ 73%|██████████████████████████████████████████████████████████▋                     | 22/30 [1:14:23<26:51, 201.39s/it][23/30] - ptime: 200.71, loss_d: 0.005, loss_g: 0.092
+ 77%|█████████████████████████████████████████████████████████████▎                  | 23/30 [1:17:46<23:32, 201.75s/it][24/30] - ptime: 201.87, loss_d: 0.002, loss_g: 0.049
+ 80%|████████████████████████████████████████████████████████████████                | 24/30 [1:21:10<20:14, 202.34s/it][25/30] - ptime: 200.94, loss_d: 0.006, loss_g: 0.093
+ 83%|██████████████████████████████████████████████████████████████████▋             | 25/30 [1:24:33<16:52, 202.49s/it][26/30] - ptime: 200.51, loss_d: 0.006, loss_g: 0.069
+ 87%|█████████████████████████████████████████████████████████████████████▎          | 26/30 [1:27:55<13:29, 202.45s/it][27/30] - ptime: 203.23, loss_d: 0.004, loss_g: 0.061
+ 90%|████████████████████████████████████████████████████████████████████████        | 27/30 [1:31:20<10:09, 203.25s/it][28/30] - ptime: 197.90, loss_d: 0.004, loss_g: 0.082
+ 93%|██████████████████████████████████████████████████████████████████████████▋     | 28/30 [1:34:40<06:44, 202.19s/it][29/30] - ptime: 198.18, loss_d: 0.006, loss_g: 0.050
+ 97%|█████████████████████████████████████████████████████████████████████████████▎  | 29/30 [1:38:00<03:21, 201.56s/it][30/30] - ptime: 198.06, loss_d: 0.005, loss_g: 0.076
+100%|████████████████████████████████████████████████████████████████████████████████| 30/30 [1:41:20<00:00, 201.06s/it]
+Avg per epoch ptime: 200.80, total 30 epochs ptime: 6080.29
+Training finish!... save training results
+Using TensorFlow backend.
+2019-04-26 00:43:55.712498: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-04-26 00:43:55.715012: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Completed 38.4 KiB/38.4 KiB (351.5 KiB/s) with 1 file(s) remainingupload: ../data/ERGAN_MNIST/Fixed_results/25.png to s3://am221/ERGAN_MNIST/ergan0.png
+using cuda!
+using cuda!
+training start!
+  0%|                                                                                            | 0/30 [00:00<?, ?it/s][1/30] - ptime: 105.74, loss_d: 0.829, loss_g: 2.760
+  3%|██▊                                                                                | 1/30 [01:47<52:08, 107.90s/it][2/30] - ptime: 101.94, loss_d: 0.732, loss_g: 3.264
+  7%|█████▌                                                                             | 2/30 [03:31<49:46, 106.67s/it][3/30] - ptime: 101.47, loss_d: 0.568, loss_g: 3.841
+ 10%|████████▎                                                                          | 3/30 [05:15<47:33, 105.69s/it][4/30] - ptime: 101.51, loss_d: 0.514, loss_g: 4.120
+ 13%|███████████                                                                        | 4/30 [06:58<45:29, 105.00s/it][5/30] - ptime: 101.25, loss_d: 0.511, loss_g: 4.029
+ 17%|█████████████▊                                                                     | 5/30 [08:41<43:31, 104.46s/it][6/30] - ptime: 101.09, loss_d: 0.388, loss_g: 4.521
+ 20%|████████████████▌                                                                  | 6/30 [10:24<41:36, 104.01s/it][7/30] - ptime: 101.17, loss_d: 0.371, loss_g: 4.813
+ 23%|███████████████████▎                                                               | 7/30 [12:07<39:45, 103.73s/it][8/30] - ptime: 104.24, loss_d: 0.360, loss_g: 4.685
+ 27%|██████████████████████▏                                                            | 8/30 [13:53<38:18, 104.47s/it][9/30] - ptime: 104.94, loss_d: 0.327, loss_g: 4.802
+ 30%|████████████████████████▉                                                          | 9/30 [15:40<36:50, 105.24s/it][10/30] - ptime: 105.29, loss_d: 0.299, loss_g: 4.794
+ 33%|███████████████████████████▎                                                      | 10/30 [17:28<35:16, 105.85s/it][11/30] - ptime: 104.93, loss_d: 0.283, loss_g: 5.126
+ 37%|██████████████████████████████                                                    | 11/30 [19:15<33:37, 106.18s/it][12/30] - ptime: 105.28, loss_d: 0.319, loss_g: 4.959
+ 40%|████████████████████████████████▊                                                 | 12/30 [21:02<31:57, 106.51s/it][13/30] - ptime: 104.58, loss_d: 0.303, loss_g: 4.811
+ 43%|███████████████████████████████████▌                                              | 13/30 [22:49<30:10, 106.52s/it][14/30] - ptime: 104.28, loss_d: 0.316, loss_g: 4.604
+ 47%|██████████████████████████████████████▎                                           | 14/30 [24:35<28:22, 106.43s/it][15/30] - ptime: 103.97, loss_d: 0.278, loss_g: 4.757
+ 50%|█████████████████████████████████████████                                         | 15/30 [26:21<26:34, 106.29s/it][16/30] - ptime: 103.97, loss_d: 0.278, loss_g: 4.729
+ 53%|███████████████████████████████████████████▋                                      | 16/30 [28:07<24:46, 106.17s/it][17/30] - ptime: 104.04, loss_d: 0.260, loss_g: 4.771
+ 57%|██████████████████████████████████████████████▍                                   | 17/30 [29:53<23:00, 106.21s/it][18/30] - ptime: 103.88, loss_d: 0.237, loss_g: 4.768
+ 60%|█████████████████████████████████████████████████▏                                | 18/30 [31:39<21:13, 106.09s/it][19/30] - ptime: 103.94, loss_d: 0.244, loss_g: 4.882
+ 63%|███████████████████████████████████████████████████▉                              | 19/30 [33:25<19:26, 106.05s/it][20/30] - ptime: 106.19, loss_d: 0.243, loss_g: 4.846
+ 67%|██████████████████████████████████████████████████████▋                           | 20/30 [35:13<17:46, 106.68s/it][21/30] - ptime: 104.01, loss_d: 0.229, loss_g: 4.905
+ 70%|█████████████████████████████████████████████████████████▍                        | 21/30 [36:59<15:58, 106.47s/it][22/30] - ptime: 104.43, loss_d: 0.216, loss_g: 4.894
+ 73%|████████████████████████████████████████████████████████████▏                     | 22/30 [38:45<14:11, 106.44s/it][23/30] - ptime: 103.91, loss_d: 0.216, loss_g: 5.096
+ 77%|██████████████████████████████████████████████████████████████▊                   | 23/30 [40:31<12:23, 106.28s/it][24/30] - ptime: 100.30, loss_d: 0.219, loss_g: 4.796
+ 80%|█████████████████████████████████████████████████████████████████▌                | 24/30 [42:13<10:30, 105.05s/it][25/30] - ptime: 100.07, loss_d: 0.223, loss_g: 4.728
+ 83%|████████████████████████████████████████████████████████████████████▎             | 25/30 [43:55<08:40, 104.12s/it][26/30] - ptime: 100.17, loss_d: 0.208, loss_g: 4.939
+ 87%|███████████████████████████████████████████████████████████████████████           | 26/30 [45:37<06:54, 103.51s/it][27/30] - ptime: 100.20, loss_d: 0.189, loss_g: 4.738
+ 90%|█████████████████████████████████████████████████████████████████████████▊        | 27/30 [47:19<05:09, 103.09s/it][28/30] - ptime: 100.26, loss_d: 0.188, loss_g: 4.994
+ 93%|████████████████████████████████████████████████████████████████████████████▌     | 28/30 [49:01<03:25, 102.79s/it][29/30] - ptime: 100.24, loss_d: 0.199, loss_g: 4.877
+ 97%|███████████████████████████████████████████████████████████████████████████████▎  | 29/30 [50:44<01:42, 102.59s/it][30/30] - ptime: 100.16, loss_d: 0.171, loss_g: 4.943
+100%|██████████████████████████████████████████████████████████████████████████████████| 30/30 [52:26<00:00, 102.41s/it]
+Avg per epoch ptime: 102.92, total 30 epochs ptime: 3146.10
+Training finish!... save training results
+Using TensorFlow backend.
+2019-04-26 01:36:53.412609: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-04-26 01:36:53.414609: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Completed 42.2 KiB/42.2 KiB (315.0 KiB/s) with 1 file(s) remainingupload: ../data/ERGAN_MNIST/Fixed_results/25.png to s3://am221/ERGAN_MNIST/ergan1.png
+using cuda!
+usage: mnist_gan.py [-h] [--model_type MODEL_TYPE] [--arch_type ARCH_TYPE]
+                    [--save_dir SAVE_DIR] [--tau TAU]
+                    [--latent_dim LATENT_DIM] [--batch_size BATCH_SIZE]
+                    [--num_epochs NUM_EPOCHS] [--learning_rate LEARNING_RATE]
+                    [--buffer_prop BUFFER_PROP] [--buffer_size BUFFER_SIZE]
+                    [--gen_file GEN_FILE] [--disc_file DISC_FILE]
+mnist_gan.py: error: unrecognized arguments: -bufsz 1000
+Using TensorFlow backend.
+2019-04-26 01:37:24.338907: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-04-26 01:37:24.340964: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Completed 42.2 KiB/42.2 KiB (739.9 KiB/s) with 1 file(s) remainingupload: ../data/ERGAN_MNIST/Fixed_results/25.png to s3://am221/ERGAN_MNIST/ergan0.png
+using cuda!
+usage: mnist_gan.py [-h] [--model_type MODEL_TYPE] [--arch_type ARCH_TYPE]
+                    [--save_dir SAVE_DIR] [--tau TAU]
+                    [--latent_dim LATENT_DIM] [--batch_size BATCH_SIZE]
+                    [--num_epochs NUM_EPOCHS] [--learning_rate LEARNING_RATE]
+                    [--buffer_prop BUFFER_PROP] [--buffer_size BUFFER_SIZE]
+                    [--gen_file GEN_FILE] [--disc_file DISC_FILE]
+mnist_gan.py: error: unrecognized arguments: -bufsz 1000
+Using TensorFlow backend.
+2019-04-26 01:37:55.216179: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-04-26 01:37:55.218772: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Completed 42.2 KiB/42.2 KiB (612.5 KiB/s) with 1 file(s) remainingupload: ../data/ERGAN_MNIST/Fixed_results/25.png to s3://am221/ERGAN_MNIST/ergan0.png
+using cuda!
+using cuda!
+training start!
+  0%|                                                                                            | 0/30 [00:00<?, ?it/s][1/30] - ptime: 106.66, loss_d: 0.841, loss_g: 2.790
+  3%|██▊                                                                                | 1/30 [01:48<52:31, 108.68s/it][2/30] - ptime: 106.28, loss_d: 0.708, loss_g: 3.270
+  7%|█████▌                                                                             | 2/30 [03:36<50:39, 108.56s/it][3/30] - ptime: 105.75, loss_d: 0.592, loss_g: 3.708
+ 10%|████████▎                                                                          | 3/30 [05:24<48:44, 108.32s/it][4/30] - ptime: 104.29, loss_d: 0.598, loss_g: 3.757
+ 13%|███████████                                                                        | 4/30 [07:10<46:39, 107.68s/it][5/30] - ptime: 102.49, loss_d: 0.692, loss_g: 3.225
+ 17%|█████████████▊                                                                     | 5/30 [08:55<44:27, 106.70s/it][6/30] - ptime: 102.59, loss_d: 0.668, loss_g: 3.325
+ 20%|████████████████▌                                                                  | 6/30 [10:39<42:24, 106.03s/it][7/30] - ptime: 102.58, loss_d: 0.610, loss_g: 3.449
+ 23%|███████████████████▎                                                               | 7/30 [12:24<40:28, 105.57s/it][8/30] - ptime: 105.03, loss_d: 0.533, loss_g: 3.783
+ 27%|██████████████████████▏                                                            | 8/30 [14:11<38:52, 106.00s/it][9/30] - ptime: 105.76, loss_d: 0.504, loss_g: 3.859
+ 30%|████████████████████████▉                                                          | 9/30 [15:59<37:17, 106.54s/it][10/30] - ptime: 107.45, loss_d: 0.416, loss_g: 4.106
+ 33%|███████████████████████████▎                                                      | 10/30 [17:48<35:48, 107.41s/it][11/30] - ptime: 105.79, loss_d: 0.412, loss_g: 4.285
+ 37%|██████████████████████████████                                                    | 11/30 [19:36<34:03, 107.53s/it][12/30] - ptime: 106.77, loss_d: 0.414, loss_g: 4.190
+ 40%|████████████████████████████████▊                                                 | 12/30 [21:25<32:22, 107.90s/it][13/30] - ptime: 105.77, loss_d: 0.394, loss_g: 4.291
+ 43%|███████████████████████████████████▌                                              | 13/30 [23:12<30:33, 107.88s/it][14/30] - ptime: 106.69, loss_d: 0.405, loss_g: 4.292
+ 47%|██████████████████████████████████████▎                                           | 14/30 [25:01<28:49, 108.11s/it][15/30] - ptime: 105.08, loss_d: 0.421, loss_g: 4.149
+ 50%|█████████████████████████████████████████                                         | 15/30 [26:48<26:57, 107.80s/it][16/30] - ptime: 105.35, loss_d: 0.438, loss_g: 3.987
+ 53%|███████████████████████████████████████████▋                                      | 16/30 [28:35<25:07, 107.65s/it][17/30] - ptime: 101.82, loss_d: 0.428, loss_g: 3.970
+ 57%|██████████████████████████████████████████████▍                                   | 17/30 [30:19<23:04, 106.48s/it][18/30] - ptime: 104.15, loss_d: 0.414, loss_g: 4.058
+ 60%|█████████████████████████████████████████████████▏                                | 18/30 [32:05<21:16, 106.35s/it][19/30] - ptime: 101.79, loss_d: 0.420, loss_g: 4.040
+ 63%|███████████████████████████████████████████████████▉                              | 19/30 [33:49<19:21, 105.56s/it][20/30] - ptime: 103.23, loss_d: 0.395, loss_g: 3.983
+ 67%|██████████████████████████████████████████████████████▋                           | 20/30 [35:34<17:34, 105.42s/it][21/30] - ptime: 101.75, loss_d: 0.429, loss_g: 3.932
+ 70%|█████████████████████████████████████████████████████████▍                        | 21/30 [37:18<15:44, 104.91s/it][22/30] - ptime: 101.84, loss_d: 0.449, loss_g: 3.681
+ 73%|████████████████████████████████████████████████████████████▏                     | 22/30 [39:02<13:56, 104.56s/it][23/30] - ptime: 101.74, loss_d: 0.444, loss_g: 3.725
+ 77%|██████████████████████████████████████████████████████████████▊                   | 23/30 [40:45<12:10, 104.29s/it][24/30] - ptime: 101.28, loss_d: 0.431, loss_g: 3.665
+ 80%|█████████████████████████████████████████████████████████████████▌                | 24/30 [42:28<10:23, 103.95s/it][25/30] - ptime: 101.37, loss_d: 0.428, loss_g: 3.705
+ 83%|████████████████████████████████████████████████████████████████████▎             | 25/30 [44:12<08:38, 103.76s/it][26/30] - ptime: 101.27, loss_d: 0.444, loss_g: 3.609
+ 87%|███████████████████████████████████████████████████████████████████████           | 26/30 [45:55<06:54, 103.57s/it][27/30] - ptime: 101.47, loss_d: 0.389, loss_g: 3.749
+ 90%|█████████████████████████████████████████████████████████████████████████▊        | 27/30 [47:38<05:10, 103.52s/it][28/30] - ptime: 102.14, loss_d: 0.384, loss_g: 3.826
+ 93%|████████████████████████████████████████████████████████████████████████████▌     | 28/30 [49:22<03:27, 103.68s/it][29/30] - ptime: 101.92, loss_d: 0.372, loss_g: 3.862
+ 97%|███████████████████████████████████████████████████████████████████████████████▎  | 29/30 [51:06<01:43, 103.73s/it][30/30] - ptime: 102.49, loss_d: 0.364, loss_g: 3.916
+100%|██████████████████████████████████████████████████████████████████████████████████| 30/30 [52:50<00:00, 103.93s/it]
+Avg per epoch ptime: 103.75, total 30 epochs ptime: 3170.97
+Training finish!... save training results
+Using TensorFlow backend.
+2019-04-26 02:31:18.025351: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-04-26 02:31:18.027292: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Completed 42.2 KiB/42.2 KiB (406.6 KiB/s) with 1 file(s) remainingupload: ../data/ERGAN_MNIST_8/Fixed_results/25.png to s3://am221/ERGAN_MNIST_8/weightedsampling.png
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ bash temptemptemp.sh 
+using cuda!
+using cuda!
+Traceback (most recent call last):
+  File "mnist_gan.py", line 99, in <module>
+    memory = deque(maxlen = args.buffer_size)
+TypeError: an integer is required
+Using TensorFlow backend.
+2019-04-26 02:44:47.861753: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-04-26 02:44:47.864068: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+^CTraceback (most recent call last):
+  File "mnist_evaluate.py", line 90, in <module>
+    dect0 = evaluate(np.reshape(samples[:, :, :, 0], (batch_size, 28, 28, 1)))
+  File "mnist_evaluate.py", line 9, in evaluate
+    output = model.predict(x)
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/engine/training.py", line 1169, in predict
+    steps=steps)
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/engine/training_arrays.py", line 294, in predict_loop
+    batch_outs = f(ins_batch)
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/backend/tensorflow_backend.py", line 2715, in __call__
+    return self._call(inputs)
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/backend/tensorflow_backend.py", line 2675, in _call
+    fetched = self._callable_fn(*array_vals)
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/client/session.py", line 1451, in __call__
+    self._session._session, self._handle, args, status, None)
+KeyboardInterrupt
+^CTraceback (most recent call last):
+  File "/usr/local/bin/aws", line 27, in <module>
+    sys.exit(main())
+  File "/usr/local/bin/aws", line 23, in main
+    return awscli.clidriver.main()
+  File "/usr/local/lib/python3.5/dist-packages/awscli/clidriver.py", line 58, in main
+    driver = create_clidriver()
+  File "/usr/local/lib/python3.5/dist-packages/awscli/clidriver.py", line 68, in create_clidriver
+    event_hooks=session.get_component('event_emitter'))
+  File "/usr/local/lib/python3.5/dist-packages/awscli/plugin.py", line 44, in load_plugins
+    modules = _import_plugins(plugin_mapping)
+  File "/usr/local/lib/python3.5/dist-packages/awscli/plugin.py", line 61, in _import_plugins
+    module = __import__(path, fromlist=[module])
+  File "/usr/local/lib/python3.5/dist-packages/awscli/handlers.py", line 42, in <module>
+    from awscli.customizations.history import register_history_mode
+  File "/usr/local/lib/python3.5/dist-packages/awscli/customizations/history/__init__.py", line 28, in <module>
+    from awscli.customizations.history.show import ShowCommand
+  File "/usr/local/lib/python3.5/dist-packages/awscli/customizations/history/show.py", line 330, in <module>
+    class ShowCommand(HistorySubcommand):
+  File "/usr/local/lib/python3.5/dist-packages/awscli/customizations/history/show.py", line 358, in ShowCommand
+    'Specifies which format to use in showing the events for '
+KeyboardInterrupt
+using cuda!
+^C^C^C^C^C^C^C^C^C^C^C^C^C^C^C^C^CTraceback (most recent call last):
+  File "mnist_gan.py", line 16, in <module>
+    from helpers import *
+  File "/home/ubuntu/pacgan/helpers.py", line 22, in <module>
+    fixed_z_ = gen_noise() # fixed noise
+  File "/home/ubuntu/pacgan/helpers.py", line 19, in gen_noise
+    z_ = torch.randn((5 * 5), latent_dim).view(-1, latent_dim).type(dtype)
+KeyboardInterrupt
+^CUsing TensorFlow backend.
+^CTraceback (most recent call last):
+  File "mnist_evaluate.py", line 5, in <module>
+    import keras
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/__init__.py", line 3, in <module>
+    from . import utils
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/utils/__init__.py", line 6, in <module>
+    from . import conv_utils
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/utils/conv_utils.py", line 9, in <module>
+    from .. import backend as K
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/backend/__init__.py", line 89, in <module>
+    from .tensorflow_backend import *
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/backend/tensorflow_backend.py", line 5, in <module>
+    import tensorflow as tf
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/__init__.py", line 28, in <module>
+    from tensorflow.python import pywrap_tensorflow  # pylint: disable=unused-import
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/__init__.py", line 81, in <module>
+    from tensorflow.python import keras
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/keras/__init__.py", line 29, in <module>
+    from tensorflow.python.keras import datasets
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/keras/datasets/__init__.py", line 25, in <module>
+    from tensorflow.python.keras.datasets import imdb
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/keras/datasets/imdb.py", line 25, in <module>
+    from tensorflow.python.keras.preprocessing.sequence import _remove_long_seq
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/keras/preprocessing/__init__.py", line 20, in <module>
+    from tensorflow.python.keras.preprocessing import image
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/keras/preprocessing/image.py", line 39, in <module>
+    import scipy.ndimage as ndi
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/scipy/ndimage/__init__.py", line 161, in <module>
+    from .filters import *
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/scipy/ndimage/filters.py", line 38, in <module>
+    from . import _ni_docstrings
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/scipy/ndimage/_ni_docstrings.py", line 4, in <module>
+    from scipy.misc import doccer
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/scipy/misc/__init__.py", line 68, in <module>
+    from scipy.interpolate._pade import pade as _pade
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/scipy/interpolate/__init__.py", line 175, in <module>
+    from .interpolate import *
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/scipy/interpolate/interpolate.py", line 21, in <module>
+    import scipy.special as spec
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/scipy/special/__init__.py", line 642, in <module>
+    from .basic import *
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 674, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 779, in get_code
+  File "<frozen importlib._bootstrap_external>", line 487, in _compile_bytecode
+KeyboardInterrupt
+Completed 42.2 KiB/42.2 KiB (352.8 KiB/s) with 1 file(s) remainingupload: ../data/ERGAN_MNIST/Fixed_results/25.png to s3://am221/ERGAN_MNIST/ergan3.png
+^CTraceback (most recent call last):
+  File "mnist_gan.py", line 2, in <module>
+    import numpy as np
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/numpy/__init__.py", line 158, in <module>
+    from . import fft
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/numpy/fft/__init__.py", line 15, in <module>
+    import mkl_fft._numpy_fft as _nfft
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/mkl_fft/__init__.py", line 27, in <module>
+    from ._pydfti import (fft, ifft, fft2, ifft2, fftn, ifftn, rfft, irfft,
+  File "__init__.pxd", line 164, in init mkl_fft._pydfti
+  File "<frozen importlib._bootstrap>", line 194, in _lock_unlock_module
+KeyboardInterrupt
+Using TensorFlow backend.
+^C^CTraceback (most recent call last):
+  File "mnist_evaluate.py", line 5, in <module>
+    import keras
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/__init__.py", line 3, in <module>
+    from . import utils
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/utils/__init__.py", line 6, in <module>
+    from . import conv_utils
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/utils/conv_utils.py", line 9, in <module>
+    from .. import backend as K
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/backend/__init__.py", line 89, in <module>
+    from .tensorflow_backend import *
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/backend/tensorflow_backend.py", line 5, in <module>
+    import tensorflow as tf
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/__init__.py", line 28, in <module>
+    from tensorflow.python import pywrap_tensorflow  # pylint: disable=unused-import
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/__init__.py", line 52, in <module>
+    from tensorflow.core.framework.graph_pb2 import *
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/core/framework/graph_pb2.py", line 6, in <module>
+    from google.protobuf import descriptor as _descriptor
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/google/protobuf/__init__.py", line 37, in <module>
+    __import__('pkg_resources').declare_namespace(__name__)
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/pkg_resources/__init__.py", line 3086, in <module>
+    @_call_aside
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/pkg_resources/__init__.py", line 3070, in _call_aside
+    f(*args, **kwargs)
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/pkg_resources/__init__.py", line 3122, in _initialize_master_working_set
+    list(map(working_set.add_entry, sys.path))
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/pkg_resources/__init__.py", line 615, in add_entry
+    self.add(dist, entry, False)
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/pkg_resources/__init__.py", line 696, in add
+    if not replace and dist.key in self.by_key:
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2519, in key
+    return self._key
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2664, in __getattr__
+    def __getattr__(self, attr):
+KeyboardInterrupt
+^CTraceback (most recent call last):
+  File "/usr/local/bin/aws", line 19, in <module>
+    import awscli.clidriver
+  File "/usr/local/lib/python3.5/dist-packages/awscli/clidriver.py", line 30, in <module>
+    from awscli.commands import CLICommand
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 673, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 661, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 744, in get_code
+  File "<frozen importlib._bootstrap_external>", line 828, in path_stats
+  File "<frozen importlib._bootstrap_external>", line 75, in _path_stat
+KeyboardInterrupt
+^CTraceback (most recent call last):
+  File "mnist_gan.py", line 3, in <module>
+    import matplotlib.pyplot as plt
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/matplotlib/pyplot.py", line 31, in <module>
+    import matplotlib.colorbar
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/matplotlib/colorbar.py", line 34, in <module>
+    import matplotlib.collections as collections
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/matplotlib/collections.py", line 26, in <module>
+    from . import (_path, artist, cbook, cm, colors as mcolors, docstring,
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/matplotlib/lines.py", line 21, in <module>
+    from .markers import MarkerStyle
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 674, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 764, in get_code
+  File "<frozen importlib._bootstrap_external>", line 833, in get_data
+KeyboardInterrupt
+^CTraceback (most recent call last):
+  File "<frozen importlib._bootstrap>", line 888, in _find_spec
+AttributeError: '_SixMetaPathImporter' object has no attribute 'find_spec'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "mnist_evaluate.py", line 5, in <module>
+    import keras
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/__init__.py", line 3, in <module>
+    from . import utils
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/utils/__init__.py", line 5, in <module>
+    from . import io_utils
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/utils/io_utils.py", line 13, in <module>
+    import h5py
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/h5py/__init__.py", line 36, in <module>
+    from ._conv import register_converters as _register_converters
+  File "h5py/h5t.pxd", line 14, in init h5py._conv
+  File "h5py/h5t.pyx", line 856, in init h5py.h5t
+  File "h5py/_objects.pyx", line 51, in h5py._objects.with_phil
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 951, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 888, in _find_spec
+KeyboardInterrupt
+^CTraceback (most recent call last):
+  File "/usr/local/bin/aws", line 19, in <module>
+    import awscli.clidriver
+  File "/usr/local/lib/python3.5/dist-packages/awscli/clidriver.py", line 36, in <module>
+    from awscli.help import ProviderHelpCommand
+  File "/usr/local/lib/python3.5/dist-packages/awscli/help.py", line 20, in <module>
+    from docutils.core import publish_string
+  File "/usr/lib/python3/dist-packages/docutils/core.py", line 20, in <module>
+    from docutils import frontend, io, utils, readers, writers
+  File "/usr/lib/python3/dist-packages/docutils/frontend.py", line 38, in <module>
+    import optparse
+  File "/usr/lib/python3.5/optparse.py", line 887, in <module>
+    class OptionContainer:
+  File "/usr/lib/python3.5/optparse.py", line 887, in OptionContainer
+    class OptionContainer:
+KeyboardInterrupt
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ ^C
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ ^C
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ ^C
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ ^C
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ ^C
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ bash temptemptemp.sh 
+using cuda!
+using cuda!
+training start!
+  0%|                                                                                            | 0/30 [00:00<?, ?it/s][1/30] - ptime: 105.02, loss_d: 0.839, loss_g: 2.886
+  3%|██▊                                                                                | 1/30 [01:46<51:39, 106.88s/it][2/30] - ptime: 105.82, loss_d: 0.768, loss_g: 3.256
+  7%|█████▌                                                                             | 2/30 [03:34<50:00, 107.15s/it][3/30] - ptime: 103.29, loss_d: 0.541, loss_g: 1.730
+ 10%|████████▎                                                                          | 3/30 [05:19<47:57, 106.59s/it][4/30] - ptime: 103.19, loss_d: 0.468, loss_g: 1.997
+ 13%|███████████                                                                        | 4/30 [07:05<45:59, 106.14s/it][5/30] - ptime: 103.29, loss_d: 0.398, loss_g: 2.269
+ 17%|█████████████▊                                                                     | 5/30 [08:50<44:07, 105.88s/it][6/30] - ptime: 103.22, loss_d: 0.354, loss_g: 2.435
+ 20%|████████████████▌                                                                  | 6/30 [10:35<42:15, 105.65s/it][7/30] - ptime: 103.15, loss_d: 0.325, loss_g: 2.409
+ 23%|███████████████████▎                                                               | 7/30 [12:20<40:26, 105.49s/it][8/30] - ptime: 103.28, loss_d: 0.320, loss_g: 2.414
+ 27%|██████████████████████▏                                                            | 8/30 [14:05<38:38, 105.39s/it][9/30] - ptime: 103.25, loss_d: 0.326, loss_g: 2.455
+ 30%|████████████████████████▉                                                          | 9/30 [15:50<36:52, 105.36s/it][10/30] - ptime: 103.24, loss_d: 0.297, loss_g: 2.572
+ 33%|███████████████████████████▎                                                      | 10/30 [17:36<35:05, 105.30s/it][11/30] - ptime: 103.28, loss_d: 0.282, loss_g: 2.709
+ 37%|██████████████████████████████                                                    | 11/30 [19:21<33:20, 105.28s/it][12/30] - ptime: 103.18, loss_d: 0.300, loss_g: 2.681
+ 40%|████████████████████████████████▊                                                 | 12/30 [21:06<31:34, 105.23s/it][13/30] - ptime: 103.23, loss_d: 0.305, loss_g: 2.573
+ 43%|███████████████████████████████████▌                                              | 13/30 [22:51<29:48, 105.21s/it][14/30] - ptime: 102.60, loss_d: 0.308, loss_g: 2.609
+ 47%|██████████████████████████████████████▎                                           | 14/30 [24:36<27:59, 104.99s/it][15/30] - ptime: 102.20, loss_d: 0.305, loss_g: 2.654
+ 50%|█████████████████████████████████████████                                         | 15/30 [26:20<26:10, 104.73s/it][16/30] - ptime: 102.24, loss_d: 0.306, loss_g: 2.642
+ 53%|███████████████████████████████████████████▋                                      | 16/30 [28:04<24:23, 104.56s/it][17/30] - ptime: 102.22, loss_d: 0.305, loss_g: 2.650
+ 57%|██████████████████████████████████████████████▍                                   | 17/30 [29:48<22:37, 104.44s/it][18/30] - ptime: 102.24, loss_d: 0.292, loss_g: 2.714
+ 60%|█████████████████████████████████████████████████▏                                | 18/30 [31:32<20:52, 104.35s/it][19/30] - ptime: 100.81, loss_d: 0.316, loss_g: 2.739
+ 63%|███████████████████████████████████████████████████▉                              | 19/30 [33:15<19:02, 103.84s/it][20/30] - ptime: 99.34, loss_d: 0.328, loss_g: 2.593
+ 67%|██████████████████████████████████████████████████████▋                           | 20/30 [34:56<17:10, 103.04s/it][21/30] - ptime: 98.56, loss_d: 0.306, loss_g: 2.676
+ 70%|█████████████████████████████████████████████████████████▍                        | 21/30 [36:36<15:20, 102.25s/it][22/30] - ptime: 99.89, loss_d: 0.312, loss_g: 2.706
+ 73%|████████████████████████████████████████████████████████████▏                     | 22/30 [38:18<13:36, 102.08s/it][23/30] - ptime: 98.45, loss_d: 0.350, loss_g: 2.589
+ 77%|██████████████████████████████████████████████████████████████▊                   | 23/30 [39:58<11:50, 101.56s/it][24/30] - ptime: 100.27, loss_d: 0.310, loss_g: 2.668
+ 80%|█████████████████████████████████████████████████████████████████▌                | 24/30 [41:41<10:10, 101.72s/it][25/30] - ptime: 98.50, loss_d: 0.324, loss_g: 2.673
+ 83%|████████████████████████████████████████████████████████████████████▎             | 25/30 [43:21<08:26, 101.31s/it][26/30] - ptime: 102.53, loss_d: 0.329, loss_g: 2.708
+ 87%|███████████████████████████████████████████████████████████████████████           | 26/30 [45:05<06:48, 102.24s/it][27/30] - ptime: 102.14, loss_d: 0.285, loss_g: 2.845
+ 90%|█████████████████████████████████████████████████████████████████████████▊        | 27/30 [46:49<05:08, 102.79s/it][28/30] - ptime: 102.15, loss_d: 0.290, loss_g: 2.834
+ 93%|████████████████████████████████████████████████████████████████████████████▌     | 28/30 [48:33<03:26, 103.16s/it][29/30] - ptime: 104.14, loss_d: 0.272, loss_g: 3.058
+ 97%|███████████████████████████████████████████████████████████████████████████████▎  | 29/30 [50:20<01:44, 104.05s/it][30/30] - ptime: 99.85, loss_d: 0.268, loss_g: 2.931
+100%|██████████████████████████████████████████████████████████████████████████████████| 30/30 [52:01<00:00, 103.34s/it]
+Avg per epoch ptime: 102.15, total 30 epochs ptime: 3121.73
+Training finish!... save training results
+Using TensorFlow backend.
+2019-04-26 03:38:43.306977: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-04-26 03:38:43.308956: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Completed 42.0 KiB/42.0 KiB (347.2 KiB/s) with 1 file(s) remainingupload: ../data/ERGAN_MNIST/Fixed_results/25.png to s3://am221/ERGAN_MNIST/ergan2.png
+using cuda!
+using cuda!
+training start!
+  0%|                                                                                            | 0/30 [00:00<?, ?it/s][1/30] - ptime: 201.27, loss_d: 0.545, loss_g: 4.057
+  3%|██▋                                                                              | 1/30 [03:23<1:38:12, 203.18s/it][2/30] - ptime: 204.36, loss_d: 0.290, loss_g: 5.416
+  7%|█████▍                                                                           | 2/30 [06:49<1:35:14, 204.09s/it][3/30] - ptime: 204.03, loss_d: 0.238, loss_g: 4.560
+ 10%|████████                                                                         | 3/30 [10:15<1:32:05, 204.65s/it][4/30] - ptime: 201.86, loss_d: 0.210, loss_g: 4.660
+ 13%|██████████▊                                                                      | 4/30 [13:39<1:28:34, 204.41s/it][5/30] - ptime: 211.20, loss_d: 0.189, loss_g: 4.776
+ 17%|█████████████▌                                                                   | 5/30 [17:12<1:26:16, 207.05s/it][6/30] - ptime: 203.68, loss_d: 0.173, loss_g: 4.930
+ 20%|████████████████▏                                                                | 6/30 [20:37<1:22:38, 206.60s/it][7/30] - ptime: 199.59, loss_d: 0.159, loss_g: 5.152
+ 23%|██████████████████▉                                                              | 7/30 [23:59<1:18:37, 205.10s/it][8/30] - ptime: 198.05, loss_d: 0.150, loss_g: 5.131
+ 27%|█████████████████████▌                                                           | 8/30 [27:19<1:14:37, 203.54s/it][9/30] - ptime: 200.76, loss_d: 0.149, loss_g: 5.359
+ 30%|████████████████████████▎                                                        | 9/30 [30:42<1:11:08, 203.28s/it][10/30] - ptime: 198.31, loss_d: 0.139, loss_g: 5.341
+ 33%|██████████████████████████▋                                                     | 10/30 [34:02<1:07:26, 202.35s/it][11/30] - ptime: 199.50, loss_d: 0.134, loss_g: 5.545
+ 37%|█████████████████████████████▎                                                  | 11/30 [37:23<1:03:59, 202.07s/it][12/30] - ptime: 199.95, loss_d: 0.122, loss_g: 5.721
+ 40%|████████████████████████████████                                                | 12/30 [40:45<1:00:35, 202.00s/it][13/30] - ptime: 198.22, loss_d: 0.123, loss_g: 5.842
+ 43%|███████████████████████████████████▌                                              | 13/30 [44:05<57:04, 201.43s/it][14/30] - ptime: 198.44, loss_d: 0.112, loss_g: 5.855
+ 47%|██████████████████████████████████████▎                                           | 14/30 [47:25<53:37, 201.09s/it][15/30] - ptime: 202.13, loss_d: 0.109, loss_g: 6.200
+ 50%|█████████████████████████████████████████                                         | 15/30 [50:50<50:30, 202.01s/it][16/30] - ptime: 200.36, loss_d: 0.104, loss_g: 6.402
+ 53%|███████████████████████████████████████████▋                                      | 16/30 [54:12<47:08, 202.07s/it][17/30] - ptime: 197.53, loss_d: 0.110, loss_g: 6.273
+ 57%|██████████████████████████████████████████████▍                                   | 17/30 [57:31<43:36, 201.28s/it][18/30] - ptime: 199.85, loss_d: 0.098, loss_g: 6.524
+ 60%|████████████████████████████████████████████████                                | 18/30 [1:00:53<40:17, 201.43s/it][19/30] - ptime: 198.23, loss_d: 0.097, loss_g: 6.715
+ 63%|██████████████████████████████████████████████████▋                             | 19/30 [1:04:13<36:51, 201.04s/it][20/30] - ptime: 199.40, loss_d: 0.097, loss_g: 6.525
+ 67%|█████████████████████████████████████████████████████▎                          | 20/30 [1:07:35<33:31, 201.13s/it][21/30] - ptime: 200.79, loss_d: 0.099, loss_g: 6.553
+ 70%|████████████████████████████████████████████████████████                        | 21/30 [1:10:57<30:14, 201.60s/it][22/30] - ptime: 200.03, loss_d: 0.101, loss_g: 6.773
+ 73%|██████████████████████████████████████████████████████████▋                     | 22/30 [1:14:19<26:53, 201.69s/it][23/30] - ptime: 199.73, loss_d: 0.095, loss_g: 6.663
+ 77%|█████████████████████████████████████████████████████████████▎                  | 23/30 [1:17:41<23:31, 201.71s/it][24/30] - ptime: 199.21, loss_d: 0.092, loss_g: 6.804
+ 80%|████████████████████████████████████████████████████████████████                | 24/30 [1:21:02<20:09, 201.51s/it][25/30] - ptime: 199.29, loss_d: 0.089, loss_g: 7.059
+ 83%|██████████████████████████████████████████████████████████████████▋             | 25/30 [1:24:23<16:47, 201.42s/it][26/30] - ptime: 199.88, loss_d: 0.095, loss_g: 6.869
+ 87%|█████████████████████████████████████████████████████████████████████▎          | 26/30 [1:27:45<13:26, 201.51s/it][27/30] - ptime: 197.27, loss_d: 0.085, loss_g: 7.190
+ 90%|████████████████████████████████████████████████████████████████████████        | 27/30 [1:31:04<10:02, 200.81s/it][28/30] - ptime: 199.14, loss_d: 0.087, loss_g: 7.158
+ 93%|██████████████████████████████████████████████████████████████████████████▋     | 28/30 [1:34:25<06:41, 200.87s/it][29/30] - ptime: 198.50, loss_d: 0.086, loss_g: 7.046
+ 97%|█████████████████████████████████████████████████████████████████████████████▎  | 29/30 [1:37:45<03:20, 200.75s/it][30/30] - ptime: 199.03, loss_d: 0.086, loss_g: 7.383
+100%|████████████████████████████████████████████████████████████████████████████████| 30/30 [1:41:06<00:00, 200.79s/it]
+Avg per epoch ptime: 200.32, total 30 epochs ptime: 6066.90
+Training finish!... save training results
+Using TensorFlow backend.
+2019-04-26 05:20:22.000343: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-04-26 05:20:22.002355: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Completed 45.7 KiB/45.7 KiB (738.5 KiB/s) with 1 file(s) remainingupload: ../data/ERGAN_MNIST/Fixed_results/25.png to s3://am221/ERGAN_MNIST/ergan3.png
+using cuda!
+using cuda!
+training start!
+  0%|                                                                                            | 0/30 [00:00<?, ?it/s][1/30] - ptime: 106.04, loss_d: 0.808, loss_g: 2.823
+  3%|██▊                                                                                | 1/30 [01:48<52:13, 108.04s/it][2/30] - ptime: 105.92, loss_d: 0.843, loss_g: 2.821
+  7%|█████▌                                                                             | 2/30 [03:35<50:23, 107.97s/it][3/30] - ptime: 103.31, loss_d: 0.369, loss_g: 0.589
+ 10%|████████▎                                                                          | 3/30 [05:21<48:13, 107.16s/it]^[^[[B[4/30] - ptime: 103.24, loss_d: 0.071, loss_g: 0.059
+ 13%|███████████                                                                        | 4/30 [07:06<46:10, 106.55s/it]^[[B^[[B^[[A[5/30] - ptime: 103.12, loss_d: 0.094, loss_g: 0.079
+ 17%|█████████████▊                                                                     | 5/30 [08:51<44:13, 106.12s/it][6/30] - ptime: 103.10, loss_d: 0.057, loss_g: 0.044
+ 20%|████████████████▌                                                                  | 6/30 [10:36<42:19, 105.80s/it][7/30] - ptime: 103.29, loss_d: 0.009, loss_g: 0.007
+ 23%|███████████████████▎                                                               | 7/30 [12:21<40:29, 105.63s/it][8/30] - ptime: 103.01, loss_d: 0.075, loss_g: 0.105
+ 27%|██████████████████████▏                                                            | 8/30 [14:06<38:39, 105.42s/it][9/30] - ptime: 102.95, loss_d: 0.043, loss_g: 0.028
+ 30%|████████████████████████▉                                                          | 9/30 [15:51<36:50, 105.26s/it][10/30] - ptime: 102.99, loss_d: 0.005, loss_g: 0.025
+ 33%|███████████████████████████▎                                                      | 10/30 [17:36<35:03, 105.15s/it][11/30] - ptime: 103.10, loss_d: 0.040, loss_g: 0.094
+ 37%|██████████████████████████████                                                    | 11/30 [19:21<33:17, 105.13s/it][12/30] - ptime: 102.93, loss_d: 0.025, loss_g: 0.057
+ 40%|████████████████████████████████▊                                                 | 12/30 [21:06<31:30, 105.05s/it][13/30] - ptime: 102.62, loss_d: 0.016, loss_g: 0.026
+ 43%|███████████████████████████████████▌                                              | 13/30 [22:50<29:43, 104.91s/it][14/30] - ptime: 102.04, loss_d: 0.002, loss_g: 0.005
+ 47%|██████████████████████████████████████▎                                           | 14/30 [24:34<27:53, 104.61s/it]^[[B^[[B^[^[[B[15/30] - ptime: 102.08, loss_d: 0.026, loss_g: 0.033
+ 50%|█████████████████████████████████████████                                         | 15/30 [26:18<26:06, 104.43s/it][16/30] - ptime: 101.90, loss_d: 0.035, loss_g: 0.041
+ 53%|███████████████████████████████████████████▋                                      | 16/30 [28:02<24:19, 104.24s/it][17/30] - ptime: 101.90, loss_d: 0.002, loss_g: 0.001
+ 57%|██████████████████████████████████████████████▍                                   | 17/30 [29:46<22:33, 104.13s/it]^[[B[18/30] - ptime: 102.03, loss_d: 0.073, loss_g: 0.014
+ 60%|█████████████████████████████████████████████████▏                                | 18/30 [31:30<20:48, 104.06s/it][19/30] - ptime: 101.92, loss_d: 0.049, loss_g: 0.033
+ 63%|███████████████████████████████████████████████████▉                              | 19/30 [33:14<19:04, 104.01s/it][20/30] - ptime: 102.11, loss_d: 0.023, loss_g: 0.031
+ 67%|██████████████████████████████████████████████████████▋                           | 20/30 [34:58<17:20, 104.01s/it][21/30] - ptime: 101.85, loss_d: 0.003, loss_g: 0.006
+ 70%|█████████████████████████████████████████████████████████▍                        | 21/30 [36:42<15:35, 103.95s/it][22/30] - ptime: 102.04, loss_d: 0.043, loss_g: 0.045
+ 73%|████████████████████████████████████████████████████████████▏                     | 22/30 [38:26<13:51, 103.94s/it][23/30] - ptime: 101.90, loss_d: 0.050, loss_g: 0.049
+ 77%|██████████████████████████████████████████████████████████████▊                   | 23/30 [40:09<12:07, 103.91s/it][24/30] - ptime: 101.96, loss_d: 0.033, loss_g: 0.036
+ 80%|█████████████████████████████████████████████████████████████████▌                | 24/30 [41:53<10:23, 103.90s/it][25/30] - ptime: 102.00, loss_d: 0.002, loss_g: 0.002
+ 83%|████████████████████████████████████████████████████████████████████▎             | 25/30 [43:37<08:39, 103.91s/it][26/30] - ptime: 101.94, loss_d: 0.001, loss_g: 0.001
+ 87%|███████████████████████████████████████████████████████████████████████           | 26/30 [45:21<06:55, 103.90s/it][27/30] - ptime: 102.06, loss_d: 0.034, loss_g: 0.023
+ 90%|█████████████████████████████████████████████████████████████████████████▊        | 27/30 [47:05<05:11, 103.93s/it][28/30] - ptime: 103.85, loss_d: 0.040, loss_g: 0.035
+ 93%|████████████████████████████████████████████████████████████████████████████▌     | 28/30 [48:51<03:28, 104.47s/it][29/30] - ptime: 102.14, loss_d: 0.001, loss_g: 0.001
+ 97%|███████████████████████████████████████████████████████████████████████████████▎  | 29/30 [50:35<01:44, 104.35s/it][30/30] - ptime: 101.87, loss_d: 0.001, loss_g: 0.000
+100%|██████████████████████████████████████████████████████████████████████████████████| 30/30 [52:19<00:00, 104.18s/it]
+Avg per epoch ptime: 102.71, total 30 epochs ptime: 3139.13
+Training finish!... save training results
+Using TensorFlow backend.
+2019-04-26 06:13:12.869108: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-04-26 06:13:12.871626: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Completed 70.7 KiB/70.7 KiB (950.1 KiB/s) with 1 file(s) remainingupload: ../data/ERGAN_MNIST/Fixed_results/25.png to s3://am221/ERGAN_MNIST/erganvanilla.png
+using cuda!
+using cuda!
+training start!
+  0%|                                                                                            | 0/30 [00:00<?, ?it/s][1/30] - ptime: 108.98, loss_d: 0.811, loss_g: 2.941
+  3%|██▊                                                                                | 1/30 [01:50<53:38, 110.99s/it]^CTraceback (most recent call last):
+  File "mnist_gan.py", line 163, in <module>
+    D_losses.append(D_train_loss.item())
+KeyboardInterrupt
+
+Using TensorFlow backend.
+^CTraceback (most recent call last):
+  File "mnist_evaluate.py", line 5, in <module>
+    import keras
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/__init__.py", line 3, in <module>
+    from . import utils
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/utils/__init__.py", line 6, in <module>
+    from . import conv_utils
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/utils/conv_utils.py", line 9, in <module>
+    from .. import backend as K
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/backend/__init__.py", line 89, in <module>
+    from .tensorflow_backend import *
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/keras/backend/tensorflow_backend.py", line 5, in <module>
+    import tensorflow as tf
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/__init__.py", line 28, in <module>
+    from tensorflow.python import pywrap_tensorflow  # pylint: disable=unused-import
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/__init__.py", line 63, in <module>
+    from tensorflow.python.framework.framework_lib import *  # pylint: disable=redefined-builtin
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/framework/framework_lib.py", line 52, in <module>
+    from tensorflow.python.framework.importer import import_graph_def
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/framework/importer.py", line 27, in <module>
+    from tensorflow.python.framework import function
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/framework/function.py", line 35, in <module>
+    from tensorflow.python.ops import array_ops
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/ops/array_ops.py", line 40, in <module>
+    from tensorflow.python.ops import gen_math_ops
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/tensorflow/python/ops/gen_math_ops.py", line 5231, in <module>
+    "QuantizedAdd", _quantized_add_outputs)
+  File "/home/ubuntu/anaconda3/envs/pytorch_p36/lib/python3.6/collections/__init__.py", line 429, in namedtuple
+    exec(class_definition, namespace)
+  File "<string>", line 1, in <module>
+KeyboardInterrupt
+Completed 70.7 KiB/70.7 KiB (554.0 KiB/s) with 1 file(s) remainingupload: ../data/ERGAN_MNIST/Fixed_results/25.png to s3://am221/ERGAN_MNIST_8/weightedsampling.png
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ cd ../data
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/data[00m$ dir
+ASGAN_MNIST_1  ASGAN_MNIST_2  DCGAN_MNIST  ERGAN_MNIST	ERGAN_MNIST_8  processed  raw
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/data[00m$ cd ERGAN_MNIST
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/data/ERGAN_MNIST[00m$ less results.txt 
+[?1049h[?1h=using cuda!
+num mode 25 kl 4.228847262101875
+using cuda!
+num mode 61 kl 3.4655484848726945
+using cuda!
+num mode 63 kl 3.460773221746999
+using cuda!
+num mode 62 kl 3.4629302397686637
+the last 3 results were all the same model!
+this next one is pseudo-prioritized sampling/weighted sampling!
+using cuda!
+using cuda!
+num mode 206 kl 2.949611572097787
+using cuda!
+num mode 42 kl 3.70259684629869
+using cuda!
+num mode 3 kl 6.248998747259607
+[7mresults.txt (END)[27m[K[K [KESCESC[KOO[KBB[K[K[7m(END)[27m[K[K [KESCESC[KOO[KBB[K[K[7m(END)[27m[K[K [KESCESC[KOO[KBB[K[K[7m(END)[27m[K[K[K[7m(END)[27m[K[K[7m(END)[27m[K[K[?1l>[?1049l[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/data/ERGAN_MNIST[00m$ e[Kdir
+discriminator_param.pkl  generator_param.pkl  results.txt     train_hist.png
+Fixed_results		 Random_results       train_hist.pkl
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/data/ERGAN_MNIST[00m$ cd ..
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/data[00m$ dir
+ASGAN_MNIST_1  ASGAN_MNIST_2  DCGAN_MNIST  ERGAN_MNIST	ERGAN_MNIST_8  processed  raw
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/data[00m$ cd ..
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~[00m$ cd pacgan/
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ dir
+AlphaGAN.ipynb	ERGAN_2dring   install.sh	    mnist_time_benchmark.py  screenlog.0	 temptemptemp.sh
+ASGAN_MNIST_1	ERGAN_MNIST    mnist_asgan_temp.py  mnist_train_jason.sh     screenlog.1	 utils.py
+ASGAN_MNIST_2	ERGAN_MNIST_8  mnist_cnn.hdf5	    mnist_train.sh	     stupid.py
+configs.py	GAN.ipynb      mnist_evaluate.py    models.py		     stupid.sh
+datadir		gan.py	       mnist_gan.py	    __pycache__		     synthetic_asgan.py
+DCGAN_MNIST	helpers.py     mnist_models.py	    README.md		     synthetic_ergan.py
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	[31mmodified:   screenlog.0[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ git add --all
+[01;32mubuntu@ip-172-31-13-11[00m:[01;34m~/pacgan[00m$ git commit -am "after a long day of 
