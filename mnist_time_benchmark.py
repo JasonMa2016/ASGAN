@@ -6,6 +6,7 @@
 #     datasets.MNIST('../data', train=True, download=True, transform=transform),
 #     batch_size=batch_size, shuffle=False, pin_memory = is_cuda, sampler=sampler) # TODO: why doesn't this return cuda.FloatTensors?
 
+# slightly out of date
 
 
 # adapted (copy pasted) from https://github.com/znxlwm/pytorch-MNIST-CelebA-GAN-DCGAN
