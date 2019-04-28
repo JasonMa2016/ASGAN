@@ -29,16 +29,19 @@ import torch.nn as nn
 # from torchvision import datasets, transforms
 # from torch.autograd import Variable
 from math import ceil, log
-from mnist_models import Generator
+from mnist_models import *
 
 parser = argparse.ArgumentParser(description='training runner')
 parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
+# 0 dcgan, 1 asgan, 2 ergan, 3 ergan weighted smoothing
+parser.add_argument('--arch_type','-a',type=int,default=0,help='Architecture type')
 parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimension')
 parser.add_argument('--batch_size','-bs',type=int,default=63,help='Batch size')
 parser.add_argument('--gen_file','-gf',type=str,default='generator_param.pkl',help='Save gen filename')
 parser.add_argument('--disc_file','-df',type=str,default='discriminator_param.pkl',help='Save disc filename')
 args = parser.parse_args()
 SAVEDIR = args.save_dir
+ARCHTYPE = args.arch_type
 GENFILE = args.gen_file
 DISCFILE = args.disc_file
 # training parameters
@@ -69,7 +72,11 @@ def stack(x):
     return torch.cat([x[::3], x[1::3], x[2::3]], dim=1)
 
 # network
-G = Generator()
+if ARCHTYPE == 0:
+    G = Generator()
+else:
+    G = Generator1()
+
 G = nn.DataParallel(G)
 G.load_state_dict(torch.load(SAVEDIR+'/'+GENFILE))
 if is_cuda:

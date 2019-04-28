@@ -45,6 +45,9 @@ train_epoch = args.num_epochs
 lr = args.learning_rate
 assert(MODELTYPE == 1)
 
+if not os.path.exists(SAVEDIR):
+    os.mkdir(SAVEDIR)
+
 if torch.cuda.is_available():
     print('using cuda!')
     torch.cuda.set_device(0) # sets default gpu

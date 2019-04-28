@@ -46,6 +46,9 @@ batch_size = args.batch_size
 train_epoch = args.num_epochs
 lr = args.learning_rate
 
+if not os.path.exists(SAVEDIR):
+    os.mkdir(SAVEDIR)
+
 if torch.cuda.is_available():
     print('using cuda!')
     torch.cuda.set_device(0) # sets default gpu
@@ -180,8 +183,9 @@ for epoch in tqdm(range(train_epoch)):
 
             # add to memory
             if MODELTYPE == 2:
-                for i in range(G_result.shape[0]):
-                    memory.append(G_result[i].detach())
+                memory.extend(G_result.split(1)) # todo, should work?
+                # for i in range(G_result.shape[0]):
+                #     memory.append(G_result[i].detach())
 
             # alpha smoothing
             if MODELTYPE == 1:
