@@ -61,38 +61,38 @@ if not os.path.exists('../data/real'):
     os.mkdir('../data')
     os.mkdir('../data/real') # 2 separate steps
     # data_loader
-img_size = 28
-transform = transforms.Compose([
-        transforms.Scale(img_size) if torch.__version__[0] < '1' else transforms.Resize(img_size),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
-])
-train_loader = torch.utils.data.DataLoader(
-    datasets.MNIST('../data', train=True, download=True, transform=transform),
-    batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
-# i = 0
-# for x_, _ in train_loader:
-#     x_ = stack(x_).permute(0,2,3,1)
-#     for samp in x_.cpu().numpy():
-#         imsave('../data/real/'+str(i)+'.png', samp)
-#         i += 1
-#     if i >= 3000:
-#         break
-i = 0
-pred_arr = torch.empty(3000,dims)
-# pred_arr = np.empty((3000, dims))
-for x_, _ in train_loader:
-    print(i)
-    if is_cuda: x_ = x_.cuda()
-    x_ = stack(x_)
-    pred = model(x_)[0] # a list of a single element of shape 256,2048,1,1
-    # If model output is not scalar, apply global spatial average pooling.
-    # This happens if you choose a dimensionality not equal 2048.
-    if pred.shape[2] != 1 or pred.shape[3] != 1:
-        pred = adaptive_avg_pool2d(pred, output_size=(1, 1))
-    pred_arr[i:(i+len(pred))] = pred.squeeze(3).squeeze(2)# .cpu().data.numpy()
-    i += len(x_)
-    if i >= 3000: break
+    img_size = 28
+    transform = transforms.Compose([
+            transforms.Scale(img_size) if torch.__version__[0] < '1' else transforms.Resize(img_size),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
+    ])
+    train_loader = torch.utils.data.DataLoader(
+        datasets.MNIST('../data', train=True, download=True, transform=transform),
+        batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
+    # i = 0
+    # for x_, _ in train_loader:
+    #     x_ = stack(x_).permute(0,2,3,1)
+    #     for samp in x_.cpu().numpy():
+    #         imsave('../data/real/'+str(i)+'.png', samp)
+    #         i += 1
+    #     if i >= 3000:
+    #         break
+    i = 0
+    pred_arr = torch.empty(3000,dims)
+    # pred_arr = np.empty((3000, dims))
+    for x_, _ in train_loader:
+        print(i)
+        if is_cuda: x_ = x_.cuda()
+        x_ = stack(x_)
+        pred = model(x_)[0] # a list of a single element of shape 256,2048,1,1
+        # If model output is not scalar, apply global spatial average pooling.
+        # This happens if you choose a dimensionality not equal 2048.
+        if pred.shape[2] != 1 or pred.shape[3] != 1:
+            pred = adaptive_avg_pool2d(pred, output_size=(1, 1))
+        pred_arr[i:(i+len(pred))] = pred.squeeze(3).squeeze(2)# .cpu().data.numpy()
+        i += len(x_)
+        if i >= 3000: break
 
     save('../data/real_activations.npy', pred_arr.cpu().data.numpy())
     print('finished real images')
