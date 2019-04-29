@@ -127,14 +127,14 @@ for i in range(int(num_test_sample/batch_size)):
         #     save_images(np.reshape(samples[0, :, :, 0], (1, 28, 28, 1)), image_manifold_size(1), os.path.join(self.sample_dir, "eva_epoch{}_i{}_dect{}.png".format(epoch, i, dect0[0])))
 
 # inception
-start = time.time()
+# start = time.time()
 py = np.mean(split_probs, axis=0)
 scores = []
 for j in range(split_probs.shape[0]):
     pyx = split_probs[j, :]
     scores.append(entropy(pyx, py))
 
-end=time.time()
+# end=time.time()
 inception_score = np.exp(np.mean(scores))
 
 map = {}
