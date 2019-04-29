@@ -132,7 +132,7 @@ samp_arr = samp_arr.cpu().detach()
 torch.save(samp_arr, 'samp_arr.pkl')
 
 for name in dir():
-    if not name.startswith('_') and name not in ['torch','model','samp_arr','adaptive_avg_pool2d','save','SAVEDIR']:
+    if not name.startswith('_') and name not in ['torch','dims','model','samp_arr','adaptive_avg_pool2d','save','SAVEDIR']:
         del globals()[name]
 
 pred_arr = torch.empty(3000, dims)
@@ -147,13 +147,18 @@ for epoch in range(30):
     pred_arr[i:(i+len(pred))] = pred.squeeze(3).squeeze(2)# .cpu().data.numpy()
     del pred
 
-save(SAVEDIR+'/real_activations.npy', pred_arr)
+save(SAVEDIR+'/fake_activations.npy', pred_arr)
 print('finished saving fake images at', SAVEDIR)
 
 # save fake data. check that the thing actually works. check dimensionality of activations.
 # how long it take to save the images? not too bad. but passing through inception net takes a while.
 # what are the dimensions of the inception thing? does it matter that we pass in ints? (it accepts -1 to 1)
 # calculate inception score? fid with mnist-cnn?
+'''
+what i should do
+make a new cnn in pytorch
+try a fid where i paste together the activations from each digit separately.
+'''
 
 # from fid_score_pytorch import calculate_fid_given_paths
 # fid_value = calculate_fid_given_paths(['../data/real',SAVEDIR+'/fake'],
@@ -163,7 +168,13 @@ print('finished saving fake images at', SAVEDIR)
 # print('FID', fid_value)
 
 
-# np.savez('blah.npz',mu=a,sigma=b)
+for name in dir():
+    if not name.startswith('_') and name not in ['np','SAVEDIR']:
+        del globals()[name]
 
-# from fid_score import compute_fid_from_activations
-# fid = compute_fid_from_activations(real_activations, fake_activations)
+# np.savez('blah.npz',mu=a,sigma=b)
+import tensorflow
+from fid.fid_score import compute_fid_from_activations
+real_activations, fake_activations = np.load('../data/real_activations.npy'), np.load(SAVEDIR+'/fake_activations.npy')
+fid = compute_fid_from_activations(real_activations, fake_activations)
+print('fid',fid)

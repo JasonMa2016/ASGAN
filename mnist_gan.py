@@ -30,6 +30,8 @@ parser.add_argument('--num_epochs','-ne',type=int,default=30,help='Number of epo
 parser.add_argument('--learning_rate','-lr',type=float,default=0.0002,help='Learning rate')
 parser.add_argument('--buffer_prop','-bufp',type=float,default=0.5,help='Proportion of batch sampled from buffer')
 parser.add_argument('--buffer_size','-bufs',type=int,default=20000,help='Length of replay buffer')
+parser.add_argument('--rs_epoch','-rse',type=int,default=3,help='Epoch to begin replaying')
+parser.add_argument('--select_enq','-se',type=float,default=1.0,help='Selective enqueueing')
 parser.add_argument('--gen_file','-gf',type=str,default='generator_param.pkl',help='Save gen filename')
 parser.add_argument('--disc_file','-df',type=str,default='discriminator_param.pkl',help='Save disc filename')
 # parser.add_argument('--track_space','-ts',action='store_true',help='Save 2D latent space viz, if ld=2')
@@ -145,7 +147,7 @@ for epoch in tqdm(range(train_epoch)):
             D_result = D(x_).squeeze()
             D_real_loss = BCE_loss(D_result, y_real_)
 
-            if MODELTYPE >= 2 and len(memory) > mini_batch and epoch > 1:
+            if (MODELTYPE >= 2) and (len(memory) > mini_batch) and (epoch >= args.rs_epoch):
                 G_result = patch_with_replay(mini_batch, G, memory, latent_dim, MODELTYPE-2, args.buffer_prop)
                 # it's a little messy, outsourcing patching to a helper function
                 # last arg determines whether to use weighted sampling (yes for model type 3)
@@ -183,7 +185,8 @@ for epoch in tqdm(range(train_epoch)):
 
             # add to memory
             if MODELTYPE == 2:
-                memory.extend(G_result.split(1)) # todo, should work?
+                randidx = np.random.choice(len(G_result), int(len(G_result)*args.select_enq), replace=False)
+                memory.extend(G_result[randidx].split(1)) # todo, should work?
                 # for i in range(G_result.shape[0]):
                 #     memory.append(G_result[i].detach())
 
@@ -197,7 +200,6 @@ for epoch in tqdm(range(train_epoch)):
 
     epoch_end_time = time.time()
     per_epoch_ptime = epoch_end_time - epoch_start_time
-
 
     print('[%d/%d] - ptime: %.2f, loss_d: %.3f, loss_g: %.3f' % ((epoch + 1), train_epoch, per_epoch_ptime, torch.mean(torch.FloatTensor(D_losses)),
                                                               torch.mean(torch.FloatTensor(G_losses))))

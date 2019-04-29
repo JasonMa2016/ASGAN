@@ -189,7 +189,7 @@ for epoch in tqdm(range(train_epoch)):
             # alpha smoothing
             if MODELTYPE == 1:
                 for model_param, old1_param, old2_param in zip(G.parameters(), G_old1.parameters(), G_old2.parameters()):
-                    model_param.data.copy_(model_param.data*0.33 + old1_param.data*0.33 + old2_param.data*0.33)
+                    model_param.data.copy_(model_param.data*0.5 + old1_param.data*0.3 + old2_param.data*0.2)
                     old2_param.data.copy_(old1_param.data)
                     old1_param.data.copy_(model_param.data)
 
