@@ -128,9 +128,13 @@ for epoch in range(30):
     samp = G(input_z_samples)
     samp_arr[i:(i+len(samp))] = samp
 
-del x_, pred, pred_arr, G, input_z_samples, transform, train_loader
 samp_arr = samp_arr.cpu().detach()
 torch.save(samp_arr, 'samp_arr.pkl')
+
+for name in dir():
+    if not name.startswith('_') and name not in ['torch','model','samp_arr','adaptive_avg_pool2d','save','SAVEDIR']:
+        del globals()[name]
+
 pred_arr = torch.empty(3000, dims)
 for epoch in range(30):
     i = 100 * epoch
