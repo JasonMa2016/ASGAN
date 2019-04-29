@@ -25,7 +25,7 @@ parser.add_argument('--arch_type','-a',type=int,default=0,help='Architecture typ
 parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
 parser.add_argument('--tau','-t',type=float,default=0.3,help='Alpha smoothing parameter')
 parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimension')
-parser.add_argument('--batch_size','-bs',type=int,default=540,help='Batch size') # not 63
+parser.add_argument('--batch_size','-bs',type=int,default=315,help='Batch size') # not 63
 parser.add_argument('--num_epochs','-ne',type=int,default=30,help='Number of epochs')
 parser.add_argument('--learning_rate','-lr',type=float,default=0.0002,help='Learning rate')
 parser.add_argument('--gen_file','-gf',type=str,default='generator_param.pkl',help='Save gen filename')
