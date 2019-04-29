@@ -13,7 +13,7 @@ from torchvision import datasets, transforms
 # from torch.autograd import Variable
 from math import ceil, log
 from mnist_models import *
-# from helpers import *
+from helpers import stack
 
 from fid.inception import InceptionV3
 from torch.nn.functional import adaptive_avg_pool2d
