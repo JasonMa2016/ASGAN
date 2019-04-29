@@ -127,6 +127,8 @@ def get_activations(files, model, batch_size=50, dims=2048,
 
         pred_arr[start:end] = pred.cpu().data.numpy().reshape(batch_size, -1)
 
+    print('batch shape', batch.shape)
+    print('pred shape', pred.shape)
     if verbose:
         print(' done')
 
@@ -245,6 +247,13 @@ def calculate_fid_given_paths(paths, batch_size, cuda, dims):
                                          dims, cuda)
     m2, s2 = _compute_statistics_of_path(paths[1], model, batch_size,
                                          dims, cuda)
+
+    print('mu1 sigma1', m1, s1)
+    np.save('mu1.npy',m1)
+    np.save('sigma1.npy',s1)
+    print('mu2 sigma2', m2, s2)
+    np.save('mu2.npy',m2)
+    np.save('sigma2.npy',s2)
     fid_value = calculate_frechet_distance(m1, s1, m2, s2)
 
     return fid_value

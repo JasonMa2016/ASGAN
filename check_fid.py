@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 # import torch.nn.functional as F
 # import torch.optim as optim
-# from torchvision import datasets, transforms
+from torchvision import datasets, transforms
 # from torch.autograd import Variable
 from math import ceil, log
 from mnist_models import *
@@ -43,29 +43,29 @@ else:
     dtype = torch.FloatTensor
     is_cuda = False
 
-
-# data_loader
-img_size = 28
-transform = transforms.Compose([
-        transforms.Scale(img_size) if torch.__version__[0] < '1' else transforms.Resize(img_size),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
-])
-train_loader = torch.utils.data.DataLoader(
-    datasets.MNIST('../data', train=True, download=True, transform=transform),
-    batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
-
 if not os.path.exists('../data/real'):
-    os.mkdir(SAVEDIR+'../data/real')
+    os.mkdir('../data')
+    os.mkdir('../data/real') # 2 separate steps
+    # data_loader
+    img_size = 28
+    transform = transforms.Compose([
+            transforms.Scale(img_size) if torch.__version__[0] < '1' else transforms.Resize(img_size),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
+    ])
+    train_loader = torch.utils.data.DataLoader(
+        datasets.MNIST('../data', train=True, download=True, transform=transform),
+        batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
     i = 0
     for x_, _ in train_loader:
-    	x_ = stack(x_)
-    	for samp in x_.cpu().numpy():
-    		imwrite('../data/fake/'+str(i)+'.png', samp)
-    		i += 1
-    	if i >= 3000:
-    		break
+        x_ = stack(x_).permute(0,2,3,1)
+        for samp in x_.cpu().numpy():
+            imsave('../data/real/'+str(i)+'.png', samp)
+            i += 1
+        if i >= 3000:
+            break
 
+    print('finished generating real images')
 
 if not os.path.exists(SAVEDIR+'/fake'):
     os.mkdir(SAVEDIR+'/fake')
@@ -81,17 +81,23 @@ G.load_state_dict(torch.load(SAVEDIR+'/'+GENFILE))
 if is_cuda:
     G.cuda()
 
-print('gotta make those folders!')
-
-batch_size = 100
 i=0
-for epoch in range(30):
-	input_z_samples = torch.randn((batch_size, latent_dim)).view(-1, latent_dim)
-	if is_cuda: input_z_samples = input_z_samples.cuda()
-	samples = G(input_z_samples).cpu().data.numpy()
-	for samp in samples:
-		imwrite(SAVEDIR+'/fake/'+str(i)+'.png', samp)
-		i += 1
+for epoch in range(3000):
+    input_z_samples = torch.randn((batch_size, latent_dim)).view(-1, latent_dim)
+    if is_cuda: input_z_samples = input_z_samples.cuda()
+    samples = G(input_z_samples).cpu().data.numpy().transpose(0,2,3,1)
+    for samp in samples:
+        imsave(SAVEDIR+'/fake/'+str(i)+'.png', samp)
+        i += 1
+
+print('finished saving fake images at', SAVEDIR)
 
 # save fake data. check that the thing actually works. check dimensionality of activations.
 # how long it take to save the images?
+
+from fid_score_pytorch import calculate_fid_given_paths
+fid_value = calculate_fid_given_paths(['../data/real',SAVEDIR+'/fake'],
+                                          50,
+                                          args.gpu != '',
+                                          2048)
+print('FID', fid_value)
