@@ -25,7 +25,7 @@ parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save
 # 0 dcgan, 1 asgan, 2 ergan, 3 ergan weighted smoothing
 parser.add_argument('--arch_type','-a',type=int,default=0,help='Architecture type')
 parser.add_argument('--latent_dim','-ld',type=int,default=100,help='Latent dimension')
-parser.add_argument('--batch_size','-bs',type=int,default=63,help='Batch size')
+parser.add_argument('--batch_size','-bs',type=int,default=300,help='Batch size')
 parser.add_argument('--gen_file','-gf',type=str,default='generator_param.pkl',help='Save gen filename')
 parser.add_argument('--disc_file','-df',type=str,default='discriminator_param.pkl',help='Save disc filename')
 args = parser.parse_args()
@@ -66,7 +66,7 @@ if not os.path.exists('../data/real'):
     ])
     train_loader = torch.utils.data.DataLoader(
         datasets.MNIST('../data', train=True, download=True, transform=transform),
-        batch_size=3000, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
+        batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
     # i = 0
     # for x_, _ in train_loader:
     #     x_ = stack(x_).permute(0,2,3,1)
@@ -111,8 +111,9 @@ if is_cuda:
 
 i = 0
 pred_arr = torch.empty(3000, dims)
-for epoch in range(3):
-    input_z_samples = torch.randn((1000, latent_dim)).view(-1, latent_dim)
+for epoch in range(30):
+    print(i)
+    input_z_samples = torch.randn((100, latent_dim)).view(-1, latent_dim)
     if is_cuda: input_z_samples = input_z_samples.cuda()
     # samples = G(input_z_samples).cpu().data.numpy().transpose(0,2,3,1)
     # for samp in samples:
