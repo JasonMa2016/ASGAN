@@ -119,13 +119,7 @@ def get_activations(files, model, batch_size=50, dims=2048,
         if cuda:
             batch = batch.cuda()
 
-        if blah: 
-            pred = model(batch)
-            print(pred.shape)
-            pred = pred[0]
-            blah = False
-        else:
-            pred = model(batch)[0]
+        pred = model(batch)[0] # a list of a single element of shape 256,2048,1,1
 
         # If model output is not scalar, apply global spatial average pooling.
         # This happens if you choose a dimensionality not equal 2048.

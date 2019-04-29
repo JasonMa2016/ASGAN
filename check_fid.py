@@ -15,7 +15,10 @@ from math import ceil, log
 from mnist_models import *
 from helpers import *
 
-from scipy.imageio import imwrite
+from fid.inception import InceptionV3
+from torch.nn.functional import adaptive_avg_pool2d
+# from imageio import imwrite
+# from scipy.misc import imsave
 
 parser = argparse.ArgumentParser(description='training runner')
 parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
@@ -43,6 +46,14 @@ else:
     dtype = torch.FloatTensor
     is_cuda = False
 
+# code from https://github.com/mseitzer/pytorch-fid/blob/master/fid_score.py
+dims = 2048
+block_idx = InceptionV3.BLOCK_INDEX_BY_DIM[dims]
+model = InceptionV3([block_idx], normalize_input = False)
+model.eval()
+if is_cuda:
+    model.cuda()
+
 if not os.path.exists('../data/real'):
     os.mkdir('../data')
     os.mkdir('../data/real') # 2 separate steps
@@ -55,17 +66,34 @@ if not os.path.exists('../data/real'):
     ])
     train_loader = torch.utils.data.DataLoader(
         datasets.MNIST('../data', train=True, download=True, transform=transform),
-        batch_size=batch_size, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
+        batch_size=3000, shuffle=True, pin_memory = is_cuda, drop_last = True) # TODO: why doesn't this return cuda.FloatTensors?
+    # i = 0
+    # for x_, _ in train_loader:
+    #     x_ = stack(x_).permute(0,2,3,1)
+    #     for samp in x_.cpu().numpy():
+    #         imsave('../data/real/'+str(i)+'.png', samp)
+    #         i += 1
+    #     if i >= 3000:
+    #         break
     i = 0
+    pred_arr = torch.empty(3000, dims)
     for x_, _ in train_loader:
-        x_ = stack(x_).permute(0,2,3,1)
-        for samp in x_.cpu().numpy():
-            imsave('../data/real/'+str(i)+'.png', samp)
-            i += 1
-        if i >= 3000:
-            break
+        print(i)
+        if is_cuda: x_ = x_.cuda()
+        x_ = stack(x_)
+        pred = model(x_)[0] # a list of a single element of shape 256,2048,1,1
+        # If model output is not scalar, apply global spatial average pooling.
+        # This happens if you choose a dimensionality not equal 2048.
+        if pred.shape[2] != 1 or pred.shape[3] != 1:
+            pred = adaptive_avg_pool2d(pred, output_size=(1, 1))
+        pred_arr[i:(i+len(pred))] = pred.squeeze(3).squeeze(2)
+        i += len(x_)
+        if i >= 3000: break
 
-    print('finished generating real images')
+    np.save('../data/real_activations.npy', pred_arr.cpu().data.numpy())
+    print('finished real images')
+
+########################
 
 if not os.path.exists(SAVEDIR+'/fake'):
     os.mkdir(SAVEDIR+'/fake')
@@ -81,28 +109,41 @@ G.load_state_dict(torch.load(SAVEDIR+'/'+GENFILE))
 if is_cuda:
     G.cuda()
 
-i=0
-for epoch in range(3000):
-    input_z_samples = torch.randn((batch_size, latent_dim)).view(-1, latent_dim)
+i = 0
+pred_arr = torch.empty(3000, dims)
+for epoch in range(3):
+    input_z_samples = torch.randn((1000, latent_dim)).view(-1, latent_dim)
     if is_cuda: input_z_samples = input_z_samples.cuda()
-    samples = G(input_z_samples).cpu().data.numpy().transpose(0,2,3,1)
-    for samp in samples:
-        imsave(SAVEDIR+'/fake/'+str(i)+'.png', samp)
-        i += 1
+    # samples = G(input_z_samples).cpu().data.numpy().transpose(0,2,3,1)
+    # for samp in samples:
+    #     imsave(SAVEDIR+'/fake/'+str(i)+'.png', samp)
+    #     i += 1
+    x_ = G(input_z_samples)
+    pred = model(x_)[0] # a list of a single element of shape 256,2048,1,1
+    # If model output is not scalar, apply global spatial average pooling.
+    # This happens if you choose a dimensionality not equal 2048.
+    if pred.shape[2] != 1 or pred.shape[3] != 1:
+        pred = adaptive_avg_pool2d(pred, output_size=(1, 1))
+    pred_arr[i:(i+len(pred))] = pred.squeeze(3).squeeze(2)
+    i += len(x_)
 
+np.save(SAVEDIR+'/real_activations.npy', pred_arr.cpu().data.numpy())
 print('finished saving fake images at', SAVEDIR)
 
 # save fake data. check that the thing actually works. check dimensionality of activations.
 # how long it take to save the images? not too bad. but passing through inception net takes a while.
-# what are the dimensions of the inception thing? does it matter that we pass in ints?
+# what are the dimensions of the inception thing? does it matter that we pass in ints? (it accepts -1 to 1)
 # calculate inception score? fid with mnist-cnn?
 
-from fid_score_pytorch import calculate_fid_given_paths
-fid_value = calculate_fid_given_paths(['../data/real',SAVEDIR+'/fake'],
-                                          50,
-                                          args.gpu != '',
-                                          2048)
-print('FID', fid_value)
+# from fid_score_pytorch import calculate_fid_given_paths
+# fid_value = calculate_fid_given_paths(['../data/real',SAVEDIR+'/fake'],
+#                                           50,
+#                                           args.gpu != '',
+#                                           2048)
+# print('FID', fid_value)
 
 
 # np.savez('blah.npz',mu=a,sigma=b)
+
+# from fid_score import compute_fid_from_activations
+# fid = compute_fid_from_activations(real_activations, fake_activations)

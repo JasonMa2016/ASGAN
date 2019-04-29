@@ -25,3 +25,6 @@ mkdir -p ../data
 # asergan
 
 # todo: er within pacgan
+
+# todo: i want to show that alpha smoothing actually smooths the training. contrast the histograms or images per epoch?
+# and i want to show the speed/robustness to mode collapse tradeoff
