@@ -19,6 +19,7 @@ from fid.inception import InceptionV3
 from torch.nn.functional import adaptive_avg_pool2d
 # from imageio import imwrite
 # from scipy.misc import imsave
+from numpy import save
 
 parser = argparse.ArgumentParser(description='training runner')
 parser.add_argument('--save_dir','-sd',type=str,default='DCGAN_MNIST',help='Save directory')
@@ -93,7 +94,7 @@ for x_, _ in train_loader:
     i += len(x_)
     if i >= 3000: break
 
-    np.save('../data/real_activations.npy', pred_arr.cpu().data.numpy())
+    save('../data/real_activations.npy', pred_arr.cpu().data.numpy())
     print('finished real images')
 
 ########################
@@ -142,7 +143,7 @@ for epoch in range(30):
     pred_arr[i:(i+len(pred))] = pred.squeeze(3).squeeze(2)# .cpu().data.numpy()
     del pred
 
-np.save(SAVEDIR+'/real_activations.npy', pred_arr)
+save(SAVEDIR+'/real_activations.npy', pred_arr)
 print('finished saving fake images at', SAVEDIR)
 
 # save fake data. check that the thing actually works. check dimensionality of activations.
