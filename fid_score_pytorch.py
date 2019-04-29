@@ -100,6 +100,7 @@ def get_activations(files, model, batch_size=50, dims=2048,
 
     pred_arr = np.empty((n_used_imgs, dims))
 
+    blah=True
     for i in tqdm(range(n_batches)):
         if verbose:
             print('\rPropagating batch %d/%d' % (i + 1, n_batches),
@@ -118,7 +119,13 @@ def get_activations(files, model, batch_size=50, dims=2048,
         if cuda:
             batch = batch.cuda()
 
-        pred = model(batch)[0]
+        if blah: 
+            pred = model(batch)
+            print(pred.shape)
+            pred = pred[0]
+            blah = False
+        else:
+            pred = model(batch)[0]
 
         # If model output is not scalar, apply global spatial average pooling.
         # This happens if you choose a dimensionality not equal 2048.
@@ -132,7 +139,8 @@ def get_activations(files, model, batch_size=50, dims=2048,
     if verbose:
         print(' done')
 
-    return pred_arr
+    np.save('pred_arr'+str(np.random.random(1)), pred_arr)
+    return pred_arr # 3000 images by 2048 dims
 
 
 def calculate_frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):

@@ -93,7 +93,9 @@ for epoch in range(3000):
 print('finished saving fake images at', SAVEDIR)
 
 # save fake data. check that the thing actually works. check dimensionality of activations.
-# how long it take to save the images?
+# how long it take to save the images? not too bad. but passing through inception net takes a while.
+# what are the dimensions of the inception thing? does it matter that we pass in ints?
+# calculate inception score? fid with mnist-cnn?
 
 from fid_score_pytorch import calculate_fid_given_paths
 fid_value = calculate_fid_given_paths(['../data/real',SAVEDIR+'/fake'],
@@ -101,3 +103,6 @@ fid_value = calculate_fid_given_paths(['../data/real',SAVEDIR+'/fake'],
                                           args.gpu != '',
                                           2048)
 print('FID', fid_value)
+
+
+# np.savez('blah.npz',mu=a,sigma=b)
