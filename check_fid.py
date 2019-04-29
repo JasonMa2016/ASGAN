@@ -86,11 +86,11 @@ if not os.path.exists('../data/real'):
         # This happens if you choose a dimensionality not equal 2048.
         if pred.shape[2] != 1 or pred.shape[3] != 1:
             pred = adaptive_avg_pool2d(pred, output_size=(1, 1))
-        pred_arr[i:(i+len(pred))] = pred.squeeze(3).squeeze(2)
+        pred_arr[i:(i+len(pred))] = pred.squeeze(3).squeeze(2).cpu().data.numpy()
         i += len(x_)
         if i >= 3000: break
 
-    np.save('../data/real_activations.npy', pred_arr.cpu().data.numpy())
+    np.save('../data/real_activations.npy', pred_arr)
     print('finished real images')
 
 ########################
@@ -110,7 +110,7 @@ if is_cuda:
     G.cuda()
 
 i = 0
-pred_arr = torch.empty(3000, dims)
+pred_arr = np.empty((3000, dims))
 for epoch in range(30):
     print(i)
     input_z_samples = torch.randn((100, latent_dim)).view(-1, latent_dim)
@@ -125,10 +125,10 @@ for epoch in range(30):
     # This happens if you choose a dimensionality not equal 2048.
     if pred.shape[2] != 1 or pred.shape[3] != 1:
         pred = adaptive_avg_pool2d(pred, output_size=(1, 1))
-    pred_arr[i:(i+len(pred))] = pred.squeeze(3).squeeze(2)
+    pred_arr[i:(i+len(pred))] = pred.squeeze(3).squeeze(2).cpu().data.numpy()
     i += len(x_)
 
-np.save(SAVEDIR+'/real_activations.npy', pred_arr.cpu().data.numpy())
+np.save(SAVEDIR+'/real_activations.npy', pred_arr)
 print('finished saving fake images at', SAVEDIR)
 
 # save fake data. check that the thing actually works. check dimensionality of activations.
