@@ -109,16 +109,14 @@ for i in range(int(num_test_sample/batch_size)):
     for j in range(len(samples)):
         probs[j] = np.kron(np.kron(probs0[j], probs1[j]), probs2[j])
     split_probs[i*batch_size:(i+1)*batch_size] = probs
+    # new_results = list(zip(probs0.argmax(axis=1), probs1.argmax(axis=1), probs2.argmax(axis=1)))
     new_results = probs.argmax(axis=1).tolist()
-    results.extend(new_results[0:min(len(results), num_test_sample-len(results))])
-    # # return list(np.argmax(output, axis=1))
+    results.extend(new_results[0:min(len(probs), num_test_sample-len(results))])
     # dect0 = evaluate(np.reshape(samples[:, :, :, 0], (batch_size, 28, 28, 1)))
     # dect1 = evaluate(np.reshape(samples[:, :, :, 1], (batch_size, 28, 28, 1)))
     # dect2 = evaluate(np.reshape(samples[:, :, :, 2], (batch_size, 28, 28, 1)))
-
     # new_results = zip(dect0, dect1, dect2)
     # if len(results) + min(len(dect0), len(dect1), len(dect2)) > num_test_sample:
-    # if len(results) + len(new_results) > num_test_sample:
     #     results.extend(list(new_results[0 : (num_test_sample - len(results))]))
     # else:
     #     results.extend(new_results)
@@ -139,6 +137,7 @@ inception_score = np.exp(np.mean(scores))
 
 map = {}
 for result in results:
+    # result = tuple(str(resultq))
     if result in map:
         map[result] += 1
     else:

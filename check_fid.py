@@ -135,7 +135,7 @@ for name in dir():
 pred_arr = torch.empty(3000, dims)
 for epoch in range(30):
     i = 100 * epoch
-    print(i)
+    print(i, end=' ')
     pred = model(samp_arr[i:(i+100)].cuda())[0] # a list of a single element of shape 256,2048,1,1
     # If model output is not scalar, apply global spatial average pooling.
     # This happens if you choose a dimensionality not equal 2048.
