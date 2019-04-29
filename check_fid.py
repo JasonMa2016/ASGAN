@@ -177,12 +177,49 @@ real_activations, fake_activations = np.load('../data/real_activations.npy'), np
 fid = compute_fid_from_activations(real_activations, fake_activations)
 print('fid', fid)
 
-''' or this non-tensorflow version??
-from fid.fid_score_pytorch import calculate_frechet_distance
+
+from scipy import linalg
+def calculate_frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):
+    mu1 = np.atleast_1d(mu1)
+    mu2 = np.atleast_1d(mu2)
+    sigma1 = np.atleast_2d(sigma1)
+    sigma2 = np.atleast_2d(sigma2)
+    assert mu1.shape == mu2.shape, \
+        'Training and test mean vectors have different lengths'
+    assert sigma1.shape == sigma2.shape, \
+        'Training and test covariances have different dimensions'
+    diff = mu1 - mu2
+    # TODO: the matrix square root is causing the error
+    # Product might be almost singular
+    # covmean, _ = linalg.sqrtm(sigma1.dot(sigma2), disp=False)
+    # if not np.isfinite(covmean).all():
+    #     msg = ('fid calculation produces singular product; '
+    #            'adding %s to diagonal of cov estimates') % eps
+    #     print(msg)
+    #     offset = np.eye(sigma1.shape[0]) * eps
+    #     covmean = linalg.sqrtm((sigma1 + offset).dot(sigma2 + offset))
+    # # Numerical error might give slight imaginary component
+    # if np.iscomplexobj(covmean):
+    #     if not np.allclose(np.diagonal(covmean).imag, 0, atol=1e-3):
+    #         m = np.max(np.abs(covmean.imag))
+    #         raise ValueError('Imaginary component {}'.format(m))
+    #     covmean = covmean.real
+
+    # check this alt version out... it's a slower algo, but TF uses it under the hood
+    # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/gan/python/eval/python/classifier_metrics_impl.py
+    U, s, Vh = linalg.svd(sigma1.dot(sigma2))
+    s[s<eps] = 0
+    covmean = U @ np.sqrt(s) @ Vh
+    tr_covmean = np.trace(covmean)
+    return (diff.dot(diff) + np.trace(sigma1) +
+            np.trace(sigma2) - 2 * tr_covmean)
+
+
+# or this non-tensorflow version??
+# from fid.fid_score_pytorch import calculate_frechet_distance
 m1 = real_activations.mean(axis=0)
 s1 = np.cov(real_activations, rowvar=False)
 m2 = fake_activations.mean(axis=0)
 s2 = np.cov(fake_activations, rowvar=False)
 fid = calculate_frechet_distance(m1, s1, m2, s2)
 print('fid', fid)
-'''
