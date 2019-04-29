@@ -58,7 +58,6 @@ if is_cuda:
 model = nn.DataParallel(model)
 
 if not os.path.exists('../data/real'):
-    os.mkdir('../data')
     os.mkdir('../data/real') # 2 separate steps
     # data_loader
     img_size = 28
@@ -174,6 +173,7 @@ for name in dir():
 
 # np.savez('blah.npz',mu=a,sigma=b)
 import tensorflow
+import numpy as np
 from fid.fid_score import compute_fid_from_activations
 real_activations, fake_activations = np.load('../data/real_activations.npy'), np.load(SAVEDIR+'/fake_activations.npy')
 fid = compute_fid_from_activations(real_activations, fake_activations)
