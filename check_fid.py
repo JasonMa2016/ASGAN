@@ -97,8 +97,8 @@ if not os.path.exists('../data/real'):
 
 ########################
 
-if not os.path.exists(SAVEDIR+'/fake'):
-    os.mkdir(SAVEDIR+'/fake')
+# if not os.path.exists(SAVEDIR+'/fake'):
+#     os.mkdir(SAVEDIR+'/fake')
 
 # network
 if ARCHTYPE == 0:
@@ -170,14 +170,15 @@ for name in dir():
         del globals()[name]
 
 # np.savez('blah.npz',mu=a,sigma=b)
-import tensorflow
+# import tensorflow # versions deprecations weirdness sad
+# import numpy as np
+# from fid.fid_score import compute_fid_from_activations
+# real_activations, fake_activations = np.load('../data/real_activations.npy'), np.load(SAVEDIR+'/fake_activations.npy')
+# fid = compute_fid_from_activations(real_activations, fake_activations)
+# print('fid', fid)
+
+
 import numpy as np
-from fid.fid_score import compute_fid_from_activations
-real_activations, fake_activations = np.load('../data/real_activations.npy'), np.load(SAVEDIR+'/fake_activations.npy')
-fid = compute_fid_from_activations(real_activations, fake_activations)
-print('fid', fid)
-
-
 from scipy import linalg
 def calculate_frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):
     mu1 = np.atleast_1d(mu1)
@@ -204,12 +205,11 @@ def calculate_frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):
     #         m = np.max(np.abs(covmean.imag))
     #         raise ValueError('Imaginary component {}'.format(m))
     #     covmean = covmean.real
-
     # check this alt version out... it's a slower algo, but TF uses it under the hood
     # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/gan/python/eval/python/classifier_metrics_impl.py
     U, s, Vh = linalg.svd(sigma1.dot(sigma2))
     s[s<eps] = 0
-    covmean = U @ np.sqrt(s) @ Vh
+    covmean = U @ np.diag(np.sqrt(s)) @ Vh
     tr_covmean = np.trace(covmean)
     return (diff.dot(diff) + np.trace(sigma1) +
             np.trace(sigma2) - 2 * tr_covmean)
