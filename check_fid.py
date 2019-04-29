@@ -81,7 +81,6 @@ if not os.path.exists('../data/real'):
     pred_arr = torch.empty(3000,dims)
     # pred_arr = np.empty((3000, dims))
     for x_, _ in train_loader:
-        print(i)
         if is_cuda: x_ = x_.cuda()
         x_ = stack(x_)
         pred = model(x_)[0] # a list of a single element of shape 256,2048,1,1
@@ -117,7 +116,6 @@ samp_arr = torch.empty(3000,3,28,28)
 # pred_arr = np.empty((3000, dims))
 for epoch in range(30):
     i = 100 * epoch
-    print(i)
     input_z_samples = torch.randn((100, latent_dim)).view(-1, latent_dim)
     if is_cuda: input_z_samples = input_z_samples.cuda()
     # samples = G(input_z_samples).cpu().data.numpy().transpose(0,2,3,1)
@@ -128,7 +126,7 @@ for epoch in range(30):
     samp_arr[i:(i+len(samp))] = samp
 
 samp_arr = samp_arr.cpu().detach()
-torch.save(samp_arr, 'samp_arr.pkl')
+torch.save(samp_arr, SAVEDIR+'/samp_arr.pkl')
 
 for name in dir():
     if not name.startswith('_') and name not in ['torch','dims','model','samp_arr','adaptive_avg_pool2d','save','SAVEDIR']:
@@ -147,7 +145,7 @@ for epoch in range(30):
     del pred
 
 save(SAVEDIR+'/fake_activations.npy', pred_arr)
-print('finished saving fake images at', SAVEDIR)
+print('finished fake images at', SAVEDIR)
 
 # save fake data. check that the thing actually works. check dimensionality of activations.
 # how long it take to save the images? not too bad. but passing through inception net takes a while.

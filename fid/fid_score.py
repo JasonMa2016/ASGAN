@@ -26,7 +26,7 @@ from __future__ import print_function
 
 from absl import logging
 
-import eval_task
+import fid.eval_task as eval_task
 # from compare_gan.metrics import eval_task
 
 import tensorflow as tf

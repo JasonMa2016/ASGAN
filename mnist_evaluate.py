@@ -30,7 +30,7 @@ import torch.nn as nn
 # from torch.autograd import Variable
 from math import ceil, log
 from mnist_models import *
-# from scipy.stats import entropy
+from scipy.stats import entropy
 
 parser = argparse.ArgumentParser(description='training runner')
 parser.add_argument('--save_dir','-sd',type=str,default='../DCGAN_MNIST',help='Save directory')
@@ -94,31 +94,21 @@ num_test_sample = ceil(26000/batch_size) * batch_size # yes, this is lazy
 results = []
 
 # Now compute the mean kl-div # inception code from https://github.com/sbarratt/inception-score-pytorch/blob/master/inception_score.py
-split_scores = []
+split_probs = np.zeros((num_test_sample, 1000))
 
-for i in range(int(ceil(float(num_test_sample) / float(batch_size)))):
+for i in range(int(num_test_sample/batch_size)):
     # input_z_samples = self.test_samples[i * batch_size : (i + 1) * batch_size]
     # samples = self.sess.run(self.sampler, feed_dict={self.z[0]: input_z_samples})
     input_z_samples = torch.randn((batch_size, latent_dim)).view(-1, latent_dim)
     if is_cuda: input_z_samples = input_z_samples.cuda()
     samples = G(input_z_samples).cpu().data.numpy().transpose(0, 2, 3, 1)
-
     probs0 = model.predict(samples[:,:,:,0:1])
     probs1 = model.predict(samples[:,:,:,1:2])
     probs2 = model.predict(samples[:,:,:,2:3])
     probs = np.zeros((len(samples), 1000))
-    for i in range(len(samples)):
-        probs[i] = np.kron(np.kron(probs0[i], probs1[i]), probs2[i])
-
-    # inception
-    py = np.mean(probs, axis=0)
-    scores = []
-    for i in range(probs.shape[0]):
-        pyx = probs[i, :]
-        scores.append(KLD(pyx, py))
-
-    split_scores.append(np.exp(np.mean(scores)))
-
+    for j in range(len(samples)):
+        probs[j] = np.kron(np.kron(probs0[j], probs1[j]), probs2[j])
+    split_probs[i*batch_size:(i+1)*batch_size] = probs
     new_results = probs.argmax(axis=1).tolist()
     results.extend(new_results[0:min(len(results), num_test_sample-len(results))])
     # # return list(np.argmax(output, axis=1))
@@ -136,6 +126,17 @@ for i in range(int(ceil(float(num_test_sample) / float(batch_size)))):
         # if i % 10 == 0:
         #     save_images(np.reshape(samples[0, :, :, 0], (1, 28, 28, 1)), image_manifold_size(1), os.path.join(self.sample_dir, "eva_epoch{}_i{}_dect{}.png".format(epoch, i, dect0[0])))
 
+# inception
+start = time.time()
+py = np.mean(split_probs, axis=0)
+scores = []
+for j in range(split_probs.shape[0]):
+    pyx = split_probs[j, :]
+    scores.append(entropy(pyx, py))
+
+end=time.time()
+inception_score = np.exp(np.mean(scores))
+
 map = {}
 for result in results:
     if result in map:
@@ -150,7 +151,7 @@ p = p / np.sum(p)
 q = [1.0 / 1000.0] * 1000
 kl = KLD(p, q)
 
-print('num mode', num_mode, 'kl', kl, 'inception', np.mean(split_scores))
+print('num mode', num_mode, 'kl', kl, 'inception', inception_score)
 # print(map)
 
 # with open(self.metric_path, "ab") as csv_file:
