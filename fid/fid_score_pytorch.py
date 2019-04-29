@@ -48,7 +48,7 @@ except ImportError:
     # If not tqdm is not available, provide a mock version of it
     def tqdm(x): return x
 
-from inception import InceptionV3
+from fid.inception import InceptionV3
 
 parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 parser.add_argument('path', type=str, nargs=2,
@@ -65,7 +65,7 @@ parser.add_argument('-c', '--gpu', default='', type=str,
 
 
 def get_activations(files, model, batch_size=50, dims=2048,
-                    cuda=False, verbose=False):
+                    cuda=False, verbose=False, fname=''):
     """Calculates the activations of the pool_3 layer for all images.
 
     Params:
@@ -100,7 +100,6 @@ def get_activations(files, model, batch_size=50, dims=2048,
 
     pred_arr = np.empty((n_used_imgs, dims))
 
-    blah=True
     for i in tqdm(range(n_batches)):
         if verbose:
             print('\rPropagating batch %d/%d' % (i + 1, n_batches),
@@ -128,12 +127,12 @@ def get_activations(files, model, batch_size=50, dims=2048,
 
         pred_arr[start:end] = pred.cpu().data.numpy().reshape(batch_size, -1)
 
-    print('batch shape', batch.shape)
-    print('pred shape', pred.shape)
+    # print('batch shape', batch.shape)
+    # print('pred shape', pred.shape)
     if verbose:
         print(' done')
 
-    np.save('pred_arr'+str(np.random.random(1)), pred_arr)
+    np.save('pred_arr'+fname+'.npy', pred_arr)
     return pred_arr # 3000 images by 2048 dims
 
 
@@ -172,21 +171,27 @@ def calculate_frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):
 
     diff = mu1 - mu2
 
+    # TODO: the matrix square root is causing the error
     # Product might be almost singular
-    covmean, _ = linalg.sqrtm(sigma1.dot(sigma2), disp=False)
-    if not np.isfinite(covmean).all():
-        msg = ('fid calculation produces singular product; '
-               'adding %s to diagonal of cov estimates') % eps
-        print(msg)
-        offset = np.eye(sigma1.shape[0]) * eps
-        covmean = linalg.sqrtm((sigma1 + offset).dot(sigma2 + offset))
+    # covmean, _ = linalg.sqrtm(sigma1.dot(sigma2), disp=False)
+    # if not np.isfinite(covmean).all():
+    #     msg = ('fid calculation produces singular product; '
+    #            'adding %s to diagonal of cov estimates') % eps
+    #     print(msg)
+    #     offset = np.eye(sigma1.shape[0]) * eps
+    #     covmean = linalg.sqrtm((sigma1 + offset).dot(sigma2 + offset))
+    # # Numerical error might give slight imaginary component
+    # if np.iscomplexobj(covmean):
+    #     if not np.allclose(np.diagonal(covmean).imag, 0, atol=1e-3):
+    #         m = np.max(np.abs(covmean.imag))
+    #         raise ValueError('Imaginary component {}'.format(m))
+    #     covmean = covmean.real
 
-    # Numerical error might give slight imaginary component
-    if np.iscomplexobj(covmean):
-        if not np.allclose(np.diagonal(covmean).imag, 0, atol=1e-3):
-            m = np.max(np.abs(covmean.imag))
-            raise ValueError('Imaginary component {}'.format(m))
-        covmean = covmean.real
+    # check this alt version out... it's a slower algo, but TF uses it under the hood
+    # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/gan/python/eval/python/classifier_metrics_impl.py
+    U, s, Vh = linalg.svd(sigma1.dot(sigma2))
+    s[s<eps] = 0
+    covmean = U @ np.sqrt(s) @ Vh
 
     tr_covmean = np.trace(covmean)
 
@@ -195,7 +200,7 @@ def calculate_frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):
 
 
 def calculate_activation_statistics(files, model, batch_size=50,
-                                    dims=2048, cuda=False, verbose=False):
+                                    dims=2048, cuda=False, verbose=False, fname=''):
     """Calculation of the statistics used by the FID.
     Params:
     -- files       : List of image files paths
@@ -213,13 +218,13 @@ def calculate_activation_statistics(files, model, batch_size=50,
     -- sigma : The covariance matrix of the activations of the pool_3 layer of
                the inception model.
     """
-    act = get_activations(files, model, batch_size, dims, cuda, verbose)
+    act = get_activations(files, model, batch_size, dims, cuda, verbose, fname)
     mu = np.mean(act, axis=0)
     sigma = np.cov(act, rowvar=False)
     return mu, sigma
 
 
-def _compute_statistics_of_path(path, model, batch_size, dims, cuda):
+def _compute_statistics_of_path(path, model, batch_size, dims, cuda, fname=''):
     if path.endswith('.npz'):
         f = np.load(path)
         m, s = f['mu'][:], f['sigma'][:]
@@ -228,7 +233,7 @@ def _compute_statistics_of_path(path, model, batch_size, dims, cuda):
         path = pathlib.Path(path)
         files = list(path.glob('*.jpg')) + list(path.glob('*.png'))
         m, s = calculate_activation_statistics(files, model, batch_size,
-                                               dims, cuda)
+                                               dims, cuda, fname)
 
     return m, s
 
@@ -246,16 +251,12 @@ def calculate_fid_given_paths(paths, batch_size, cuda, dims):
         model.cuda()
 
     m1, s1 = _compute_statistics_of_path(paths[0], model, batch_size,
-                                         dims, cuda)
+                                         dims, cuda, 'real')
     m2, s2 = _compute_statistics_of_path(paths[1], model, batch_size,
-                                         dims, cuda)
+                                         dims, cuda, 'fake')
 
-    print('mu1 sigma1', m1, s1)
-    np.save('mu1.npy',m1)
-    np.save('sigma1.npy',s1)
-    print('mu2 sigma2', m2, s2)
-    np.save('mu2.npy',m2)
-    np.save('sigma2.npy',s2)
+    np.savez('real_activations.npz', mu=m1, sigma=s1)
+    np.savez('fake_activations.npz', mu=m2, sigma=s2)
     fid_value = calculate_frechet_distance(m1, s1, m2, s2)
 
     return fid_value

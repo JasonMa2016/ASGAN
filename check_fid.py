@@ -175,4 +175,14 @@ import numpy as np
 from fid.fid_score import compute_fid_from_activations
 real_activations, fake_activations = np.load('../data/real_activations.npy'), np.load(SAVEDIR+'/fake_activations.npy')
 fid = compute_fid_from_activations(real_activations, fake_activations)
-print('fid',fid)
+print('fid', fid)
+
+''' or this non-tensorflow version??
+from fid.fid_score_pytorch import calculate_frechet_distance
+m1 = real_activations.mean(axis=0)
+s1 = np.cov(real_activations, rowvar=False)
+m2 = fake_activations.mean(axis=0)
+s2 = np.cov(fake_activations, rowvar=False)
+fid = calculate_frechet_distance(m1, s1, m2, s2)
+print('fid', fid)
+'''
