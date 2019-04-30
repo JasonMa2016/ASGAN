@@ -83,8 +83,8 @@ def patch_with_replay(mini_batch, G, memory, latent_dim = 100, sample_type=0, pr
     elif sample_type == 1:
         lm = len(memory)
         weight_dist = np.linspace(.8/lm, 1.2/lm, lm)
-        samples = np.random.choice(memory, ceil(prop*mini_batch), p=weight_dist)
-    samples = torch.stack(samples)
+        samples = np.random.choice(memory, ceil(prop*mini_batch), p=weight_dist).tolist()
+    samples = torch.cat(samples, dim=0) # torch.stack(samples)
     G_result = torch.cat((G_result, samples))
     return G_result
 
