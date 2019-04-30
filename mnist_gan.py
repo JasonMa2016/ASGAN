@@ -186,7 +186,7 @@ for epoch in tqdm(range(train_epoch)):
             # add to memory
             if MODELTYPE == 2:
                 randidx = np.random.choice(len(G_result), int(len(G_result)*args.select_enq), replace=False)
-                memory.extend(G_result[randidx].split(1).detach()) # todo, should work?
+                memory.extend(G_result[randidx].detach().split(1)) # todo, should work?
                 # for i in range(G_result.shape[0]):
                 #     memory.append(G_result[i].detach())
 
