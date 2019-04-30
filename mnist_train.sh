@@ -15,7 +15,7 @@ do
 	python mnist_evaluate.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 	python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 	aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-	aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+	aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 done
 
 # asgan 0.05 0.1 0.2 0.4 0.6 0.8
@@ -24,37 +24,37 @@ python mnist_gan.py -m 1 -sd ../data/${datadir} -t 0.05 &&
 python mnist_evaluate.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 datadir="ASGAN_MNIST_pt1"
 python mnist_gan.py -m 1 -sd ../data/${datadir} -t 0.1 &&
 python mnist_evaluate.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 datadir="ASGAN_MNIST_pt2"
 python mnist_gan.py -m 1 -sd ../data/${datadir} -t 0.2 &&
 python mnist_evaluate.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 datadir="ASGAN_MNIST_pt4"
 python mnist_gan.py -m 1 -sd ../data/${datadir} -t 0.4 &&
 python mnist_evaluate.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 datadir="ASGAN_MNIST_pt6"
 python mnist_gan.py -m 1 -sd ../data/${datadir} -t 0.6 &&
 python mnist_evaluate.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 datadir="ASGAN_MNIST_pt8"
 python mnist_gan.py -m 1 -sd ../data/${datadir} -t 0.8 &&
 python mnist_evaluate.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 
 # asgan 3 epochs .5 .3 .2
 datadir="ASGAN_MNIST_3epochs"
@@ -69,13 +69,13 @@ python mnist_gan.py -m 2 -sd ../data/$datadir -bufp 0.2 &&
 python mnist_evaluate.py -sd ../data/$datadir >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 datadir="ERGAN_MNIST_pt7bufp"
 python mnist_gan.py -m 2 -sd ../data/$datadir -bufp 0.7 &&
 python mnist_evaluate.py -sd ../data/$datadir >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 
 # ergan 1000 buf size
 datadir="ERGAN_MNIST_1000bufs"
@@ -83,7 +83,7 @@ python mnist_gan.py -m 2 -sd ../data/$datadir -bufs 0.2 &&
 python mnist_evaluate.py -sd ../data/$datadir >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 
 # ergan weighted
 datadir="ERGAN_MNIST_weighted"
@@ -91,7 +91,7 @@ python mnist_gan.py -m 3 -sd ../data/$datadir -bufp 0.2 &&
 python mnist_evaluate.py -sd ../data/$datadir >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 
 # ergan after 5 epochs
 datadir="ERGAN_MNIST_5rse"
@@ -99,7 +99,7 @@ python mnist_gan.py -m 2 -sd ../data/$datadir -rse 5 &&
 python mnist_evaluate.py -sd ../data/$datadir >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 
 # ergan selective sampling
 datadir="ERGAN_MNIST_se"
@@ -107,7 +107,7 @@ python mnist_gan.py -m 2 -sd ../data/$datadir -se 0.3 &&
 python mnist_evaluate.py -sd ../data/$datadir >> ../data/${datadir}/results.txt
 python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
-aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}
+aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 
 # todo: asergan
 

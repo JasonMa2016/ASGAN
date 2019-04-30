@@ -217,6 +217,7 @@ def calculate_frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):
 
 # or this non-tensorflow version??
 # from fid.fid_score_pytorch import calculate_frechet_distance
+real_activations, fake_activations = np.load('../data/real_activations.npy'), np.load(SAVEDIR+'/fake_activations.npy')
 m1 = real_activations.mean(axis=0)
 s1 = np.cov(real_activations, rowvar=False)
 m2 = fake_activations.mean(axis=0)
