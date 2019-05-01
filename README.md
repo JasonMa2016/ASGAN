@@ -12,6 +12,7 @@
 
 ## Usage
 Set up AWS S3 storage credential:
+
 	$ aws configure
 
 Activate Pytorch environment and run scripts:
