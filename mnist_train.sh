@@ -62,6 +62,7 @@ bucketname="am221"
 # python mnist_evaluate.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 # python check_fid.py -sd ../data/${datadir} >> ../data/${datadir}/results.txt
 # aws s3 sync ../data/${datadir}/Fixed_results s3://${bucketname}/${datadir}
+# aws s3 cp ../data/${datadir}/results.txt s3://${bucketname}/${datadir}/results.txt
 
 # ergan 0.2 buf prop, 0.7 buf prop
 datadir="ERGAN_MNIST_pt2bufp"
