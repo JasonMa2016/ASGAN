@@ -1,3 +1,4 @@
+# test commit
 # adapted (copy pasted) from https://github.com/znxlwm/pytorch-MNIST-CelebA-GAN-DCGAN
 import argparse
 import os, time
